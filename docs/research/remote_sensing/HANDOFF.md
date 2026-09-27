@@ -153,8 +153,45 @@ Use only for:
 
 Codex should return facts and artifacts, not decide the scientific story.
 
+## Submission sprint mode
+
+The project is now in **Remote Sensing submission sprint mode**.
+
+Work proceeds in parallel:
+
+### Track A — manuscript reconstruction
+
+Start and maintain the new manuscript under:
+
+`docs/paper/RemoteSensing/`
+
+Do not wait for RS-E01-Lite before rewriting the non-numerical scientific narrative. The title, abstract structure, introduction, related work, method, observation contract, experimental protocol, discussion, conclusion, and figure/table architecture should be developed immediately.
+
+### Track B — minimal evidence cleaning
+
+The only mandatory pre-submission empirical task is **RS-E01-Lite**:
+
+- existing checkpoints only;
+- common 33,600-record held-out contract;
+- one evaluator;
+- one normalization contract;
+- core metrics: MAE, RMSE, SSIM;
+- parameter count as supporting evidence;
+- frequency metrics only if the clean unified evaluation validates them.
+
+Candidate main-table methods:
+- BG-RFM / PD-BG-RFM;
+- adapted InversionNet;
+- adapted VelocityGAN;
+- adapted Latent U-Net;
+- adapted UPFWI only if it improves the scientific comparison without complicating interpretation.
+
+Auto-Linear is optional.
+
+RS-E02 through RS-E06 remain documented but are **deferred / reviewer-triggered** unless a retained core claim cannot be supported without them.
+
+No new training is required before the first Remote Sensing submission.
+
 ## Immediate next action
 
-Start **RS-A0 — Freeze Empirical Assets**.
-
-Do not start RS-E01 evaluation or any new training until the retained asset inventory and common held-out record contract have been reviewed.
+Advance Track A immediately while finishing only the provenance work needed to launch RS-E01-Lite. Do not delay manuscript reconstruction for optional experiments.

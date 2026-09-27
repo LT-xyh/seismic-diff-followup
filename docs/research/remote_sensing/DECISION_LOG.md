@@ -107,3 +107,35 @@ Verification on `main`:
 - GitHub Actions `quality`: PASS.
 
 This debugging history is internal reproducibility evidence only and must not be turned into manuscript content.
+
+
+## 2026-09-27 — Submission sprint mode
+
+Decision: enter **Remote Sensing submission sprint mode**.
+
+The publication goal is now to produce a focused, scientifically defensible manuscript as quickly as possible using the strongest existing evidence plus one minimal unified re-evaluation package.
+
+Two tracks proceed in parallel:
+
+- **Track A — Manuscript reconstruction:** rewrite the journal manuscript immediately. Title, abstract structure, introduction, related work, method, observation contract, experimental protocol, discussion, conclusion, and figure architecture do not wait for new quantitative results.
+- **Track B — Minimal evidence cleaning:** the only mandatory pre-submission empirical task is **RS-E01-Lite**, using existing checkpoints only under one common held-out/evaluator contract.
+
+Pre-submission experiment policy:
+
+- no new training;
+- no multi-seed campaign;
+- no new robustness suite;
+- no 3D extension;
+- no field-transfer study;
+- no downstream FWI/migration study;
+- no expanded baseline search unless later reviewer feedback makes it necessary.
+
+RS-E02 through RS-E06 are retained in the historical plan but are now **optional / reviewer-triggered** unless the manuscript cannot support a retained core claim without one of them.
+
+The main quantitative table may be limited to MAE, RMSE, SSIM, and parameter count. Frequency metrics are optional and must not become central unless RS-E01-Lite validates them cleanly.
+
+The working journal title is:
+
+> **Background-Guided Residual Flow Matching for Multi-Constraint Seismic Velocity Model Building**
+
+The manuscript-facing working name is **BG-RFM**. Historical `PD-BG-RFM` terminology remains valid for code and provenance.

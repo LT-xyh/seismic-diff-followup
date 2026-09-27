@@ -1,5 +1,39 @@
 # Remote Sensing Experiment Queue
 
+## Submission sprint override
+
+**Effective 2026-09-27.**
+
+The project is in Remote Sensing submission sprint mode.
+
+Only one empirical task is mandatory before the first submission:
+
+### RS-E01-Lite — minimal unified re-evaluation
+
+- existing checkpoints only;
+- no training;
+- common 33,600 held-out records;
+- common evaluator and normalization;
+- required metrics: MAE, RMSE, SSIM;
+- parameter count may be reported as supporting efficiency evidence;
+- frequency metrics are optional and only retained if internally consistent.
+
+Primary candidate methods:
+- BG-RFM / PD-BG-RFM;
+- InversionNet adaptation;
+- VelocityGAN adaptation;
+- Latent U-Net adaptation.
+
+UPFWI-adapted is optional and subject to PI decision after the unified evaluation. Auto-Linear is not required for the first submission.
+
+RS-A0 remains a provenance/asset-preparation activity needed only to identify the exact retained checkpoints and common record contract for RS-E01-Lite. It does **not** block manuscript writing.
+
+RS-E02, RS-E03, RS-E04, RS-E05, RS-E06, and extended missing-modality work below are retained as historical plans but are now **deferred / reviewer-triggered** unless the manuscript cannot support a retained core claim without them.
+
+No new training is authorized for the first submission sprint.
+
+---
+
 The queue is intentionally staged to minimize unnecessary GPU work.
 
 ## Global rules
@@ -41,7 +75,7 @@ At least one PD-BG-RFM checkpoint and the checkpoints needed for the clean compa
 
 ## RS-E01 — Common-evaluator matched-input reconstruction
 
-**Priority:** BLOCKER / MUST  
+**Priority:** REPLACED BY RS-E01-Lite for first submission  
 **Owner:** GPT prepares/fixes evaluation code and result schema; Codex executes on retained checkpoints.  
 **Training:** none if usable checkpoints exist.
 
@@ -89,7 +123,7 @@ Frequency metrics enter the final paper only if they pass consistency validation
 
 ## RS-E02 — Direct background evaluation
 
-**Priority:** MUST  
+**Priority:** DEFERRED / REVIEWER-TRIGGERED  
 **Owner:** GPT defines evaluator output; Codex evaluates the retained proposed-method checkpoint.  
 **Training:** none.
 
@@ -119,7 +153,7 @@ Do not require it to beat every full-field model's final low-frequency error; th
 
 ## RS-E03 — Attribution controls
 
-**Priority:** MUST, but evaluate existing assets before training  
+**Priority:** DEFERRED / REVIEWER-TRIGGERED  
 **Owner:** GPT defines the comparison; Codex evaluates/trains only as required.
 
 ### Desired comparison
@@ -153,7 +187,7 @@ Not every control must appear in the main paper; final placement depends on the 
 
 ## RS-E04 — Observation perturbation stress test
 
-**Priority:** HIGH-VALUE / likely main paper  
+**Priority:** OPTIONAL / REVIEWER-TRIGGERED  
 **Owner:** GPT implements perturbation logic; Codex runs evaluation.  
 **Training:** none.
 
@@ -196,7 +230,7 @@ Demonstrate behavior under plausible errors in interpreted/kinematic constraints
 
 ## RS-E05 — Inference step/runtime tradeoff
 
-**Priority:** HIGH-VALUE and cheap  
+**Priority:** OPTIONAL / REVIEWER-TRIGGERED  
 **Owner:** GPT defines timing protocol; Codex measures on fixed hardware.  
 **Training:** none.
 
@@ -226,7 +260,7 @@ Determine whether 10–20 steps retain most of the 50-step quality and quantify 
 
 ## RS-E06 — Multi-seed training stability
 
-**Priority:** GATED  
+**Priority:** DEFERRED / REVIEWER-TRIGGERED  
 **Owner:** GPT decides after RS-E01/RS-E03; Codex trains.  
 **Training:** expensive.
 
@@ -271,6 +305,6 @@ Historical six-mode evaluation exists. First identify which artifact version is 
 
 # Execution order
 
-`RS-A0 -> RS-E01 -> RS-E02 -> RS-E03A -> RS-E04/RS-E05 -> decision gate -> RS-E03B and/or RS-E06 only if required`
+`RS-A0 provenance check -> RS-E01-Lite -> submit; RS-E02–RS-E06 only if manuscript evidence fails or reviewers request them`
 
 This ordering maximizes information gained before expensive training.
