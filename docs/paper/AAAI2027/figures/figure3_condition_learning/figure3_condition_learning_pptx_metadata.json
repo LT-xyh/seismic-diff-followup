@@ -1,0 +1,28 @@
+{
+  "all_elements_native_editable": true,
+  "font": "Times New Roman",
+  "freeform_violin_count": 4,
+  "main_figure_panels": [
+    "anchor_calibration",
+    "role_specialization"
+  ],
+  "picture_count": 0,
+  "presentation": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/figure3_condition_learning/figure3_condition_learning_editable.pptx",
+  "shape_count": 190,
+  "slide_size_inches": [
+    13.333,
+    5.72
+  ],
+  "source_anchor_rows": 67200,
+  "source_role_rows": 33600,
+  "subset_order": [
+    "FlatVelA",
+    "FlatVelB",
+    "CurveVelA",
+    "CurveVelB",
+    "FlatFaultA",
+    "FlatFaultB",
+    "CurveFaultA",
+    "CurveFaultB"
+  ]
+}

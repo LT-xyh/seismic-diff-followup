@@ -1,0 +1,35 @@
+Use case: scientific-educational
+Asset type: AAAI conference paper subfigure, residual Flow Matching mechanism
+Primary request: Create a clean scientific diagram titled "Residual Flow Matching with Background-Quality Gate". The figure should focus only on the residual Flow Matching module, not the full multimodal architecture.
+Style/medium: crisp vector-like scientific infographic, white background, thin gray borders, restrained colors, readable in an AAAI paper. Use simple boxes, arrows, and a central continuous-time trajectory.
+Composition/framing: wide landscape 16:9. Three visual zones from left to right: residual target construction, Flow Matching trajectory, conditional residual generation. Keep labels large and minimal.
+Color palette: green for residual/structure, blue for background context, amber for gate/background quality, dark gray for neutral text and arrows.
+Text (verbatim, keep labels exact and readable):
+"Residual Flow Matching with Background-Quality Gate"
+"Residual target"
+"R_B = V - B_hat"
+"Noise"
+"xi"
+"Interpolated residual state"
+"R_t = (1-t) xi + t R_B"
+"Target vector field"
+"u_t = R_B - xi"
+"Flow model"
+"v_theta(R_t, t | C_S, psi_B(B_hat), q_B)"
+"Structural condition"
+"C_S"
+"Background embedding"
+"psi_B(B_hat)"
+"Background-quality gate"
+"rho_hat_B"
+"Generated residual"
+"R_hat"
+"Low-frequency penalty adapts to background quality"
+Panel details:
+- Left zone: show a small velocity target V and background estimate B_hat subtracting to form residual target R_B = V - B_hat. Use a green residual map thumbnail with structural lines.
+- Middle zone: show Gaussian noise xi on the left and residual target R_B on the right, connected by a smooth green trajectory with several intermediate points labeled t. Place formula R_t = (1-t) xi + t R_B near the trajectory and u_t = R_B - xi as an arrow direction label.
+- Right zone: show a compact Flow model box receiving R_t and t, plus three conditioning inputs: C_S in green, psi_B(B_hat) in blue, rho_hat_B in amber. The output is generated residual R_hat.
+- Show the amber rho_hat_B gate modulating a small low-frequency penalty knob or slider, with the label "Low-frequency penalty adapts to background quality".
+- Make clear that this module generates residual R_hat, not full velocity V_hat.
+Constraints: no full architecture, no modality input cards, no encoder blocks, no U-Net, no final V_hat merge, no training curves, no quantitative results, no dense text. Text must be large and readable. Use formulas exactly as provided using plain ASCII symbols if needed.
+Avoid: decorative gradients, dark background, photorealistic scenes, fake heatmap results, crowded equations, tiny annotations, watermarks, logos, unrelated modules.

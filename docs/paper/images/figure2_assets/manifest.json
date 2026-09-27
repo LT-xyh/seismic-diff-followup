@@ -1,0 +1,63 @@
+{
+  "purpose": "Editable Fig. 2 asset package for PD-BG-RFM method overview.",
+  "semantic_colors": {
+    "background_condition": "#16A34A",
+    "structural_condition": "#2563EB",
+    "training_only": "#F59E0B",
+    "neutral_border": "#CBD5E1"
+  },
+  "solid_arrows": "Inference computation.",
+  "dashed_orange_arrows": "Training-only supervision or target construction.",
+  "concept_panels": [
+    "anchor_calibration.svg",
+    "background_residual_composition.svg",
+    "condition_space_cluster.svg",
+    "diagnostic_hooks.svg",
+    "residual_transport.svg",
+    "training_only_box.svg"
+  ],
+  "data_tiles": [
+    "background_1to1.png",
+    "horizon_1to1.png",
+    "interpolated_residual_field.png",
+    "metadata.json",
+    "noise_field.png",
+    "pstm_1to1.png",
+    "rms_1to1.png",
+    "structure_1to1.png",
+    "velocity_1to1.png",
+    "well_1to1.png"
+  ],
+  "feature_maps": [
+    "cb_aggregate.png",
+    "cb_channels_grid.png",
+    "cb_cs_feature_panel.png",
+    "cb_lowfreq_channel.png",
+    "cs_aggregate.png",
+    "cs_channels_grid.png",
+    "cs_highfreq_channel.png",
+    "metadata.json"
+  ],
+  "colorbars": [
+    "colorbar_structure.png",
+    "colorbar_velocity.png"
+  ],
+  "transport_burden": [
+    "README.md",
+    "full_vs_residual_burden.png",
+    "full_vs_residual_burden.svg",
+    "residual_transport_3stage.png",
+    "residual_transport_3stage.svg"
+  ],
+  "previews": [
+    "previews/anchor_calibration.png",
+    "previews/background_residual_composition.png",
+    "previews/condition_space_cluster.png",
+    "previews/diagnostic_hooks.png",
+    "previews/residual_transport.png",
+    "previews/training_only_box.png",
+    "previews/figure2_draft.png",
+    "transport_burden/full_vs_residual_burden.png",
+    "transport_burden/residual_transport_3stage.png"
+  ]
+}

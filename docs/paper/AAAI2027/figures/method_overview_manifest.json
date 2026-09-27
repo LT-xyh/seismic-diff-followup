@@ -1,0 +1,50 @@
+{
+  "figure": "PD-BG-RFM method overview",
+  "source_pptx": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/method.pptx",
+  "canvas_inches": [
+    13.333,
+    5.0
+  ],
+  "outputs": {
+    "pptx": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/method_overview_editable.pptx",
+    "svg": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/method_overview.svg",
+    "pdf": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/method_overview.pdf",
+    "png": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/method_overview_preview.png"
+  },
+  "pptx_validation": {
+    "slide_count": 1,
+    "shape_count": 119,
+    "picture_count": 9,
+    "all_text_arrows_native_editable": true
+  },
+  "asset_map": {
+    "pstm": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/images/figure2_assets/data_tiles/pstm_1to1.png",
+    "horizon": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/images/figure2_assets/data_tiles/horizon_1to1.png",
+    "rms": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/images/figure2_assets/data_tiles/rms_1to1.png",
+    "well": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/images/figure2_assets/data_tiles/well_1to1.png",
+    "velocity": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/images/figure2_assets/data_tiles/velocity_1to1.png",
+    "background": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/images/figure2_assets/data_tiles/background_1to1.png",
+    "structure": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/images/figure2_assets/data_tiles/structure_1to1.png",
+    "noise": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/images/figure2_assets/data_tiles/noise_field.png",
+    "rt": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/images/figure2_assets/data_tiles/interpolated_residual_field.png",
+    "rhat": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/images/figure2_assets/transport_burden/subfigures/stage3_target_residual_Rhat.png",
+    "cb": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/images/figure2_assets/feature_maps/cb_aggregate.png",
+    "cs": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/images/figure2_assets/feature_maps/cs_aggregate.png"
+  },
+  "semantic_colors": {
+    "background": "#2A9D6F",
+    "structure": "#246BCE",
+    "training_only": "#D9822B",
+    "theory": "#7257C7"
+  },
+  "formula_contract": [
+    "p_PD(b,r|XΩ) = δ[b=f_B(C_B)] pθ(r|C_S,b)",
+    "B̄=sg[B̂]",
+    "R_{B̂}=V-B̄",
+    "R_t=(1-t)ξ+tR_{B̂}",
+    "V̂=B̂+R̂",
+    "V̂-V=R̂-R_{B̂}"
+  ],
+  "training_only_is_dashed_orange": true,
+  "forbidden_legacy_terms_absent": true
+}

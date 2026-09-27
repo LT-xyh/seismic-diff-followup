@@ -1,0 +1,26 @@
+extends: _base_formal.yaml
+
+benchmark:
+  variant: bg_pdr_fm
+  capacity_tier: smooth_gate_e50
+  generator_hidden_channels: 96
+  freeze_background_branch: true
+
+model:
+  background_hidden_channels: 64
+  background_output_mode: smooth_bottleneck
+  background_bottleneck_hw: [18, 18]
+  background_upsample_mode: bilinear
+
+loss:
+  rho_weight: 0.05
+
+quality_gate:
+  mode: learned
+
+training:
+  load_stage_checkpoint: null
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/eval_interim_best_smooth_fixed/bg_pdr_fm_smooth_gate_e50
+  checkpoint: logs/bg_pdr_fm/residual_train_smooth_hc64_gate_e50/stage_checkpoints/residual_last.ckpt

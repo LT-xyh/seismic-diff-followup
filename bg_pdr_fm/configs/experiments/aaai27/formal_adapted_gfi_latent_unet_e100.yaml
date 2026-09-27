@@ -1,0 +1,31 @@
+extends: _base_formal.yaml
+
+benchmark:
+  variant: adapted_gfi_latent_unet
+  capacity_tier: adapted_external
+  adapted_gfi_latent_input_hw: [1000, 70]
+  adapted_gfi_latent_hw: [70, 70]
+  adapted_gfi_latent_channels: 128
+  adapted_gfi_unet_depth: 2
+  adapted_gfi_unet_repeat_blocks: 2
+  adapted_gfi_unet_skip: true
+
+training:
+  freeze_encoder: true
+  load_stage_checkpoint: null
+  max_epochs: 100
+  batch_size: 300
+  devices: 4
+  strategy: ddp
+  logging:
+    log_dir: logs/bg_pdr_fm/aaai27/formal/adapted_gfi_latent_unet_e100/lightning
+    log_version: "formal_adapted_gfi_latent_unet_e100_{time}"
+  checkpoint:
+    dirpath: logs/bg_pdr_fm/aaai27/formal/adapted_gfi_latent_unet_e100/checkpoints
+    filename: "adapted-gfi-latent-unet-e100-{epoch}-loss{val/loss:.4f}"
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/eval_adapted_gfi_latent_unet_e100/adapted_gfi_latent_unet_e100
+  checkpoint: logs/bg_pdr_fm/aaai27/formal/adapted_gfi_latent_unet_e100/checkpoints/last.ckpt
+  missing_modes:
+    - full

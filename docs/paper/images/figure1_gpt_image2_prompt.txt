@@ -1,0 +1,31 @@
+Use case: scientific-educational
+Asset type: AAAI conference paper figure, full-width method overview / design principle figure
+Primary request: Create a clean, publication-ready scientific diagram titled "Motivation and Design Principle of Background-Gated Residual Generation". The figure has three horizontal panels from left to right: (a) Asymmetric multimodal evidence, (b) Physical decomposition, and (c) Design principle. This is a motivation-led design principle figure, not a full neural network architecture.
+Style/medium: crisp vector-like scientific infographic, white background, thin gray borders, restrained colors, AAAI paper style, readable at two-column full-width size.
+Composition/framing: wide landscape 16:9 figure, three equal panels connected by simple left-to-right arrows. Keep generous whitespace. Use concise labels only.
+Color palette: blue for numerical/background cues, green/teal for structural/residual cues, amber for background-quality gate, dark gray for neutral text and arrows.
+Text (verbatim):
+"(a) Asymmetric multimodal evidence"
+"PSTM / horizon"
+"structural cues"
+"RMS velocity / well logs"
+"numerical background cues"
+"(b) Physical decomposition"
+"V = B + S"
+"B = P_L(V)"
+"S = P_H(V)"
+"low-frequency background"
+"high-frequency structure"
+"(c) Design principle"
+"Numerical condition"
+"C_N -> background B_hat"
+"Structural condition + background quality"
+"C_S + psi_B(B_hat) + rho_hat_B -> residual R_hat"
+"Final velocity"
+"V_hat = B_hat + R_hat"
+Panel details:
+Panel (a): show four simple input cards: PSTM image and horizon grouped in green as structural cues; RMS velocity and well logs grouped in blue as numerical background cues. Use small schematic thumbnails, not realistic experimental results.
+Panel (b): show a stylized velocity field V splitting into smooth blue low-frequency background B and green sharp high-frequency structure S. Make clear that B and S have different roles.
+Panel (c): show a minimal design chain, not a full architecture: blue path C_N -> B_hat, green path C_S plus blue background embedding plus amber rho_hat_B gate -> R_hat, then merge B_hat and R_hat into V_hat. Use natural-language labels above formulas so symbols are understandable before reading the Method section.
+Constraints: no full U-Net, no detailed encoder layers, no loss-function blocks, no Symile shuffle, no dense text. Do not use fake quantitative charts or result heatmaps. Avoid decorative gradients and dark backgrounds. Text must be spelled exactly as provided, large and readable.
+Avoid: photorealistic lab scenes, 3D glossy render, decorative icons, crowded arrows, tiny text, watermark, logos, random extra equations.

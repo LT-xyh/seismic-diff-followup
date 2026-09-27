@@ -1,0 +1,150 @@
+{
+  "checkpoint": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/joint_full_contrastive_bgfm_pixelfm_predbg_e100/lightning/checkpoints/joint_full_contrastive_bgfm_pixelfm_predbg_e100-epoch_99-loss0.1036.ckpt",
+  "checkpoint_info": {
+    "loaded_keys": 1070,
+    "missing_keys": 0,
+    "mode": "full",
+    "path": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/joint_full_contrastive_bgfm_pixelfm_predbg_e100/lightning/checkpoints/joint_full_contrastive_bgfm_pixelfm_predbg_e100-epoch_99-loss0.1036.ckpt",
+    "skipped_shape_keys": 0,
+    "unexpected_keys": 0
+  },
+  "checkpoint_sha256": "0d77a529618d8d158af0731752cc68efc01c4f6e2f2adfedaf87d8008f930a36",
+  "config": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/joint_full_contrastive_bgfm_pixelfm_predbg_e100/evaluation_epoch99_global_heldout_full_parallel_bs64/worker_00/eval_config.yaml",
+  "dataset_split": "global test then identity filter",
+  "euler_steps": 50,
+  "inference_seed": 2027,
+  "normalization_conversion": {
+    "field": "depth_vel",
+    "formula": "physical_value = low + (stored_value + 1) * 0.5 * (high - low)",
+    "mode": "-1_1",
+    "physical_range_m_per_s": [
+      1500.0,
+      4500.0
+    ],
+    "profile": "openfwi",
+    "residual_conversion": "physical residuals are formed after affine denormalization"
+  },
+  "normalization_mode": "-1_1",
+  "normalization_profile": "openfwi",
+  "normalized_arrays": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/figure4_residual_transport/replay_arrays_normalized.npz",
+  "physical_arrays": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/figure4_residual_transport/replay_arrays.npz",
+  "replay_metric_checks": {
+    "CurveFaultA": {
+      "mae_delta": 0.0020243930571465464,
+      "mae_formal": 0.0026541335973888636,
+      "mae_matches_formal": 0.0,
+      "mae_replay": 0.00467852665453541,
+      "q_t_delta": -3.120879799034526e-08,
+      "q_t_formal": 0.9363130331039429,
+      "q_t_replay": 0.9363130018951449
+    },
+    "CurveFaultB": {
+      "mae_delta": 0.0024255181993452866,
+      "mae_formal": 0.008525186218321323,
+      "mae_matches_formal": 0.0,
+      "mae_replay": 0.01095070441766661,
+      "q_t_delta": -2.1401773464546636e-08,
+      "q_t_formal": 0.7317848801612854,
+      "q_t_replay": 0.7317848587595119
+    },
+    "CurveVelA": {
+      "mae_delta": 0.0011652695419913043,
+      "mae_formal": 0.00361508852802217,
+      "mae_matches_formal": 0.0,
+      "mae_replay": 0.004780358070013474,
+      "q_t_delta": -2.2877985061953154e-09,
+      "q_t_formal": 0.8675258159637451,
+      "q_t_replay": 0.8675258136759466
+    },
+    "CurveVelB": {
+      "mae_delta": 0.0007006672134965046,
+      "mae_formal": 0.004943551030009985,
+      "mae_matches_formal": 0.0,
+      "mae_replay": 0.00564421824350649,
+      "q_t_delta": -2.3513538893737973e-08,
+      "q_t_formal": 0.9428232908248901,
+      "q_t_replay": 0.9428232673113512
+    },
+    "FlatFaultA": {
+      "mae_delta": 0.0018698684177456465,
+      "mae_formal": 0.0022291969507932663,
+      "mae_matches_formal": 0.0,
+      "mae_replay": 0.004099065368538913,
+      "q_t_delta": 2.81714518379772e-08,
+      "q_t_formal": 0.9595932364463806,
+      "q_t_replay": 0.9595932646178325
+    },
+    "FlatFaultB": {
+      "mae_delta": 0.003649645360680867,
+      "mae_formal": 0.006505616474896669,
+      "mae_matches_formal": 0.0,
+      "mae_replay": 0.010155261835577536,
+      "q_t_delta": 2.6765399230299636e-08,
+      "q_t_formal": 0.8724007606506348,
+      "q_t_replay": 0.872400787416034
+    },
+    "FlatVelA": {
+      "mae_delta": 0.0023543760283108875,
+      "mae_formal": 0.0021841698326170444,
+      "mae_matches_formal": 0.0,
+      "mae_replay": 0.004538545860927932,
+      "q_t_delta": -1.4310689411267674e-08,
+      "q_t_formal": 0.9193591475486755,
+      "q_t_replay": 0.9193591332379861
+    },
+    "FlatVelB": {
+      "mae_delta": 0.0024900604054635886,
+      "mae_formal": 0.003070591017603874,
+      "mae_matches_formal": 0.0,
+      "mae_replay": 0.005560651423067463,
+      "q_t_delta": -3.798364323071013e-08,
+      "q_t_formal": 0.7839672565460205,
+      "q_t_replay": 0.7839672185623773
+    }
+  },
+  "selected_identities": {
+    "CurveFaultA": {
+      "dataset_id": 6,
+      "source_sample_index": 1220
+    },
+    "CurveFaultB": {
+      "dataset_id": 7,
+      "source_sample_index": 4692
+    },
+    "CurveVelA": {
+      "dataset_id": 2,
+      "source_sample_index": 10700
+    },
+    "CurveVelB": {
+      "dataset_id": 3,
+      "source_sample_index": 15941
+    },
+    "FlatFaultA": {
+      "dataset_id": 4,
+      "source_sample_index": 6511
+    },
+    "FlatFaultB": {
+      "dataset_id": 5,
+      "source_sample_index": 12648
+    },
+    "FlatVelA": {
+      "dataset_id": 0,
+      "source_sample_index": 14135
+    },
+    "FlatVelB": {
+      "dataset_id": 1,
+      "source_sample_index": 17501
+    }
+  },
+  "split_audit": {
+    "manifest_count": 33600,
+    "overlap_train": 0,
+    "overlap_val": 0,
+    "test_count": 33600,
+    "test_manifest_missing": 0,
+    "test_manifest_unexpected": 0,
+    "train_count": 235200,
+    "train_val_overlap": 0,
+    "val_count": 67200
+  }
+}

@@ -1,0 +1,21 @@
+extends: _base_smoke.yaml
+
+benchmark:
+  variant: two_stage_ddpm
+  capacity_tier: reference
+  generator_hidden_channels: 64
+  direct_hidden_channels: 64
+
+model:
+  residual_backend: simple_ddpm
+  residual_num_train_timesteps: 100
+  residual_num_inference_steps: 10
+
+training:
+  logging:
+    log_version: "two_stage_ddpm_{time}"
+  checkpoint:
+    filename: "two-stage-ddpm-{epoch}-loss{val/loss:.4f}"
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/two_stage_ddpm/evaluation

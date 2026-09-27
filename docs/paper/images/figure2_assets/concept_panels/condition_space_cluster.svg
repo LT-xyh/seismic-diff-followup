@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="620" height="390" viewBox="0 0 620 390">
+<defs>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#64748B" />
+  </marker>
+  <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#2563EB" />
+  </marker>
+  <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#16A34A" />
+  </marker>
+  <marker id="arrow-orange" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#F59E0B" />
+  </marker>
+  <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#DC2626" />
+  </marker>
+  <style>
+    .title { font: 700 18px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #111827; }
+    .subtitle { font: 500 12px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #64748B; }
+    .label { font: 600 13px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #111827; }
+    .small { font: 500 11px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #64748B; }
+    .formula { font: 600 13px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #111827; }
+    .tiny { font: 500 9px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #64748B; }
+  </style>
+</defs>
+
+<rect x="0" y="0" width="620" height="390" fill="white"/>
+<text x="24" y="36" class="title" text-anchor="start">Evidence-to-Contract Mapping</text>
+<text x="24" y="56" class="subtitle" text-anchor="start">Use actual data views to show why C_B and C_S carry different roles</text>
+<rect x="34" y="82" width="250" height="224" rx="8" fill="#F0FDF4" stroke="#BBF7D0" stroke-width="1.2" />
+<text x="159" y="112" class="label" text-anchor="middle" fill="#16A34A">Background interface C_B</text>
+<image href="../data_tiles/rms_1to1.png" x="58" y="134" width="82" height="82" preserveAspectRatio="xMidYMid meet"/>
+<image href="../data_tiles/well_1to1.png" x="178" y="134" width="82" height="82" preserveAspectRatio="xMidYMid meet"/>
+<image href="../data_tiles/background_1to1.png" x="118" y="218" width="82" height="82" preserveAspectRatio="xMidYMid meet"/>
+<rect x="58" y="134" width="82" height="82" rx="3" fill="none" stroke="#CBD5E1" stroke-width="1.2" />
+<rect x="178" y="134" width="82" height="82" rx="3" fill="none" stroke="#CBD5E1" stroke-width="1.2" />
+<rect x="118" y="218" width="82" height="82" rx="3" fill="none" stroke="#BBF7D0" stroke-width="1.2" />
+<text x="99" y="230" class="tiny" text-anchor="middle">RMS</text>
+<text x="219" y="230" class="tiny" text-anchor="middle">Well</text>
+<text x="159" y="316" class="small" text-anchor="middle">smooth numerical trend</text>
+<rect x="336" y="82" width="250" height="224" rx="8" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.2" />
+<text x="461" y="112" class="label" text-anchor="middle" fill="#2563EB">Structural interface C_S</text>
+<image href="../data_tiles/pstm_1to1.png" x="360" y="134" width="82" height="82" preserveAspectRatio="xMidYMid meet"/>
+<image href="../data_tiles/horizon_1to1.png" x="480" y="134" width="82" height="82" preserveAspectRatio="xMidYMid meet"/>
+<image href="../data_tiles/structure_1to1.png" x="420" y="218" width="82" height="82" preserveAspectRatio="xMidYMid meet"/>
+<rect x="360" y="134" width="82" height="82" rx="3" fill="none" stroke="#CBD5E1" stroke-width="1.2" />
+<rect x="480" y="134" width="82" height="82" rx="3" fill="none" stroke="#CBD5E1" stroke-width="1.2" />
+<rect x="420" y="218" width="82" height="82" rx="3" fill="none" stroke="#BFDBFE" stroke-width="1.2" />
+<text x="401" y="230" class="tiny" text-anchor="middle">PoSTM</text>
+<text x="521" y="230" class="tiny" text-anchor="middle">Horizon</text>
+<text x="461" y="316" class="small" text-anchor="middle">localized structural residual</text>
+<line x1="284" y1="188" x2="336" y2="188" stroke="#F59E0B" stroke-width="1.8" marker-end="url(#arrow-orange)" stroke-dasharray="6 4"/>
+<text x="310" y="176" class="tiny" text-anchor="middle" fill="#F59E0B">contract</text>
+<text x="310" y="216" class="tiny" text-anchor="middle" fill="#F59E0B">L_symile + L_A + L_O</text>
+<text x="40" y="354" class="tiny" text-anchor="start">No t-SNE/UMAP: this panel uses real examples and target-derived training views.</text>
+
+</svg>

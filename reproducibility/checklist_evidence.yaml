@@ -1,0 +1,107 @@
+version: 1
+scope: computational_checklist
+items:
+  - id: "4.2"
+    question: hyperparameter search disclosure
+    status: "partial"
+    evidence_scope: repository_and_paper
+    evidence_path: docs/paper/AAAI2027/pd-bg-rfm.tex
+    command: python scripts/aaai27/train.py --config bg_pdr_fm/configs/release/aaai27/train.yaml --dry-run
+  - id: "4.3"
+    question: preprocessing code included
+    status: "yes"
+    evidence_scope: repository
+    evidence_path: scripts/aaai27/prepare_openfwi.py
+    command: python scripts/aaai27/prepare_openfwi.py --help
+  - id: "4.4"
+    question: experiment source inventory
+    status: "yes"
+    evidence_scope: repository
+    evidence_path: reproducibility/release_manifest.yaml
+    command: python reproducibility/validate_release.py
+  - id: "4.5"
+    question: public source availability and license
+    status: "conditional"
+    evidence_scope: publication_dependent
+    evidence_path: reproducibility/README.md
+    command: publication-owner license and archive review
+  - id: "4.6"
+    question: method comments and paper references
+    status: "yes"
+    evidence_scope: repository
+    evidence_path: docs/paper/AAAI2027/code_release_map.md
+    command: rg -n "Paper (Eq|Eqs|Section)" bg_pdr_fm/models bg_pdr_fm/lightning
+  - id: "4.7"
+    question: randomness and seeds
+    status: "yes"
+    evidence_scope: repository
+    evidence_path: bg_pdr_fm/reproducibility.py
+    command: python scripts/aaai27/train.py --config bg_pdr_fm/configs/release/aaai27/train.yaml --dry-run
+  - id: "4.8"
+    question: computing infrastructure
+    status: "yes"
+    evidence_scope: repository_and_paper
+    evidence_path: reproducibility/requirements.txt
+    command: python -m pip install -r reproducibility/requirements.txt
+  - id: "4.9"
+    question: evaluation metrics
+    status: "yes"
+    evidence_scope: repository
+    evidence_path: bg_pdr_fm/evaluation/benchmark_metrics.py
+    command: python -m pytest -q bg_pdr_fm/tests/test_theory_diagnostics.py
+  - id: "4.10"
+    question: algorithm run counts
+    status: "yes"
+    evidence_scope: repository_and_publication_dependent
+    evidence_path: bg_pdr_fm/evaluation/run_manifest.py
+    command: python scripts/aaai27/evaluate.py --config bg_pdr_fm/configs/release/aaai27/evaluate.yaml --dry-run
+  - id: "4.11"
+    question: distributional or confidence information
+    status: "yes"
+    evidence_scope: repository_and_paper
+    evidence_path: docs/paper/AAAI2027/pd-bg-rfm.tex
+    command: rg -n "bootstrap|confidence|distribution" docs/paper/AAAI2027/pd-bg-rfm.tex
+  - id: "4.12"
+    question: statistical significance tests
+    status: "no"
+    evidence_scope: paper
+    evidence_path: docs/paper/AAAI2027/pd-bg-rfm.tex
+    command: rg -n "do not report variation|significance test" docs/paper/AAAI2027/pd-bg-rfm.tex
+  - id: "4.13"
+    question: final hyperparameters
+    status: "yes"
+    evidence_scope: repository_and_paper
+    evidence_path: bg_pdr_fm/configs/release/aaai27/train.yaml
+    command: python scripts/aaai27/train.py --config bg_pdr_fm/configs/release/aaai27/train.yaml --dry-run
+  - id: "4.14"
+    question: release archive scope gate
+    status: "conditional"
+    evidence_scope: publication_dependent
+    evidence_path: reproducibility/THIRD_PARTY_NOTICES.md
+    command: publication-owner archive and third-party provenance review
+repository_facts:
+  - claim: canonical source files are present and source-only
+    status: "verified"
+    evidence_path: reproducibility/release_manifest.yaml
+    command: python reproducibility/validate_release.py
+  - claim: canonical configs resolve with explicit split, well, and training seeds
+    status: "verified"
+    evidence_path: bg_pdr_fm/configs/release/aaai27/train.yaml
+    command: python scripts/aaai27/train.py --config bg_pdr_fm/configs/release/aaai27/train.yaml --dry-run
+  - claim: metrics and run manifests expose the paper schema
+    status: "verified"
+    evidence_path: bg_pdr_fm/evaluation/run_manifest.py
+    command: python -m pytest -q bg_pdr_fm/tests/test_run_manifest.py
+publication_dependent:
+  - claim: license
+    status: "conditional"
+    evidence_path: reproducibility/README.md
+    command: publication-owner license review
+  - claim: public_availability
+    status: "conditional"
+    evidence_path: reproducibility/README.md
+    command: publication-owner archive and venue-upload review
+  - claim: literature_rerun
+    status: "conditional"
+    evidence_path: docs/paper/AAAI2027/pd-bg-rfm.tex
+    command: verify cited literature rows were not silently treated as reruns

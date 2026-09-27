@@ -1,0 +1,7 @@
+extends: velocity_gan.yaml
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/eval_velocity_gan_official_e100/velocity_gan_official_e100
+  checkpoint: logs/bg_pdr_fm/aaai27/formal/velocity_gan_official_e100/checkpoints/last.ckpt
+  missing_modes:
+    - full

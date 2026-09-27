@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="620" height="250" viewBox="0 0 620 250">
+<defs>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#64748B" />
+  </marker>
+  <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#2563EB" />
+  </marker>
+  <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#16A34A" />
+  </marker>
+  <marker id="arrow-orange" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#F59E0B" />
+  </marker>
+  <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#DC2626" />
+  </marker>
+  <style>
+    .title { font: 700 18px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #111827; }
+    .subtitle { font: 500 12px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #64748B; }
+    .label { font: 600 13px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #111827; }
+    .small { font: 500 11px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #64748B; }
+    .formula { font: 600 13px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #111827; }
+    .tiny { font: 500 9px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #64748B; }
+  </style>
+</defs>
+
+<rect x="0" y="0" width="620" height="250" fill="white"/>
+<rect x="28" y="32" width="564" height="184" rx="12" fill="#FFF7ED" stroke="#F59E0B" stroke-width="1.2" stroke-dasharray="8 5"/>
+<text x="50" y="68" class="title" text-anchor="start" fill="#F59E0B">Training-only information</text>
+<text x="50" y="96" class="subtitle" text-anchor="start">Used to define supervision and contract losses; unavailable at inference.</text>
+<text x="70" y="132" class="formula" text-anchor="start">Anchors: A_B = W_L(V),  A_S = W_H(V)</text>
+<text x="70" y="162" class="formula" text-anchor="start">Contract: L_C = L_symile + L_A + L_O + L_freq + L_rel + L_pair</text>
+<text x="70" y="192" class="formula" text-anchor="start">Residual target: R_hatB = V - hat B</text>
+<text x="50" y="232" class="tiny" text-anchor="start">Suggested placement: side band or dashed overlay, never on the inference path.</text>
+
+</svg>

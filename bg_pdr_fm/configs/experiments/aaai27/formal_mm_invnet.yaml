@@ -1,0 +1,17 @@
+extends: _base_formal.yaml
+
+benchmark:
+  variant: mm_invnet
+  capacity_tier: reference
+
+training:
+  logging:
+    log_dir: logs/bg_pdr_fm/aaai27/formal/mm_invnet/lightning
+    log_version: "formal_mm_invnet_{time}"
+  checkpoint:
+    dirpath: logs/bg_pdr_fm/aaai27/formal/mm_invnet/checkpoints
+    filename: "mm-invnet-{epoch}-loss{val/loss:.4f}"
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/formal/mm_invnet/evaluation
+  checkpoint: logs/bg_pdr_fm/aaai27/formal/mm_invnet/checkpoints/last.ckpt

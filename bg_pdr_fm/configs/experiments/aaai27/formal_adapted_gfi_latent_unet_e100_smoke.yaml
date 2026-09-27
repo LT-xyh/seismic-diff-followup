@@ -1,0 +1,15 @@
+extends: formal_adapted_gfi_latent_unet_e100.yaml
+
+training:
+  max_epochs: 1
+  limit_train_batches: 1
+  limit_val_batches: 1
+  logging:
+    log_dir: logs/bg_pdr_fm/aaai27/smoke/adapted_gfi_latent_unet_e100/lightning
+    log_version: "formal_adapted_gfi_latent_unet_e100_smoke_{time}"
+  checkpoint:
+    dirpath: logs/bg_pdr_fm/aaai27/smoke/adapted_gfi_latent_unet_e100/checkpoints
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/smoke/eval_adapted_gfi_latent_unet_e100/adapted_gfi_latent_unet_e100
+  checkpoint: logs/bg_pdr_fm/aaai27/smoke/adapted_gfi_latent_unet_e100/checkpoints/last.ckpt

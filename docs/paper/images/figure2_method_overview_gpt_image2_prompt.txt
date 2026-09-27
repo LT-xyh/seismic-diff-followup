@@ -1,0 +1,35 @@
+Use case: scientific-educational
+Asset type: AAAI conference paper figure, rough algorithm architecture / method overview
+Primary request: Create a clean publication-ready scientific diagram titled "Background-Gated Residual Flow Matching". This is a rough algorithm architecture figure, not a full detailed network schematic. Show the main pipeline for multimodal seismic velocity modeling with large, readable labels and simple boxes/arrows.
+Style/medium: crisp vector-like scientific infographic, white background, thin gray borders, restrained colors, AAAI paper style, readable at two-column full-width size.
+Composition/framing: wide landscape 16:9 figure with a left-to-right pipeline. Keep generous whitespace. Use one compact top strip for training-time anchors and one main pipeline for inference-time flow.
+Color palette: blue for numerical/background cues, green for structural/residual cues, amber for background-quality gate, dark gray for neutral text and arrows.
+Text (verbatim, keep short):
+"Multimodal inputs"
+"PSTM"
+"Horizon"
+"RMS velocity"
+"Well log"
+"Modality encoders"
+"Training only"
+"A_N"
+"A_S"
+"Disentangled conditions"
+"C_N"
+"C_S"
+"Background branch"
+"f_B"
+"B_hat"
+"Residual Flow Matching"
+"psi_B(B_hat)"
+"rho_hat_B"
+"R_hat"
+"V_hat = B_hat + R_hat"
+Panel details:
+- Show the main pipeline from left to right: multimodal inputs -> modality encoders -> disentangled conditions C_N and C_S -> background branch f_B predicts B_hat from C_N -> residual Flow Matching uses C_S together with psi_B(B_hat) and rho_hat_B to generate R_hat -> final reconstruction V_hat = B_hat + R_hat.
+- Show training-time wavelet anchors A_N and A_S in a small dashed or faded top strip connected to the condition learner, clearly labeled "Training only".
+- Show inference-time gate rho_hat_B as an amber control signal feeding the residual branch.
+- Make the architecture schematic, not literal code or a full U-Net. No detailed layer stacks, no loss-function blocks, no dense equations, no result charts.
+- Use simple rectangular modules and a few clean arrows. Keep all labels large and legible.
+Constraints: no realistic seismic photos, no decorative gradients, no dark background, no watermark, no logo, no extra panels beyond the rough algorithm overview, no tiny text, no clutter.
+Avoid: exact implementation detail overload, long formulas, crowded annotations, full encoder/decoder blocks, training curves, numerical tables, or experimental results.

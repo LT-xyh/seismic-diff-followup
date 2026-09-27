@@ -1,0 +1,100 @@
+\begingroup
+\sffamily
+\scriptsize
+\definecolor{figink}{HTML}{111827}
+\definecolor{figmuted}{HTML}{64748B}
+\definecolor{figline}{HTML}{CBD5E1}
+\definecolor{figfill}{HTML}{FCFDFF}
+\definecolor{figstruct}{HTML}{2563EB}
+\definecolor{figback}{HTML}{16A34A}
+\definecolor{figtagblue}{HTML}{E9F0FF}
+\definecolor{figtaggreen}{HTML}{E9F7EF}
+\newcommand{\figimgpath}{../images/figure1_visuals}
+\newcommand{\tileaxis}[6]{%
+  \node[inner sep=0pt, anchor=south west] (#1) at (#2,#3)
+    {\includegraphics[width=#4cm,height=#4cm]{\figimgpath/#5.png}};
+  \draw[figline, line width=0.35pt] (#1.south west) rectangle (#1.north east);
+  \draw[figmuted, line width=0.25pt] (#1.south west) -- ++(0.08,0);
+  \draw[figmuted, line width=0.25pt] (#1.south east) -- ++(-0.08,0);
+  \draw[figmuted, line width=0.25pt] (#1.north west) -- ++(0,-0.08);
+  \draw[figmuted, line width=0.25pt] (#1.south west) -- ++(0,0.08);
+  \node[font=\tiny, text=figmuted, anchor=north] at (#1.south west) {0};
+  \node[font=\tiny, text=figmuted, anchor=north] at (#1.south east) {1};
+  \node[font=\tiny, text=figmuted, anchor=east] at (#1.north west) {0};
+  \node[font=\tiny, text=figmuted, anchor=east] at (#1.south west) {1};
+  \node[font=\tiny, text=figmuted, rotate=90, anchor=south] at ($(#1.west)+(-0.22,0)$) {#6};
+  \node[font=\tiny, text=figmuted, anchor=north] at ($(#1.south)+(0,-0.13)$) {$x$};
+}
+\newcommand{\tilelabel}[4]{%
+  \node[font=\scriptsize\bfseries, text=figink, anchor=north] at ($(#1.south)+(0,-0.36)$) {#2};
+  \node[font=\tiny, text=#4, anchor=north] at ($(#1.south)+(0,-0.62)$) {#3};
+}
+\newcommand{\colorbar}[5]{%
+  \shade[bottom color=#3, top color=#4] (#1,#2) rectangle ++(0.11,#5);
+  \draw[figmuted, line width=0.25pt] (#1,#2) rectangle ++(0.11,#5);
+  \node[font=\tiny, text=figmuted, anchor=east] at (#1,#2) {0};
+  \node[font=\tiny, text=figmuted, anchor=east] at (#1,{#2+#5}) {1};
+}
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+  x=1cm,
+  y=1cm,
+  >=Latex,
+  every node/.style={inner sep=0pt}
+]
+  % Panels
+  \draw[rounded corners=2pt, figline, fill=figfill, line width=0.45pt] (0.0,0.0) rectangle (8.05,4.85);
+  \draw[rounded corners=2pt, figline, fill=figfill, line width=0.45pt] (9.15,0.0) rectangle (17.20,4.85);
+  \node[font=\large\bfseries, text=figink, anchor=west] at (0.28,4.55) {(a) Heterogeneous evidence};
+  \node[font=\large\bfseries, text=figink, anchor=west] at (9.43,4.55) {(b) Physical decomposition};
+
+  % Left panel tags
+  \node[rounded corners=1.5pt, fill=figtagblue, text=figstruct, font=\scriptsize\bfseries, minimum width=2.45cm, minimum height=0.28cm]
+    at (4.03,3.92) {structural cues};
+  \node[rounded corners=1.5pt, fill=figtaggreen, text=figback, font=\scriptsize\bfseries, minimum width=2.25cm, minimum height=0.28cm]
+    at (4.03,2.06) {numerical cues};
+
+  % Left tiles
+  \tileaxis{pstm}{1.85}{2.42}{1.25}{pstm_dense_reflector_texture}{t}
+  \tileaxis{horz}{4.98}{2.42}{1.25}{horizon_sparse_interfaces}{z}
+  \tileaxis{rms}{1.85}{0.58}{1.25}{rms_smooth_numerical_trend}{t}
+  \tileaxis{well}{4.98}{0.58}{1.25}{well_log_sparse_absolute_calibration}{z}
+  \tilelabel{pstm}{PoSTM}{reflectors}{figstruct}
+  \tilelabel{horz}{Horizon}{interfaces}{figstruct}
+  \tilelabel{rms}{RMS velocity}{trend}{figback}
+  \tilelabel{well}{Well log}{scale}{figback}
+
+  % Left velocity colorbar
+  \colorbar{7.32}{0.78}{blue}{red}{1.25}
+  \node[font=\tiny, text=figmuted, rotate=90, anchor=south] at (7.55,1.40) {velocity};
+
+  % Cross-panel arrow
+  \draw[->, figmuted, line width=0.65pt] (8.25,2.43) -- (8.95,2.43);
+  \node[font=\tiny, text=figmuted] at (8.60,2.68) {motivation};
+
+  % Right tiles
+  \tileaxis{vel}{12.40}{3.10}{1.25}{velocity_target_v}{z}
+  \tileaxis{bg}{10.95}{0.70}{1.25}{low_frequency_background_b}{z}
+  \tileaxis{hi}{14.00}{0.70}{1.25}{high_frequency_structure_s}{z}
+  \tilelabel{vel}{Target $V$}{full field}{figmuted}
+  \tilelabel{bg}{$B=P_L(V)$}{low-pass}{figback}
+  \tilelabel{hi}{$S=P_H(V)$}{high-pass}{figstruct}
+
+  % Decomposition arrows and formulas
+  \draw[->, figback, line width=0.8pt] (12.50,3.05) .. controls (11.95,2.55) and (11.50,2.15) .. (11.35,2.00);
+  \draw[->, figstruct, line width=0.8pt] (13.45,3.05) .. controls (14.00,2.55) and (14.40,2.15) .. (14.55,2.00);
+  \node[font=\Large, text=figink, align=center] at (12.95,2.46)
+    {$V=P_L(V)+P_H(V)$\\[-1pt]$=B+S$};
+
+  % Right colorbars
+  \colorbar{16.12}{3.10}{blue}{red}{1.25}
+  \node[font=\tiny, text=figmuted, rotate=90, anchor=south] at (16.36,3.72) {velocity};
+  \shade[bottom color=blue, middle color=white, top color=red] (16.12,0.70) rectangle ++(0.11,1.25);
+  \draw[figmuted, line width=0.25pt] (16.12,0.70) rectangle ++(0.11,1.25);
+  \node[font=\tiny, text=figmuted, anchor=east] at (16.12,0.70) {$-1$};
+  \node[font=\tiny, text=figmuted, anchor=east] at (16.12,1.325) {0};
+  \node[font=\tiny, text=figmuted, anchor=east] at (16.12,1.95) {1};
+  \node[font=\tiny, text=figmuted, rotate=90, anchor=south] at (16.36,1.32) {residual};
+\end{tikzpicture}%
+}
+\endgroup

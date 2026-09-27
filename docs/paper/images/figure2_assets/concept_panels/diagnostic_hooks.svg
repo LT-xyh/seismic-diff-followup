@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="640" height="210" viewBox="0 0 640 210">
+<defs>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#64748B" />
+  </marker>
+  <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#2563EB" />
+  </marker>
+  <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#16A34A" />
+  </marker>
+  <marker id="arrow-orange" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#F59E0B" />
+  </marker>
+  <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#DC2626" />
+  </marker>
+  <style>
+    .title { font: 700 18px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #111827; }
+    .subtitle { font: 500 12px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #64748B; }
+    .label { font: 600 13px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #111827; }
+    .small { font: 500 11px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #64748B; }
+    .formula { font: 600 13px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #111827; }
+    .tiny { font: 500 9px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #64748B; }
+  </style>
+</defs>
+
+<rect x="0" y="0" width="640" height="210" fill="white"/>
+<text x="24" y="36" class="title" text-anchor="start">Diagnostic Hooks</text>
+<text x="24" y="56" class="subtitle" text-anchor="start">These metrics verify whether the claimed decomposition is followed</text>
+<rect x="48" y="92" width="158" height="76" rx="8" fill="#F0FDF4" stroke="#BBF7D0" stroke-width="1.2" />
+<text x="127" y="122" class="formula" text-anchor="middle" fill="#16A34A">eta_B</text>
+<text x="127" y="146" class="small" text-anchor="middle">background role</text>
+<rect x="242" y="92" width="158" height="76" rx="8" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.2" />
+<text x="321" y="122" class="formula" text-anchor="middle" fill="#2563EB">eta_S</text>
+<text x="321" y="146" class="small" text-anchor="middle">structural role</text>
+<rect x="436" y="92" width="158" height="76" rx="8" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1.2" />
+<text x="515" y="122" class="formula" text-anchor="middle">rho_B</text>
+<text x="515" y="146" class="small" text-anchor="middle">residual leakage</text>
+<line x1="206" y1="130" x2="242" y2="130" stroke="#64748B" stroke-width="1.8" marker-end="url(#arrow)" />
+<line x1="400" y1="130" x2="436" y2="130" stroke="#64748B" stroke-width="1.8" marker-end="url(#arrow)" />
+<text x="322" y="194" class="tiny" text-anchor="middle">Use as a small footer: design -> measurable checks</text>
+
+</svg>

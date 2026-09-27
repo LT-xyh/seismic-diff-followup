@@ -1,0 +1,82 @@
+{
+  "dataset": "FlatFaultB",
+  "sample_index": 27006,
+  "lmdb_root": "/public/home/xuyinghao/workspace/datasets/openfwi_lmdb",
+  "source_root": null,
+  "lowpass_kernel": 5,
+  "lowpass_pad_mode": "edge",
+  "well_columns": [
+    20,
+    43
+  ],
+  "assets": {
+    "pstm": {
+      "shape": [
+        350,
+        70
+      ],
+      "finite_min": -387.2381286621094,
+      "finite_max": 194.2066192626953,
+      "finite_mean": -23.889270782470703
+    },
+    "horizon": {
+      "shape": [
+        70,
+        70
+      ],
+      "finite_min": 0.0,
+      "finite_max": 1.0,
+      "finite_mean": 0.8253061175346375
+    },
+    "rms": {
+      "shape": [
+        1000,
+        70
+      ],
+      "finite_min": 1679.0,
+      "finite_max": 4111.87548828125,
+      "finite_mean": 3311.04345703125
+    },
+    "well_log": {
+      "shape": [
+        70,
+        70
+      ],
+      "finite_min": 1679.0,
+      "finite_max": 4233.0,
+      "finite_mean": 3532.0
+    },
+    "depth_vel": {
+      "shape": [
+        70,
+        70
+      ],
+      "finite_min": 1679.0,
+      "finite_max": 4383.0,
+      "finite_mean": 3569.62744140625
+    },
+    "low": {
+      "shape": [
+        70,
+        70
+      ],
+      "finite_min": 1679.0,
+      "finite_max": 4383.0,
+      "finite_mean": 3569.700927734375
+    },
+    "high": {
+      "shape": [
+        70,
+        70
+      ],
+      "finite_min": -775.56005859375,
+      "finite_max": 657.199951171875,
+      "finite_mean": -0.0736725702881813
+    }
+  },
+  "display_policy": {
+    "single_tiles": "1:1 pure image tiles with plt.subplots_adjust(top=1, bottom=0, right=1, left=0)",
+    "horizon": "missing/background pixels are white; horizon lines are black",
+    "well_log": "unobserved pixels are white; observed well columns use jet velocity colors"
+  }
+}

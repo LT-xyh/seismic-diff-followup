@@ -1,0 +1,7 @@
+extends: conditional_ddpm.yaml
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/eval_conditional_ddpm/conditional_ddpm
+  checkpoint: logs/bg_pdr_fm/aaai27/formal/conditional_ddpm/checkpoints/last.ckpt
+  missing_modes:
+    - full

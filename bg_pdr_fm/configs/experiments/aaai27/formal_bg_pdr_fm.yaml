@@ -1,0 +1,26 @@
+extends: _base_formal.yaml
+
+benchmark:
+  variant: bg_pdr_fm
+  capacity_tier: reference
+  generator_hidden_channels: 96
+  freeze_background_branch: true
+
+loss:
+  rho_weight: 0.05
+
+quality_gate:
+  mode: learned
+
+training:
+  load_stage_checkpoint: logs/bg_pdr_fm/background_train_hc16_lh01/lightning/checkpoints/background_hc16_lh01-epoch_96-loss0.0801.ckpt
+  logging:
+    log_dir: logs/bg_pdr_fm/aaai27/formal/bg_pdr_fm/lightning
+    log_version: "formal_bg_pdr_fm_{time}"
+  checkpoint:
+    dirpath: logs/bg_pdr_fm/aaai27/formal/bg_pdr_fm/checkpoints
+    filename: "bg-pdr-fm-{epoch}-loss{val/loss:.4f}"
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/formal/bg_pdr_fm/evaluation
+  checkpoint: logs/bg_pdr_fm/aaai27/formal/bg_pdr_fm/checkpoints/last.ckpt

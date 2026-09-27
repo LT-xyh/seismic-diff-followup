@@ -1,0 +1,17 @@
+extends: sv_inv_net.yaml
+
+training:
+  num_workers: 8
+  persistent_workers: true
+  prefetch_factor: 4
+  dataloader_multiprocessing_context: spawn
+  logging:
+    log_dir: logs/bg_pdr_fm/aaai27/formal/sv_inv_net_direct_highio/lightning
+    log_version: "sv_inv_net_direct_highio_{time}"
+  checkpoint:
+    dirpath: logs/bg_pdr_fm/aaai27/formal/sv_inv_net_direct_highio/checkpoints
+    filename: "sv-inv-net-direct-highio-{epoch}-loss{val/loss:.4f}"
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/eval_sv_inv_net_direct_highio/sv_inv_net
+  checkpoint: logs/bg_pdr_fm/aaai27/formal/sv_inv_net_direct_highio/checkpoints/last.ckpt

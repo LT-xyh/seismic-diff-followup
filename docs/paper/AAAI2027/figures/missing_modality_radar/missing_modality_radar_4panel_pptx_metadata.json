@@ -1,0 +1,88 @@
+{
+  "all_elements_native_editable": true,
+  "contains_embedded_media": false,
+  "datasets": [
+    "FlatVelA",
+    "FlatVelB",
+    "CurveVelA",
+    "CurveVelB",
+    "FlatFaultA",
+    "FlatFaultB",
+    "CurveFaultA",
+    "CurveFaultB"
+  ],
+  "font": "Times New Roman",
+  "line_count": 230,
+  "methods": [
+    "InversionNet",
+    "VelocityGAN",
+    "UPFWI",
+    "Auto-Linear",
+    "Latent U-Net (Large)",
+    "PD-BG-RFM"
+  ],
+  "modes": [
+    "w/o well_log",
+    "w/o horizon",
+    "w/o PSTM",
+    "RMS only"
+  ],
+  "num_rows": 192,
+  "panel_radial_ranges": {
+    "RMS only": [
+      0.5,
+      1.0
+    ],
+    "w/o PSTM": [
+      0.85,
+      1.0
+    ],
+    "w/o horizon": [
+      0.5,
+      1.0
+    ],
+    "w/o well_log": [
+      0.85,
+      1.0
+    ]
+  },
+  "panel_radial_ticks": {
+    "RMS only": [
+      0.5,
+      0.6,
+      0.7,
+      0.8,
+      0.9,
+      1.0
+    ],
+    "w/o PSTM": [
+      0.85,
+      0.9,
+      0.95,
+      1.0
+    ],
+    "w/o horizon": [
+      0.5,
+      0.6,
+      0.7,
+      0.8,
+      0.9,
+      1.0
+    ],
+    "w/o well_log": [
+      0.85,
+      0.9,
+      0.95,
+      1.0
+    ]
+  },
+  "picture_count": 0,
+  "presentation": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/missing_modality_radar/missing_modality_radar_4panel_editable.pptx",
+  "shape_count": 507,
+  "slide_size_inches": [
+    13.333,
+    5.0
+  ],
+  "source_csv": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/missing_modality_radar/missing_modality_radar_source.csv",
+  "source_csv_sha256": "dfbf0fa0784065a4a86e1f0760bff570b22e5ebed90faf76cfe67520d7779185"
+}

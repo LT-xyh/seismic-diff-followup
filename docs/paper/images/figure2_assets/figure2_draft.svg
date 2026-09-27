@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1500" height="760" viewBox="0 0 1500 760">
+<defs>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#64748B" />
+  </marker>
+  <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#2563EB" />
+  </marker>
+  <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#16A34A" />
+  </marker>
+  <marker id="arrow-orange" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#F59E0B" />
+  </marker>
+  <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#DC2626" />
+  </marker>
+  <style>
+    .title { font: 700 18px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #111827; }
+    .subtitle { font: 500 12px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #64748B; }
+    .label { font: 600 13px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #111827; }
+    .small { font: 500 11px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #64748B; }
+    .formula { font: 600 13px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #111827; }
+    .tiny { font: 500 9px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #64748B; }
+  </style>
+</defs>
+
+<rect x="0" y="0" width="1500" height="760" fill="white"/>
+<text x="34" y="42" class="title" text-anchor="start">PD-BG-RFM: physics-decoupled residual transport</text>
+<text x="34" y="66" class="subtitle" text-anchor="start">Solid arrows: inference computation. Dashed orange arrows: training-only supervision.</text>
+<rect x="34" y="112" width="260" height="500" rx="8" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1.2" />
+<text x="164" y="144" class="label" text-anchor="middle">Multimodal evidence</text>
+<image href="data_tiles/pstm_1to1.png" x="60" y="172" width="92" height="92"/>
+<image href="data_tiles/horizon_1to1.png" x="174" y="172" width="92" height="92"/>
+<image href="data_tiles/rms_1to1.png" x="60" y="310" width="92" height="92"/>
+<image href="data_tiles/well_1to1.png" x="174" y="310" width="92" height="92"/>
+<text x="106" y="282" class="tiny" text-anchor="middle">PoSTM</text>
+<text x="220" y="282" class="tiny" text-anchor="middle">Horizon</text>
+<text x="106" y="420" class="tiny" text-anchor="middle">RMS</text>
+<text x="220" y="420" class="tiny" text-anchor="middle">Well</text>
+<rect x="78" y="472" width="172" height="70" rx="8" fill="white" stroke="#CBD5E1" stroke-width="1.2" />
+<text x="164" y="502" class="label" text-anchor="middle">modality encoder</text>
+<text x="164" y="526" class="small" text-anchor="middle">1x1 role heads</text>
+<line x1="294" y1="362" x2="370" y2="362" stroke="#64748B" stroke-width="1.8" marker-end="url(#arrow)" />
+<rect x="370" y="112" width="360" height="500" rx="8" fill="white" stroke="#CBD5E1" stroke-width="1.2" />
+<text x="550" y="144" class="label" text-anchor="middle">Physics-decoupled contract</text>
+<image href="concept_panels/condition_space_cluster.svg" x="396" y="170" width="308" height="194"/>
+<rect x="408" y="394" width="282" height="92" rx="8" fill="#FFF7ED" stroke="#F59E0B" stroke-width="1.2" stroke-dasharray="7 5"/>
+<text x="549" y="426" class="formula" text-anchor="middle">A_B=W_L(V), A_S=W_H(V)</text>
+<text x="549" y="454" class="small" text-anchor="middle">contract losses are training only</text>
+<line x1="730" y1="362" x2="806" y2="362" stroke="#64748B" stroke-width="1.8" marker-end="url(#arrow)" />
+<rect x="806" y="112" width="280" height="500" rx="8" fill="white" stroke="#CBD5E1" stroke-width="1.2" />
+<text x="946" y="144" class="label" text-anchor="middle">Background responsibility</text>
+<rect x="854" y="190" width="184" height="72" rx="8" fill="#F0FDF4" stroke="#BBF7D0" stroke-width="1.2" />
+<text x="946" y="222" class="formula" text-anchor="middle" fill="#16A34A">C_B -> f_B -> hat B</text>
+<text x="946" y="246" class="small" text-anchor="middle">deterministic branch</text>
+<image href="data_tiles/background_1to1.png" x="876" y="300" width="140" height="140"/>
+<text x="946" y="466" class="formula" text-anchor="middle" fill="#16A34A">hat B</text>
+<line x1="1086" y1="362" x2="1162" y2="362" stroke="#64748B" stroke-width="1.8" marker-end="url(#arrow)" />
+<rect x="1162" y="112" width="304" height="500" rx="8" fill="white" stroke="#CBD5E1" stroke-width="1.2" />
+<text x="1314" y="144" class="label" text-anchor="middle">Residual-space transport</text>
+<rect x="1192" y="184" width="244" height="74" rx="8" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.2" />
+<text x="1314" y="216" class="formula" text-anchor="middle" fill="#2563EB">C_S + psi_B(hat B)</text>
+<text x="1314" y="240" class="small" text-anchor="middle">conditions residual FM</text>
+<image href="concept_panels/residual_transport.svg" x="1190" y="286" width="246" height="126"/>
+<text x="1314" y="454" class="formula" text-anchor="middle">hat V = hat B + hat R</text>
+<rect x="56" y="650" width="1388" height="70" rx="8" fill="white" stroke="#CBD5E1" stroke-width="1.2" />
+<text x="96" y="682" class="label" text-anchor="start">Diagnostics:</text>
+<text x="212" y="682" class="small" text-anchor="start">eta_B, eta_S check condition roles; rho_B checks low-frequency residual leakage.</text>
+<text x="212" y="706" class="small" text-anchor="start">These are evaluation diagnostics, not extra inference inputs.</text>
+
+</svg>

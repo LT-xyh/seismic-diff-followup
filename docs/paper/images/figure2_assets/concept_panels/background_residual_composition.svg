@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="820" height="300" viewBox="0 0 820 300">
+<defs>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#64748B" />
+  </marker>
+  <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#2563EB" />
+  </marker>
+  <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#16A34A" />
+  </marker>
+  <marker id="arrow-orange" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#F59E0B" />
+  </marker>
+  <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#DC2626" />
+  </marker>
+  <style>
+    .title { font: 700 18px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #111827; }
+    .subtitle { font: 500 12px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #64748B; }
+    .label { font: 600 13px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #111827; }
+    .small { font: 500 11px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #64748B; }
+    .formula { font: 600 13px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #111827; }
+    .tiny { font: 500 9px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #64748B; }
+  </style>
+</defs>
+
+<rect x="0" y="0" width="820" height="300" fill="white"/>
+<text x="24" y="36" class="title" text-anchor="start">Background-Guided Composition</text>
+<text x="24" y="56" class="subtitle" text-anchor="start">Deterministic background plus generated structured residual</text>
+<image href="../data_tiles/background_1to1.png" x="54" y="92" width="142" height="142" preserveAspectRatio="xMidYMid meet"/>
+<rect x="54" y="92" width="142" height="142" rx="4" fill="none" stroke="#BBF7D0" stroke-width="1.2" />
+<text x="125" y="258" class="formula" text-anchor="middle" fill="#16A34A">hat B = f_B(C_B)</text>
+<text x="226" y="176" class="title" text-anchor="middle">+</text>
+<image href="../data_tiles/structure_1to1.png" x="258" y="92" width="142" height="142" preserveAspectRatio="xMidYMid meet"/>
+<rect x="258" y="92" width="142" height="142" rx="4" fill="none" stroke="#BFDBFE" stroke-width="1.2" />
+<text x="329" y="258" class="formula" text-anchor="middle" fill="#2563EB">hat R</text>
+<text x="430" y="176" class="title" text-anchor="middle">=</text>
+<image href="../data_tiles/velocity_1to1.png" x="462" y="92" width="142" height="142" preserveAspectRatio="xMidYMid meet"/>
+<rect x="462" y="92" width="142" height="142" rx="4" fill="none" stroke="#CBD5E1" stroke-width="1.2" />
+<text x="533" y="258" class="formula" text-anchor="middle">hat V = hat B + hat R</text>
+<rect x="646" y="100" width="138" height="116" rx="8" fill="#FFF7ED" stroke="#F59E0B" stroke-width="1.2" stroke-dasharray="7 5"/>
+<text x="715" y="132" class="label" text-anchor="middle" fill="#F59E0B">Training target</text>
+<text x="715" y="158" class="formula" text-anchor="middle">R_hatB = V - hat B</text>
+<text x="715" y="184" class="small" text-anchor="middle">not an oracle</text>
+<text x="715" y="204" class="small" text-anchor="middle">low-pass residual</text>
+
+</svg>

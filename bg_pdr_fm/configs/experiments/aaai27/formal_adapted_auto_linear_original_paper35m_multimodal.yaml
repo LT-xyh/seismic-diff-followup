@@ -1,0 +1,7 @@
+extends: adapted_auto_linear_original_paper35m_multimodal.yaml
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/eval_adapted_auto_linear_original_paper35m_multimodal/adapted_auto_linear_original_paper35m_multimodal
+  checkpoint: logs/bg_pdr_fm/aaai27/formal/adapted_auto_linear_original_paper35m_multimodal/checkpoints/last.ckpt
+  missing_modes:
+    - full

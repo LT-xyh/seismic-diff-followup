@@ -1,0 +1,241 @@
+{
+  "advantage_complete": true,
+  "arrays": [
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveFaultA_005325.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveFaultA_009443.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveFaultA_015913.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveFaultA_021035.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveFaultA_026193.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveFaultA_028137.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveFaultA_029084.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveFaultA_034030.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveFaultA_046111.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveFaultB_007146.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveFaultB_007449.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveVelA_002239.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveVelA_003929.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveVelA_012550.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveVelA_023514.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveVelB_000556.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveVelB_001645.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveVelB_007769.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveVelB_009003.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveVelB_009527.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveVelB_012557.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveVelB_013946.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveVelB_014614.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveVelB_020582.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveVelB_021564.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveVelB_022461.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveVelB_023726.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveVelB_026377.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/CurveVelB_029108.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/FlatFaultA_003158.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/FlatFaultA_003215.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/FlatFaultA_004592.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/FlatFaultA_004889.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/FlatFaultA_005437.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/FlatFaultA_006839.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/FlatFaultA_010401.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/FlatFaultA_016494.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/FlatFaultA_019468.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/FlatFaultA_021763.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/FlatFaultA_022085.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/FlatFaultA_030127.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/FlatFaultA_041410.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/FlatFaultA_047562.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/FlatFaultB_021686.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/FlatFaultB_043670.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/FlatVelA_000101.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/FlatVelA_011585.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/FlatVelB_004594.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/FlatVelB_005948.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/FlatVelB_013815.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/FlatVelB_019212.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/FlatVelB_022381.npz",
+    "logs/bg_pdr_fm/aaai27/table2_qualitative/arrays/FlatVelB_029501.npz"
+  ],
+  "base_seed": 2027,
+  "checkpoints": {
+    "Auto-Linear": {
+      "loaded_keys": 128,
+      "missing_keys": 0,
+      "mode": "variant",
+      "path": "logs/bg_pdr_fm/aaai27/formal/adapted_auto_linear_original_paper35m_multimodal/checkpoints/last.ckpt",
+      "skipped_shape_keys": 0,
+      "unexpected_keys": 0
+    },
+    "InversionNet": {
+      "loaded_keys": 175,
+      "missing_keys": 0,
+      "mode": "variant",
+      "path": "logs/bg_pdr_fm/aaai27/formal/adapted_inversion_net_official_e100/checkpoints/last.ckpt",
+      "skipped_shape_keys": 0,
+      "unexpected_keys": 0
+    },
+    "Latent U-Net (Large)": {
+      "loaded_keys": 183,
+      "missing_keys": 0,
+      "mode": "variant",
+      "path": "logs/bg_pdr_fm/aaai27/formal/adapted_gfi_latent_unet_e100/checkpoints/adapted-gfi-latent-unet-e100-resume-95-loss0.0071.ckpt",
+      "skipped_shape_keys": 0,
+      "unexpected_keys": 0
+    },
+    "PD-BG-RFM": {
+      "loaded_keys": 1070,
+      "missing_keys": 0,
+      "mode": "full",
+      "path": "logs/bg_pdr_fm/joint_full_contrastive_bgfm_pixelfm_predbg_e100/lightning/checkpoints/joint_full_contrastive_bgfm_pixelfm_predbg_e100-epoch_99-loss0.1036.ckpt",
+      "skipped_shape_keys": 0,
+      "unexpected_keys": 0
+    },
+    "UPFWI": {
+      "loaded_keys": 175,
+      "missing_keys": 0,
+      "mode": "variant",
+      "path": "logs/bg_pdr_fm/aaai27/formal/adapted_upfwi_official_e100/checkpoints/last.ckpt",
+      "skipped_shape_keys": 0,
+      "unexpected_keys": 0
+    },
+    "VelocityGAN": {
+      "loaded_keys": 238,
+      "missing_keys": 0,
+      "mode": "variant",
+      "path": "logs/bg_pdr_fm/aaai27/formal/velocity_gan_official_e100/checkpoints/last.ckpt",
+      "skipped_shape_keys": 0,
+      "unexpected_keys": 0
+    }
+  },
+  "device": "cuda:0",
+  "error_limits_mps": [
+    0.0,
+    750.0
+  ],
+  "expected_global_held_out_records": 33600,
+  "figures": {
+    "standalone_error": {
+      "directory": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/table2_qualitative/standalone_error",
+      "manifest": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/table2_qualitative/standalone_error_manifest.csv",
+      "num_images": 48
+    },
+    "standalone_velocity": {
+      "directory": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/table2_qualitative/standalone_velocity",
+      "manifest": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/table2_qualitative/standalone_velocity_manifest.csv",
+      "num_images": 56
+    },
+    "table2_advantage_cases": {
+      "coordinate_system": "x/z grid index",
+      "coordinate_ticks": [
+        0,
+        35,
+        69
+      ],
+      "error_cmap": "inferno",
+      "error_limits": [
+        0.0,
+        750.0
+      ],
+      "pdf": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/table2_qualitative/table2_advantage_cases.pdf",
+      "png": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/table2_qualitative/table2_advantage_cases.png",
+      "velocity_cmap": "jet",
+      "velocity_limits": [
+        1500.0,
+        4500.0
+      ]
+    },
+    "table2_failure_cases": {
+      "coordinate_system": "x/z grid index",
+      "coordinate_ticks": [
+        0,
+        35,
+        69
+      ],
+      "error_cmap": "inferno",
+      "error_limits": [
+        0.0,
+        750.0
+      ],
+      "pdf": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/table2_qualitative/table2_failure_cases.pdf",
+      "png": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/table2_qualitative/table2_failure_cases.png",
+      "velocity_cmap": "jet",
+      "velocity_limits": [
+        1500.0,
+        4500.0
+      ]
+    },
+    "table2_representative_cases": {
+      "coordinate_system": "x/z grid index",
+      "coordinate_ticks": [
+        0,
+        35,
+        69
+      ],
+      "error_cmap": "inferno",
+      "error_limits": [
+        0.0,
+        750.0
+      ],
+      "pdf": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/table2_qualitative/table2_representative_cases.pdf",
+      "png": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/table2_qualitative/table2_representative_cases.png",
+      "velocity_cmap": "jet",
+      "velocity_limits": [
+        1500.0,
+        4500.0
+      ]
+    },
+    "table2_representative_cases_1": {
+      "coordinate_system": "x/z grid index",
+      "coordinate_ticks": [
+        0,
+        35,
+        69
+      ],
+      "error_cmap": "inferno",
+      "error_limits": [
+        0.0,
+        750.0
+      ],
+      "pdf": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/table2_qualitative/table2_representative_cases_1.pdf",
+      "png": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/table2_qualitative/table2_representative_cases_1.png",
+      "velocity_cmap": "jet",
+      "velocity_limits": [
+        1500.0,
+        4500.0
+      ]
+    },
+    "table2_representative_cases_2": {
+      "coordinate_system": "x/z grid index",
+      "coordinate_ticks": [
+        0,
+        35,
+        69
+      ],
+      "error_cmap": "inferno",
+      "error_limits": [
+        0.0,
+        750.0
+      ],
+      "pdf": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/table2_qualitative/table2_representative_cases_2.pdf",
+      "png": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/table2_qualitative/table2_representative_cases_2.png",
+      "velocity_cmap": "jet",
+      "velocity_limits": [
+        1500.0,
+        4500.0
+      ]
+    }
+  },
+  "normalization_profiles": {
+    "Auto-Linear": "seismic_global",
+    "InversionNet": "seismic_global",
+    "Latent U-Net (Large)": "seismic_global",
+    "PD-BG-RFM": "openfwi",
+    "UPFWI": "seismic_global",
+    "VelocityGAN": "seismic_global"
+  },
+  "num_manifest_records": 33600,
+  "observed_error_limits_mps": [
+    0.0,
+    3225.500488
+  ],
+  "selection_manifest": "logs/bg_pdr_fm/aaai27/table2_qualitative/selection_manifest.csv"
+}

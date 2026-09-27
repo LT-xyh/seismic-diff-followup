@@ -1,0 +1,110 @@
+{
+  "causal_ablation": false,
+  "causal_statement": "UMAP/t-SNE layouts are qualitative representation diagnostics, not a causal contrastive-loss ablation.",
+  "checkpoint": {
+    "loaded_from_cache": true
+  },
+  "dependency_versions": {
+    "numpy": "1.24.3",
+    "python": "3.10.20",
+    "scipy": "1.15.3",
+    "sklearn": "1.7.1",
+    "torch": "2.7.1",
+    "umap": "0.5.12",
+    "openTSNE": "1.0.4"
+  },
+  "evidence_scope": "single_checkpoint_diagnostic",
+  "inputs": {
+    "checkpoint": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/joint_full_contrastive_bgfm_pixelfm_predbg_e100/lightning/checkpoints/joint_full_contrastive_bgfm_pixelfm_predbg_e100-epoch_99-loss0.1036.ckpt",
+    "checkpoint_sha256": "0d77a529618d8d158af0731752cc68efc01c4f6e2f2adfedaf87d8008f930a36",
+    "config": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/joint_full_contrastive_bgfm_pixelfm_predbg_e100/evaluation_epoch99_full_parallel_bs64/eval_config_epoch99.yaml",
+    "config_sha256": "1f26a5aa157e8d8c7e1c54e6cd9e0ba10bdf9e9289aff6108247cd547b541f60",
+    "manifest": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/joint_full_contrastive_bgfm_pixelfm_predbg_e100/evaluation_epoch99_global_heldout_full_parallel_bs64/held_out_manifest.csv",
+    "manifest_sha256": "10b22bf60842528f843f07f8a374f9920677e1a0d097f53db83e61e100494876"
+  },
+  "manifest_audit": {
+    "dataset_counts": {
+      "CurveFaultA": 5440,
+      "CurveFaultB": 5401,
+      "CurveVelA": 2958,
+      "CurveVelB": 3069,
+      "FlatFaultA": 5471,
+      "FlatFaultB": 5351,
+      "FlatVelA": 2930,
+      "FlatVelB": 2980
+    },
+    "path": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/joint_full_contrastive_bgfm_pixelfm_predbg_e100/evaluation_epoch99_global_heldout_full_parallel_bs64/held_out_manifest.csv",
+    "rows": 33600,
+    "sha256": "10b22bf60842528f843f07f8a374f9920677e1a0d097f53db83e61e100494876",
+    "unique_identities": 33600
+  },
+  "outputs": {
+    "cache": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/aaai27/diagnostics/condition_embedding_clusters/embedding_cache.npz",
+    "coordinates_csv": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/condition_embedding_clusters/coordinates.csv",
+    "dataset_audit_pdf": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/condition_embedding_clusters/condition_embedding_dataset_audit.pdf",
+    "figure_pdf": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/condition_embedding_clusters/condition_embedding_clusters.pdf",
+    "figure_png": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/condition_embedding_clusters/condition_embedding_clusters.png",
+    "figure_svg": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/condition_embedding_clusters/condition_embedding_clusters.svg",
+    "metrics_csv": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/condition_embedding_clusters/metrics.csv",
+    "provenance_csv": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/condition_embedding_clusters/provenance.csv"
+  },
+  "paper_recommendation": "appendix_diagnostic_only",
+  "visual_review": {
+    "main_text_candidate": false,
+    "reason": "Joint role separation is stable, but structural cross-modal modality silhouette is negative; retain as an appendix diagnostic rather than causal main-text evidence.",
+    "canonical_original_space_silhouette": {
+      "joint_roles": 0.4904521703720093,
+      "background_modality": 0.08903162181377411,
+      "structural_modality": -0.04458492994308472
+    }
+  },
+  "reduction": {
+    "pca_components": 50,
+    "pca_whiten": false,
+    "stability_seeds": [
+      42,
+      3407,
+      7777
+    ],
+    "tsne": {
+      "backend": "openTSNE",
+      "init": "pca",
+      "learning_rate": "auto",
+      "max_iter": 2000,
+      "metric": "cosine",
+      "negative_gradient_method": "fft",
+      "perplexity": 30,
+      "seed": 42
+    },
+    "umap": {
+      "metric": "cosine",
+      "min_dist": 0.15,
+      "n_neighbors": 30,
+      "seed": 42
+    }
+  },
+  "representations": {
+    "background": "projected numerical role heads plus projected training-only background anchor",
+    "inference_claim": "anchors are diagnostic quantities and unavailable at inference",
+    "joint_roles": "four modality-specific projected numerical/structural heads",
+    "projector_space": "trained modality/anchor contrastive projectors",
+    "structural": "projected structural role heads plus projected training-only structural anchor"
+  },
+  "sampling": {
+    "complete_modalities_only": true,
+    "per_subset": 128,
+    "seed": 42,
+    "selected_rows": 1024,
+    "selection_rule": "fixed stratified random sample from formal held-out records; no metric or visual filtering",
+    "subsets": [
+      "FlatVelA",
+      "FlatVelB",
+      "CurveVelA",
+      "CurveVelB",
+      "FlatFaultA",
+      "FlatFaultB",
+      "CurveFaultA",
+      "CurveFaultB"
+    ]
+  }
+}

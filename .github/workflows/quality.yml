@@ -1,0 +1,22 @@
+name: quality
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  source-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Install release dependencies
+        run: python -m pip install --upgrade pip -r reproducibility/requirements.txt
+      - name: Validate release manifest
+        run: python reproducibility/validate_release.py
+      - name: Run release tests
+        run: pytest -q bg_pdr_fm/tests/test_release_manifest.py bg_pdr_fm/tests/test_release_config.py bg_pdr_fm/tests/test_release_entrypoints.py tests
+      - name: Run CPU smoke path
+        run: python scripts/aaai27/smoke.py

@@ -1,0 +1,26 @@
+extends: _base_formal.yaml
+
+benchmark:
+  variant: adapted_gfi
+  capacity_tier: adapted_external
+  adapted_gfi_base_channels: 32
+  adapted_gfi_input_hw: [1000, 70]
+
+training:
+  freeze_encoder: true
+  load_stage_checkpoint: null
+  max_epochs: 5
+  batch_size: 64
+  devices: 1
+  logging:
+    log_dir: logs/bg_pdr_fm/aaai27/formal/adapted_gfi_multimodal_short/lightning
+    log_version: "adapted_gfi_multimodal_short_{time}"
+  checkpoint:
+    dirpath: logs/bg_pdr_fm/aaai27/formal/adapted_gfi_multimodal_short/checkpoints
+    filename: "adapted-gfi-multimodal-short-{epoch}-loss{val/loss:.4f}"
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/eval_adapted_gfi_multimodal_short/adapted_gfi_multimodal
+  checkpoint: logs/bg_pdr_fm/aaai27/formal/adapted_gfi_multimodal_short/checkpoints/last.ckpt
+  missing_modes:
+    - full

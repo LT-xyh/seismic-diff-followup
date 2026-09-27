@@ -1,0 +1,46 @@
+This is BibTeX, Version 0.99d (TeX Live 2018)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: _build/seismic_diff_method_appendix.aux
+The style file: aaai2026.bst
+Database file #1: aaai2026.bib
+You've used 11 entries,
+            2840 wiz_defined-function locations,
+            643 strings with 6784 characters,
+and the built_in function-call counts, 8642 in all, are:
+= -- 682
+> -- 521
+< -- 2
++ -- 191
+- -- 178
+* -- 646
+:= -- 1382
+add.period$ -- 44
+call.type$ -- 11
+change.case$ -- 107
+chr.to.int$ -- 12
+cite$ -- 11
+duplicate$ -- 556
+empty$ -- 537
+format.name$ -- 210
+if$ -- 1683
+int.to.chr$ -- 2
+int.to.str$ -- 1
+missing$ -- 122
+newline$ -- 59
+num.names$ -- 44
+pop$ -- 286
+preamble$ -- 1
+purify$ -- 95
+quote$ -- 0
+skip$ -- 276
+stack$ -- 0
+substring$ -- 366
+swap$ -- 310
+text.length$ -- 2
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 99
+warning$ -- 0
+while$ -- 62
+width$ -- 0
+write$ -- 144

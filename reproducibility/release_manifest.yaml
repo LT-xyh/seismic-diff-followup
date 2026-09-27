@@ -1,0 +1,75 @@
+version: 1
+release_name: aaai27-pd-bg-rfm-source
+description: Project-owned source inputs for the paper-linked PD-BG-RFM release.
+entrypoints:
+  prepare_openfwi: scripts/aaai27/prepare_openfwi.py
+  train: scripts/aaai27/train.py
+  evaluate: scripts/aaai27/evaluate.py
+  smoke: scripts/aaai27/smoke.py
+  validate: scripts/aaai27/validate.py
+  config_loader: bg_pdr_fm/training/benchmark_config.py
+files:
+  - bg_pdr_fm/data/batch.py
+  - bg_pdr_fm/data/datasets.py
+  - bg_pdr_fm/data/openfwi_lmdb.py
+  - bg_pdr_fm/data/normalization_profiles.py
+  - bg_pdr_fm/models/adapters.py
+  - bg_pdr_fm/models/codecs.py
+  - bg_pdr_fm/models/contrastive.py
+  - bg_pdr_fm/models/encoder.py
+  - bg_pdr_fm/models/filters.py
+  - bg_pdr_fm/models/generators.py
+  - bg_pdr_fm/models/residual_backends.py
+  - bg_pdr_fm/lightning/bg_pdr_fm_module.py
+  - bg_pdr_fm/lightning/stage_losses.py
+  - bg_pdr_fm/reproducibility.py
+  - bg_pdr_fm/training/benchmark_config.py
+  - bg_pdr_fm/training/train_bg_pdr_fm.py
+  - bg_pdr_fm/evaluation/benchmark_metrics.py
+  - bg_pdr_fm/evaluation/evaluate_bg_pdr_fm.py
+  - bg_pdr_fm/evaluation/run_manifest.py
+  - bg_pdr_fm/README.md
+  - bg_pdr_fm/configs/release/aaai27/base.yaml
+  - bg_pdr_fm/configs/release/aaai27/train.yaml
+  - bg_pdr_fm/configs/release/aaai27/smoke.yaml
+  - bg_pdr_fm/configs/release/aaai27/evaluate.yaml
+  - bg_pdr_fm/configs/release/aaai27/ablation.yaml
+  - bg_pdr_fm/tests/test_release_manifest.py
+  - bg_pdr_fm/tests/test_reproducibility.py
+  - bg_pdr_fm/tests/test_release_config.py
+  - bg_pdr_fm/tests/test_release_entrypoints.py
+  - bg_pdr_fm/tests/test_run_manifest.py
+  - bg_pdr_fm/tests/test_theory_diagnostics.py
+  - bg_pdr_fm/tests/test_inference_contract.py
+  - bg_pdr_fm/tests/test_paper_build_inputs.py
+  - bg_pdr_fm/tests/test_checklist_evidence.py
+  - scripts/aaai27/common.py
+  - scripts/aaai27/prepare_openfwi.py
+  - scripts/aaai27/train.py
+  - scripts/aaai27/evaluate.py
+  - scripts/aaai27/smoke.py
+  - scripts/aaai27/validate.py
+  - scripts/aaai27/README.md
+  - reproducibility/README.md
+  - reproducibility/requirements.txt
+  - reproducibility/THIRD_PARTY_NOTICES.md
+  - reproducibility/release_manifest.yaml
+  - reproducibility/checklist_evidence.yaml
+  - reproducibility/validate_release.py
+  - docs/paper/AAAI2027/code_release_map.md
+  - docs/paper/AAAI2027/ReproducibilityChecklist.tex
+  - docs/paper/AAAI2027/pd-bg-rfm.tex
+  - docs/paper/AAAI2027/build.sh
+external_sources:
+  - path: bg_pdr_fm/external_baselines/openfwi_official.py
+    upstream: LANL OpenFWI
+    source_commit: 48754806b7b4c5877259c6b958a87f4513fcdc0b
+    notice: reproducibility/THIRD_PARTY_NOTICES.md
+  - path: bg_pdr_fm/external_baselines/auto_linear
+    upstream: Auto-Linear baseline bridge
+    source_commit: unresolved
+    notice: Public redistribution requires provenance review.
+  - path: bg_pdr_fm/external_baselines/gfi
+    upstream: GFI baseline bridge
+    source_commit: unresolved
+    notice: Public redistribution requires provenance review.

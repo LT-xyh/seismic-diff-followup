@@ -1,0 +1,8 @@
+extends: pdr_gfi_aligned_direct_upper_bound.yaml
+
+training:
+  devices: 4
+  strategy: ddp
+  ckpt_path: logs/bg_pdr_fm/gfi_aligned_upper_bound/pdr_gfi_aligned_direct/checkpoints/last-v1.ckpt
+  logging:
+    log_version: "pdr_gfi_aligned_direct_4gpu_{time}"

@@ -1,0 +1,48 @@
+extends: train.yaml
+
+release:
+  profile: aaai27-smoke
+
+data:
+  name: synthetic
+  train_length: 2
+  val_length: 2
+
+model:
+  residual_num_inference_steps: 2
+
+training:
+  max_epochs: 1
+  batch_size: 2
+  num_workers: 0
+  persistent_workers: false
+  prefetch_factor: null
+  pin_memory: false
+  precision: 32-true
+  accelerator: cpu
+  devices: 1
+  strategy: auto
+  limit_train_batches: 1
+  limit_val_batches: 1
+  stage_checkpoint_path: release_outputs/aaai27/smoke/stage_checkpoints
+  logging:
+    log_dir: release_outputs/aaai27/smoke/lightning
+    log_version: aaai27_pd_bg_rfm_smoke
+    add_timestamp: false
+  checkpoint:
+    dirpath: release_outputs/aaai27/smoke/checkpoints
+    filename: aaai27-pd-bg-rfm-smoke-epoch_{epoch}
+    monitor: val/loss
+    mode: min
+    save_top_k: 1
+    save_last: true
+    every_n_epochs: 1
+
+diagnostics:
+  enabled: false
+  output_dir: release_outputs/aaai27/smoke/diagnostics
+
+evaluation:
+  output_dir: release_outputs/aaai27/smoke/evaluation
+  max_batches: 1
+  allow_untrained: true

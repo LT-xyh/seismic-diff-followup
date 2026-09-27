@@ -1,0 +1,27 @@
+extends: _base_smoke.yaml
+
+benchmark:
+  variant: adapted_auto_linear
+  capacity_tier: adapted_external
+  auto_linear_phase: inverse_linear
+  auto_linear_base_channels: 4
+  auto_linear_latent_dim: 16
+  auto_linear_input_hw: [1000, 70]
+
+training:
+  freeze_encoder: true
+  load_stage_checkpoint: null
+  max_epochs: 1
+  batch_size: 2
+  devices: 1
+  logging:
+    log_version: "adapted_auto_linear_multimodal_smoke_{time}"
+  checkpoint:
+    filename: "adapted-auto-linear-smoke-{epoch}-loss{val/loss:.4f}"
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/eval_adapted_auto_linear_multimodal_smoke/adapted_auto_linear_multimodal
+  checkpoint: null
+  allow_untrained: true
+  missing_modes:
+    - full

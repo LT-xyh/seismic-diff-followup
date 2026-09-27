@@ -1,0 +1,38 @@
+extends: _base_formal.yaml
+
+benchmark:
+  variant: adapted_auto_linear
+  capacity_tier: adapted_external
+  auto_linear_phase: inverse_linear
+  auto_linear_embed_dim: 256
+  auto_linear_depth: 4
+  auto_linear_num_heads: 8
+  auto_linear_latent_tokens: 16
+  auto_linear_converter_rank: 64
+  auto_linear_input_hw: [1000, 70]
+  auto_linear_measurement_patch_size: [20, 10]
+  auto_linear_velocity_patch_size: [10, 10]
+  auto_linear_mask_ratio: 0.5
+
+training:
+  freeze_encoder: true
+  load_stage_checkpoint: logs/bg_pdr_fm/aaai27/formal/adapted_auto_linear_mae_ae_pretrain/checkpoints/last.ckpt
+  max_epochs: 200
+  batch_size: 64
+  devices: 1
+  num_workers: 4
+  persistent_workers: true
+  prefetch_factor: 3
+  dataloader_multiprocessing_context: spawn
+  logging:
+    log_dir: logs/bg_pdr_fm/aaai27/formal/adapted_auto_linear_mae_multimodal/lightning
+    log_version: "adapted_auto_linear_mae_multimodal_{time}"
+  checkpoint:
+    dirpath: logs/bg_pdr_fm/aaai27/formal/adapted_auto_linear_mae_multimodal/checkpoints
+    filename: "adapted-auto-linear-mae-multimodal-{epoch}-loss{val/loss:.4f}"
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/eval_adapted_auto_linear_mae_multimodal/adapted_auto_linear_mae_multimodal
+  checkpoint: logs/bg_pdr_fm/aaai27/formal/adapted_auto_linear_mae_multimodal/checkpoints/last.ckpt
+  missing_modes:
+    - full

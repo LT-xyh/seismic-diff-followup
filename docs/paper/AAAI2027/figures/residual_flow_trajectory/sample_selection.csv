@@ -1,0 +1,2 @@
+dataset_id,dataset_name,source_sample_index,worker,dataset_split,provenance_scope,official_ssim,official_rmse,official_mae,subset_ssim_median,absolute_distance_to_median,selection_rule
+5,FlatFaultB,27006,user_selected_figure2_asset,all,not_in_official_global_heldout,,,,,,user-specified Fig. 2 asset: FlatFaultB source_sample_index=27006; not in official global held-out manifest

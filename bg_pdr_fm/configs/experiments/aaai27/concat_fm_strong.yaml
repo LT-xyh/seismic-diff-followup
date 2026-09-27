@@ -1,0 +1,17 @@
+extends: _base_smoke.yaml
+
+benchmark:
+  variant: concat_fm
+  capacity_tier: strong
+  generator_hidden_channels: 192
+  direct_hidden_channels: 192
+  full_field_backend: simple_fm
+
+training:
+  logging:
+    log_version: "concat_fm_strong_{time}"
+  checkpoint:
+    filename: "concat-fm-strong-{epoch}-loss{val/loss:.4f}"
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/concat_fm_strong/evaluation

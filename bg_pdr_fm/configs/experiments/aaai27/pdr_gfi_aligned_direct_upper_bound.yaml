@@ -1,0 +1,31 @@
+extends: _base_formal.yaml
+
+benchmark:
+  variant: pdr_gfi_aligned_direct
+  capacity_tier: adapted_external
+  adapted_gfi_base_channels: 32
+  adapted_gfi_input_hw: [1000, 70]
+
+loss:
+  final_l1_weight: 1.0
+  final_l2_weight: 0.5
+  bg_weight: 0.1
+
+training:
+  freeze_encoder: true
+  load_stage_checkpoint: null
+  max_epochs: 200
+  batch_size: 192
+  devices: 1
+  logging:
+    log_dir: logs/bg_pdr_fm/gfi_aligned_upper_bound/pdr_gfi_aligned_direct/lightning
+    log_version: "pdr_gfi_aligned_direct_{time}"
+  checkpoint:
+    dirpath: logs/bg_pdr_fm/gfi_aligned_upper_bound/pdr_gfi_aligned_direct/checkpoints
+    filename: "pdr-gfi-aligned-direct-{epoch}-loss{val/loss:.4f}"
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/gfi_aligned_upper_bound/eval_pdr_gfi_aligned_direct
+  checkpoint: logs/bg_pdr_fm/gfi_aligned_upper_bound/pdr_gfi_aligned_direct/checkpoints/last.ckpt
+  missing_modes:
+    - full

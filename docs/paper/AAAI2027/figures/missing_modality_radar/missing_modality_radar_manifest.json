@@ -1,0 +1,131 @@
+{
+  "canonical_manifest": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/joint_full_contrastive_bgfm_pixelfm_predbg_e100/evaluation_epoch99_global_heldout_full_parallel_bs64/held_out_manifest.csv",
+  "canonical_manifest_sha256": "10b22bf60842528f843f07f8a374f9920677e1a0d097f53db83e61e100494876",
+  "checkpoint_provenance": {
+    "Auto-Linear": {
+      "path": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/aaai27/formal/adapted_auto_linear_original_paper35m_multimodal/checkpoints/last.ckpt",
+      "run_manifest": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/aaai27/eval_missing_modalities_radar_global_heldout/auto_linear/run_manifest.json",
+      "sha256": "5860fcf9bc161f39b56de46ab20aa89f7aa1fe2e7edc06d9b1d8386a9b5b3369"
+    },
+    "InversionNet": {
+      "path": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/aaai27/formal/adapted_inversion_net_official_e100/checkpoints/last.ckpt",
+      "run_manifest": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/aaai27/eval_missing_modalities_radar_global_heldout/inversion_net/run_manifest.json",
+      "sha256": "632adc14b89051eaf49d9a5d707ee933999508f6e127a7a867d3c1d257add817"
+    },
+    "Latent U-Net (Large)": {
+      "path": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/aaai27/formal/adapted_gfi_latent_unet_e100/checkpoints/adapted-gfi-latent-unet-e100-resume-95-loss0.0071.ckpt",
+      "run_manifest": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/aaai27/eval_missing_modalities_radar_global_heldout/latent_unet_large/run_manifest.json",
+      "sha256": "f0f28227d3f5f9602d820f36b772bbb8f6081b4bcbd9c901865c6f7ca3e25b2a"
+    },
+    "PD-BG-RFM": {
+      "path": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/joint_full_contrastive_bgfm_pixelfm_predbg_e100/lightning/checkpoints/joint_full_contrastive_bgfm_pixelfm_predbg_e100-epoch_99-loss0.1036.ckpt",
+      "run_manifest": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/aaai27/eval_missing_modalities_radar_global_heldout/pd_bg_rfm/run_manifest.json",
+      "sha256": "0d77a529618d8d158af0731752cc68efc01c4f6e2f2adfedaf87d8008f930a36"
+    },
+    "UPFWI": {
+      "path": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/aaai27/formal/adapted_upfwi_official_e100/checkpoints/last.ckpt",
+      "run_manifest": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/aaai27/eval_missing_modalities_radar_global_heldout/upfwi/run_manifest.json",
+      "sha256": "e9c2ef41d79bf97dc77e114d9cd40c6e07a3dff7fbb687dfadd499e3eab4b03a"
+    },
+    "VelocityGAN": {
+      "path": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/aaai27/formal/velocity_gan_official_e100/checkpoints/last.ckpt",
+      "run_manifest": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/aaai27/eval_missing_modalities_radar_global_heldout/velocity_gan/run_manifest.json",
+      "sha256": "5b7438cc52a66019516dbffaa72e114ccdfcc034cd05f2e2b86eafb33da90273"
+    }
+  },
+  "dataset_labels": {
+    "CurveFaultA": "CFA",
+    "CurveFaultB": "CFB",
+    "CurveVelA": "CVA",
+    "CurveVelB": "CVB",
+    "FlatFaultA": "FFA",
+    "FlatFaultB": "FFB",
+    "FlatVelA": "FVA",
+    "FlatVelB": "FVB"
+  },
+  "datasets": [
+    "FlatVelA",
+    "FlatVelB",
+    "CurveVelA",
+    "CurveVelB",
+    "FlatFaultA",
+    "FlatFaultB",
+    "CurveFaultA",
+    "CurveFaultB"
+  ],
+  "figure_paths": {
+    "pdf": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/missing_modality_radar/missing_modality_radar_4panel.pdf",
+    "png": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/missing_modality_radar/missing_modality_radar_4panel.png"
+  },
+  "git_commit": "f01fa10c0318a790e0fb1d79ed0d0b30ce07b0a7",
+  "input_csv": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/aaai27/eval_missing_modalities_radar_global_heldout/radar_dataset_mode_summary.csv",
+  "input_csv_sha256": "866e717bd9b675909d87c5cea419468092a039c60e233dda7c66f412feb3770b",
+  "methods": [
+    "InversionNet",
+    "VelocityGAN",
+    "UPFWI",
+    "Auto-Linear",
+    "Latent U-Net (Large)",
+    "PD-BG-RFM"
+  ],
+  "metric": "SSIM",
+  "modes": [
+    "w/o well_log",
+    "w/o horizon",
+    "w/o PSTM",
+    "RMS only"
+  ],
+  "num_rows": 192,
+  "radial_range": {
+    "RMS only": [
+      0.5,
+      1.0
+    ],
+    "w/o PSTM": [
+      0.85,
+      1.0
+    ],
+    "w/o horizon": [
+      0.5,
+      1.0
+    ],
+    "w/o well_log": [
+      0.85,
+      1.0
+    ]
+  },
+  "radial_scale": "panel-specific zoomed raw SSIM display; values are not normalized",
+  "radial_ticks": {
+    "RMS only": [
+      0.5,
+      0.6,
+      0.7,
+      0.8,
+      0.9,
+      1.0
+    ],
+    "w/o PSTM": [
+      0.85,
+      0.9,
+      0.95,
+      1.0
+    ],
+    "w/o horizon": [
+      0.5,
+      0.6,
+      0.7,
+      0.8,
+      0.9,
+      1.0
+    ],
+    "w/o well_log": [
+      0.85,
+      0.9,
+      0.95,
+      1.0
+    ]
+  },
+  "source_csv": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/missing_modality_radar/missing_modality_radar_source.csv",
+  "source_csv_sha256": "dfbf0fa0784065a4a86e1f0760bff570b22e5ebed90faf76cfe67520d7779185",
+  "status": "passed"
+}

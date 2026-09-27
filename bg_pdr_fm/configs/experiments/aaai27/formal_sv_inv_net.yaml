@@ -1,0 +1,7 @@
+extends: sv_inv_net.yaml
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/eval_sv_inv_net/sv_inv_net
+  checkpoint: logs/bg_pdr_fm/aaai27/formal/sv_inv_net/checkpoints/last.ckpt
+  missing_modes:
+    - full

@@ -1,0 +1,20 @@
+extends: _base_smoke.yaml
+
+benchmark:
+  variant: bg_pdr_fm
+  capacity_tier: reference
+  generator_hidden_channels: 64
+  direct_hidden_channels: 64
+
+model:
+  residual_backend: simple_fm
+  residual_num_inference_steps: 2
+
+training:
+  logging:
+    log_version: "bg_pdr_fm_{time}"
+  checkpoint:
+    filename: "bg-pdr-fm-{epoch}-loss{val/loss:.4f}"
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/bg_pdr_fm/evaluation

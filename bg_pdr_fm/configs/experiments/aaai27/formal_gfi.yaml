@@ -1,0 +1,98 @@
+# External GFI baseline placeholder.
+#
+# This file records the paper-table identity and official input contract for
+# GFI. It is not consumed by the internal AAAI27BenchmarkLightning trainer,
+# because GFI must be run through its official external repository:
+# https://github.com/KGML-lab/Generalized-Forward-Inverse-Framework-for-DL4SI
+
+benchmark:
+  variant: gfi
+  provenance: external_published
+  venue: ICLR
+  year: 2025
+  paper: "A Unified Framework for Forward and Inverse Problems in Subsurface Imaging using Latent Space Translations"
+  official_repo: https://github.com/KGML-lab/Generalized-Forward-Inverse-Framework-for-DL4SI
+  audited_commit: cd0443b6f6463196e89ef2ea4ac775baf753ef39
+  input_contract: waveform_amplitude
+  input_shape: [5, 1000, 70]
+  output_shape: [1, 70, 70]
+  comparison_status: external_native_or_adapted
+
+reproduction:
+  mode: external_official_repo
+  smoke_status: official_inverse_smoke_and_500_sample_probe_passed
+  formal_status: blocked_pending_full_raw_waveform_split
+  smoke_date: "2026-06-15"
+  probe_date: "2026-06-16"
+  data_audit_date: "2026-06-16"
+  local_bridge: bg_pdr_fm/external_baselines/gfi
+  external_checkout: /public/home/xuyinghao/workspace/external_repos/gfi
+  isolated_env: /public/home/xuyinghao/workspace/external_repos/gfi_venv
+  smoke_data: /public/home/xuyinghao/workspace/datasets/Datasets/data1.npy
+  smoke_label: /public/home/xuyinghao/workspace/datasets/Datasets/model1.npy
+  available_raw_waveform_arrays:
+    - data: /public/home/xuyinghao/workspace/datasets/Datasets/data1.npy
+      label: /public/home/xuyinghao/workspace/datasets/Datasets/model1.npy
+      data_shape: [500, 5, 1000, 70]
+      label_shape: [500, 1, 70, 70]
+      status: probe_only_not_formal_split
+  full_raw_waveform_split:
+    status: not_found_in_current_workspace
+    required_families:
+      - FlatVelA
+      - FlatVelB
+      - CurveVelA
+      - CurveVelB
+    required_contract: "[N,5,1000,70] waveform amplitudes paired with [N,1,70,70] velocity labels"
+  smoke_annotation: /tmp/gfi_smoke/smoke.txt
+  smoke_dataset: /tmp/gfi_smoke/smoke_dataset2_indexable.pt
+  smoke_log: /tmp/gfi_smoke/official_smoke.log
+  smoke_checkpoint: /tmp/gfi_smoke/results/smoke/run_pt_indexable_n2/checkpoint.pth
+  smoke_prediction: /tmp/gfi_smoke/predictions.npy
+  smoke_target: /tmp/gfi_smoke/targets.npy
+  smoke_metric_summary: /tmp/gfi_smoke/metric_adapter/summary.json
+  runner: bg_pdr_fm.external_baselines.gfi.run_official_gfi
+  runner_last_probe:
+    date: "2026-06-16"
+    dataset_name: curvevel-b
+    model_name: UNetInverseModel
+    output_root: logs/bg_pdr_fm/aaai27/external_gfi_native
+    run_name: curvevel_b_probe
+    batch_size: 8
+    epoch_block: 1
+    num_blocks: 1
+    unet_repeat_blocks: 1
+    num_samples: 500
+  train_script: src/train_inverse.py
+  metric_adapter: bg_pdr_fm.external_baselines.gfi.evaluate_gfi_predictions
+  metric_adapter_outputs:
+    - metrics.csv
+    - summary.json
+  adapter_module: bg_pdr_fm.external_baselines.gfi.adapter
+  model_wrapper_module: bg_pdr_fm.external_baselines.gfi.model_wrapper
+  model_candidates:
+    - UNetInverseModel
+    - IUnetInverseModel
+    - IUNET
+  notes:
+    - "Official GFI consumes waveform amplitudes [B,5,1000,70], not BG-PDR-FM multimodal conditions."
+    - "Use this as a native waveform-to-velocity external baseline, or explicitly label any same-input multimodal adapter as adapted GFI."
+    - "The 2026-06-15 smoke verifies official-code train/val forward/backward and local metric bridging only; it is not a benchmark result."
+    - "The 2026-06-16 mini-probe verifies the runner over the available 500-sample arrays only; it is not a formal OpenFWI split result."
+    - "Do not put GFI in a paper result table until a complete raw waveform split is available or a same-input adapted GFI protocol is explicitly defined."
+    - "Direct conda env creation from official environment.yaml was blocked by Anaconda channel Terms of Service; smoke used an isolated venv and did not modify conda seg."
+  smoke_metrics:
+    train_loss: 0.9460
+    val_vel_sum_abs_error: 0.4733978509902954
+    val_vel_sum_squared_error: 0.33439409732818604
+    adapter_mae: 0.47339780628681183
+    adapter_rmse: 0.5717177242040634
+    adapter_ssim: 0.00180062121944502
+    adapter_mae_l: 0.45025773346424103
+    adapter_mae_h: 0.04991407319903374
+  runner_probe_metrics:
+    mae: 0.6081101673841477
+    rmse: 0.6889032337963581
+    ssim: 0.16329611928388477
+    mae_l: 0.565067267358303
+    mae_h: 0.08103190580010414

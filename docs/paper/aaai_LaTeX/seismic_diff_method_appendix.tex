@@ -1,0 +1,429 @@
+% File: seismic_diff_method_appendix.tex
+\documentclass[letterpaper]{article}
+\usepackage[submission]{aaai2026}
+\usepackage{times}
+\usepackage{helvet}
+\usepackage{courier}
+\usepackage[hyphens]{url}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{natbib}
+\frenchspacing
+\setlength{\pdfpagewidth}{8.5in}
+\setlength{\pdfpageheight}{11in}
+\pdfinfo{
+/TemplateVersion (2026.1)
+}
+\setcounter{secnumdepth}{0}
+
+\title{Physics-Decomposed Residual Flow Matching for Seismic Velocity Modeling}
+\author{
+Anonymous Submission
+}
+\affiliations{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Seismic velocity modeling from heterogeneous geophysical observations is difficult because smooth background trends and sharp structural cues are often entangled in the same conditioning stream, while a single generator must also recover both coarse low-frequency content and fine residual detail. We address this by learning physics-anchored numerical and structural conditions from training-time wavelet anchors, then using a background estimator and a residual Flow Matching model to produce the final velocity field through a physics-decomposed reconstruction path. The resulting design keeps the main generator conditioned on disentangled representations, assigns the background branch the responsibility of explaining low-frequency content, and lets the residual branch model the remaining structural detail and amplitude correction.
+\end{abstract}
+
+\section{Introduction}
+Seismic velocity modeling is a central component of subsurface imaging, resource exploration, and geophysical interpretation. Classical full waveform inversion (FWI) reconstructs velocity models by fitting observed waveforms through a physics-based forward operator, but the resulting optimization is highly nonlinear and sensitive to initialization, noise, missing low frequencies, and cycle skipping \citep{virieux2009overview}. Data-driven inversion methods such as InversionNet have shown that convolutional networks can learn efficient mappings from seismic measurements to velocity models, while OpenFWI has enabled larger-scale and more reproducible evaluation of such models \citep{wu2020inversionnet,deng2022openfwi}. Despite these advances, robust velocity modeling remains challenging when the available observations are heterogeneous and only partially reliable.
+
+In realistic settings, velocity estimation is rarely conditioned on a single clean input. Seismic images, interpreted horizons (layer boundaries), RMS velocity, and well logs provide complementary but asymmetric evidence: some modalities better indicate local structures, whereas others better constrain absolute velocity trends. Directly concatenating these inputs into a conditional generator tends to entangle numerical background, structural interfaces, and modality-specific artifacts. Higher-order multimodal objectives such as Symile have been proposed to capture joint consistency beyond pairwise alignment \citep{saporta2024symile}, but seismic velocity modeling also requires that learned conditions remain physically meaningful and safe to use at inference time.
+
+Generative models offer a promising alternative to deterministic regression because they can represent ambiguous inverse solutions and synthesize detailed velocity fields. Diffusion models have become a strong foundation for image generation and conditional synthesis \citep{ho2020ddpm,rombach2022ldm,zhang2023controlnet}, and Flow Matching provides an efficient continuous-time formulation for learning generative vector fields \citep{lipman2023flowmatching}. In geophysics, diffusion-based methods have recently been used for controllable velocity synthesis, joint seismic-velocity generation, and diffusion-regularized inversion \citep{wang2024controllable,wang2024wavediffusion,shan2026reddiffeq}. However, most conditional generation pipelines still leave the generator to resolve both low-frequency background trends and high-frequency structural residuals in a single coupled target.
+
+We propose a physics-anchored, physics-decomposed residual Flow Matching framework for multimodal seismic velocity modeling. The key idea is to first learn disentangled numerical and structural conditions from heterogeneous observations, then use the numerical condition to predict a deterministic low-frequency background and apply Flow Matching only to the remaining background-conditioned residual. Training-time wavelet anchors $A_N$ and $A_S$ calibrate the condition space, but they are never used at inference time. During inference, the model relies only on observed modalities, the derived conditions $C_N$ and $C_S$, and a compact background embedding; target-derived velocity statistics are used only for training supervision and evaluation diagnostics.
+
+Our contributions are threefold:
+\begin{itemize}
+\item We introduce a physics-anchored multimodal condition learner that separates numerical and structural evidence using wavelet anchors, reliability weighting, and subset-aware Symile alignment.
+\item We formulate physics-decomposed residual Flow Matching, where a deterministic background branch reduces the residual transport burden and the residual generator models the remaining structural and amplitude corrections.
+\item We introduce a frequency-decomposed evaluation protocol that reports trend and structural reconstruction errors, directly testing whether the background-residual division improves geophysical velocity reconstruction.
+\end{itemize}
+
+Although developed for seismic velocity modeling, the proposed physics-decomposed residual generation framework can be applied to physical inverse problems where low-frequency trends and high-frequency structures admit a meaningful decomposition.
+
+\begin{table*}[t]
+\centering
+{\scriptsize
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{llcccccc}
+\hline
+Subset & Method & MAE$\downarrow$ & RMSE$\downarrow$ & SSIM$\uparrow$ & $\mathrm{MAE}_L\downarrow$ & $\mathrm{MAE}_H\downarrow$ & Params \\
+\hline
+FlatVelA & Smooth-Dix & 0.0867 & 0.1180 & 0.8324 & 0.0780 & 0.0156 & 0.00M \\
+ & SV\_Inv\_Net & 0.0028 & 0.0041 & 0.9994 & 0.0022 & 0.0012 & 2.89M \\
+ & VelocityGAN & -- & -- & -- & -- & -- & -- \\
+ & Conditional DDPM & -- & -- & -- & -- & -- & -- \\
+ & Adapted GFI & 0.0028 & 0.0041 & 0.9993 & 0.0024 & 0.0010 & 41.11M \\
+ & Adapted Auto-Linear & 0.0483 & 0.0703 & 0.9443 & 0.0368 & 0.0166 & 42.32M \\
+ & PDR-FM (Ours) & 0.0088 & 0.0123 & 0.9956 & 0.0075 & 0.0030 & 10.65M \\
+\hline
+FlatVelB & Smooth-Dix & 0.2301 & 0.2916 & 0.2205 & 0.2045 & 0.0376 & 0.00M \\
+ & SV\_Inv\_Net & 0.0045 & 0.0069 & 0.9977 & 0.0036 & 0.0017 & 2.89M \\
+ & VelocityGAN & -- & -- & -- & -- & -- & -- \\
+ & Conditional DDPM & -- & -- & -- & -- & -- & -- \\
+ & Adapted GFI & 0.0058 & 0.0085 & 0.9969 & 0.0048 & 0.0020 & 41.11M \\
+ & Adapted Auto-Linear & 0.1334 & 0.1786 & 0.7005 & 0.1071 & 0.0397 & 42.32M \\
+ & PDR-FM (Ours) & 0.0164 & 0.0230 & 0.9900 & 0.0143 & 0.0043 & 10.65M \\
+\hline
+CurveVelA & Smooth-Dix & 0.0884 & 0.1209 & 0.8320 & 0.0766 & 0.0219 & 0.00M \\
+ & SV\_Inv\_Net & 0.0043 & 0.0072 & 0.9993 & 0.0031 & 0.0022 & 2.89M \\
+ & VelocityGAN & -- & -- & -- & -- & -- & -- \\
+ & Conditional DDPM & -- & -- & -- & -- & -- & -- \\
+ & Adapted GFI & 0.0064 & 0.0181 & 0.9966 & 0.0038 & 0.0050 & 41.11M \\
+ & Adapted Auto-Linear & 0.0525 & 0.0762 & 0.9409 & 0.0366 & 0.0228 & 42.32M \\
+ & PDR-FM (Ours) & 0.0099 & 0.0144 & 0.9969 & 0.0082 & 0.0036 & 10.65M \\
+\hline
+CurveVelB & Smooth-Dix & 0.2305 & 0.2947 & 0.2152 & 0.1967 & 0.0516 & 0.00M \\
+ & SV\_Inv\_Net & 0.0088 & 0.0163 & 0.9966 & 0.0060 & 0.0048 & 2.89M \\
+ & VelocityGAN & -- & -- & -- & -- & -- & -- \\
+ & Conditional DDPM & -- & -- & -- & -- & -- & -- \\
+ & Adapted GFI & 0.0166 & 0.0480 & 0.9833 & 0.0097 & 0.0143 & 41.11M \\
+ & Adapted Auto-Linear & 0.1500 & 0.1994 & 0.6515 & 0.1131 & 0.0530 & 42.32M \\
+ & PDR-FM (Ours) & 0.0214 & 0.0330 & 0.9888 & 0.0179 & 0.0066 & 10.65M \\
+\hline
+FlatFaultA & Smooth-Dix & 0.1293 & 0.1683 & 0.6296 & 0.1194 & 0.0150 & 0.00M \\
+ & SV\_Inv\_Net & 0.0032 & 0.0077 & 0.9992 & 0.0023 & 0.0018 & 2.89M \\
+ & VelocityGAN & -- & -- & -- & -- & -- & -- \\
+ & Conditional DDPM & -- & -- & -- & -- & -- & -- \\
+ & Adapted GFI & 0.0034 & 0.0082 & 0.9984 & 0.0026 & 0.0018 & 41.11M \\
+ & Adapted Auto-Linear & 0.0375 & 0.0671 & 0.9534 & 0.0292 & 0.0144 & 42.32M \\
+ & PDR-FM (Ours) & 0.0087 & 0.0175 & 0.9941 & 0.0072 & 0.0042 & 10.65M \\
+\hline
+FlatFaultB & Smooth-Dix & 0.1275 & 0.1698 & 0.7490 & 0.1116 & 0.0295 & 0.00M \\
+ & SV\_Inv\_Net & 0.0058 & 0.0129 & 0.9990 & 0.0039 & 0.0035 & 2.89M \\
+ & VelocityGAN & -- & -- & -- & -- & -- & -- \\
+ & Conditional DDPM & -- & -- & -- & -- & -- & -- \\
+ & Adapted GFI & 0.0106 & 0.0291 & 0.9945 & 0.0061 & 0.0080 & 41.11M \\
+ & Adapted Auto-Linear & 0.0721 & 0.1031 & 0.9288 & 0.0538 & 0.0296 & 42.32M \\
+ & PDR-FM (Ours) & 0.0174 & 0.0307 & 0.9902 & 0.0142 & 0.0067 & 10.65M \\
+\hline
+CurveFaultA & Smooth-Dix & 0.1243 & 0.1628 & 0.6616 & 0.1138 & 0.0154 & 0.00M \\
+ & SV\_Inv\_Net & 0.0040 & 0.0101 & 0.9990 & 0.0026 & 0.0025 & 2.89M \\
+ & VelocityGAN & -- & -- & -- & -- & -- & -- \\
+ & Conditional DDPM & -- & -- & -- & -- & -- & -- \\
+ & Adapted GFI & 0.0044 & 0.0111 & 0.9979 & 0.0031 & 0.0027 & 41.11M \\
+ & Adapted Auto-Linear & 0.0405 & 0.0704 & 0.9547 & 0.0315 & 0.0147 & 42.32M \\
+ & PDR-FM (Ours) & 0.0094 & 0.0190 & 0.9943 & 0.0073 & 0.0050 & 10.65M \\
+\hline
+CurveFaultB & Smooth-Dix & 0.1350 & 0.1796 & 0.7535 & 0.1127 & 0.0409 & 0.00M \\
+ & SV\_Inv\_Net & 0.0137 & 0.0300 & 0.9953 & 0.0073 & 0.0102 & 2.89M \\
+ & VelocityGAN & -- & -- & -- & -- & -- & -- \\
+ & Conditional DDPM & -- & -- & -- & -- & -- & -- \\
+ & Adapted GFI & 0.0246 & 0.0548 & 0.9849 & 0.0104 & 0.0221 & 41.11M \\
+ & Adapted Auto-Linear & 0.0859 & 0.1216 & 0.9166 & 0.0608 & 0.0406 & 42.32M \\
+ & PDR-FM (Ours) & 0.0258 & 0.0530 & 0.9873 & 0.0179 & 0.0148 & 10.65M \\
+\hline
+\end{tabular}
+}
+\caption{Full-modality OpenFWI test comparison grouped by OpenFWI subset. Params are reported in millions and refer to method-specific effective model parameters rather than the shared benchmark wrapper. VelocityGAN, Conditional DDPM, Adapted GFI, and Adapted Auto-Linear denote architecture-level adaptations to the PSTM, horizon, RMS velocity, and well-log input protocol rather than official native reproductions. Rows marked -- are pending retraining or re-evaluation under the updated paper-faithful baseline definitions; SV\_Inv\_Net is held out until its full 200-epoch formal training is complete. PDR-FM uses checkpoint \texttt{joint\_full\_contrastive\_bgfm\_pixelfm\_predbg\_e100-epoch\_99-loss0.1036.ckpt}.}
+\label{tab:openfwi_full_comparison}
+\end{table*}
+
+
+\begin{table*}[t]
+\centering
+{\scriptsize
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{llcccccc}
+\hline
+Subset & Method & MAE$\downarrow$ & RMSE$\downarrow$ & SSIM$\uparrow$ & $\mathrm{MAE}_L\downarrow$ & $\mathrm{MAE}_H\downarrow$ & Params \\
+\hline
+FlatVelA & Smooth-Dix & -- & -- & -- & -- & -- & 0.00M \\
+ & SV\_Inv\_Net & 0.1900 & 0.2307 & 0.4545 & 0.1796 & 0.0172 & 2.89M \\
+ & VelocityGAN & -- & -- & -- & -- & -- & -- \\
+ & Conditional DDPM & -- & -- & -- & -- & -- & -- \\
+ & Adapted GFI & 0.2484 & 0.2876 & 0.4538 & 0.2358 & 0.0206 & 41.11M \\
+ & Adapted Auto-Linear & 0.4130 & 0.4856 & 0.0008 & 0.3851 & 0.1231 & 42.32M \\
+ & PDR-FM (Ours) &  &  &  &  &  &  \\
+\hline
+FlatVelB & Smooth-Dix & -- & -- & -- & -- & -- & 0.00M \\
+ & SV\_Inv\_Net & 0.1838 & 0.2265 & 0.4634 & 0.1664 & 0.0287 & 2.89M \\
+ & VelocityGAN & -- & -- & -- & -- & -- & -- \\
+ & Conditional DDPM & -- & -- & -- & -- & -- & -- \\
+ & Adapted GFI & 0.2196 & 0.2634 & 0.3905 & 0.2018 & 0.0312 & 41.11M \\
+ & Adapted Auto-Linear & 0.3811 & 0.4528 & -0.0039 & 0.3397 & 0.1329 & 42.32M \\
+ & PDR-FM (Ours) &  &  &  &  &  &  \\
+\hline
+CurveVelA & Smooth-Dix & -- & -- & -- & -- & -- & 0.00M \\
+ & SV\_Inv\_Net & 0.2034 & 0.2459 & 0.4247 & 0.1910 & 0.0231 & 2.89M \\
+ & VelocityGAN & -- & -- & -- & -- & -- & -- \\
+ & Conditional DDPM & -- & -- & -- & -- & -- & -- \\
+ & Adapted GFI & 0.2478 & 0.2903 & 0.4480 & 0.2338 & 0.0251 & 41.11M \\
+ & Adapted Auto-Linear & 0.4128 & 0.4863 & 0.0014 & 0.3832 & 0.1249 & 42.32M \\
+ & PDR-FM (Ours) &  &  &  &  &  &  \\
+\hline
+CurveVelB & Smooth-Dix & -- & -- & -- & -- & -- & 0.00M \\
+ & SV\_Inv\_Net & 0.2024 & 0.2513 & 0.3982 & 0.1780 & 0.0416 & 2.89M \\
+ & VelocityGAN & -- & -- & -- & -- & -- & -- \\
+ & Conditional DDPM & -- & -- & -- & -- & -- & -- \\
+ & Adapted GFI & 0.2214 & 0.2733 & 0.3856 & 0.1968 & 0.0441 & 41.11M \\
+ & Adapted Auto-Linear & 0.3783 & 0.4508 & -0.0037 & 0.3304 & 0.1387 & 42.32M \\
+ & PDR-FM (Ours) &  &  &  &  &  &  \\
+\hline
+FlatFaultA & Smooth-Dix & -- & -- & -- & -- & -- & 0.00M \\
+ & SV\_Inv\_Net & 0.1687 & 0.2092 & 0.4529 & 0.1588 & 0.0153 & 2.89M \\
+ & VelocityGAN & -- & -- & -- & -- & -- & -- \\
+ & Conditional DDPM & -- & -- & -- & -- & -- & -- \\
+ & Adapted GFI & 0.2136 & 0.2549 & 0.4493 & 0.2023 & 0.0175 & 41.11M \\
+ & Adapted Auto-Linear & 0.3526 & 0.4295 & 0.0012 & 0.3214 & 0.1208 & 42.32M \\
+ & PDR-FM (Ours) &  &  &  &  &  &  \\
+\hline
+FlatFaultB & Smooth-Dix & -- & -- & -- & -- & -- & 0.00M \\
+ & SV\_Inv\_Net & 0.1895 & 0.2380 & 0.4252 & 0.1752 & 0.0274 & 2.89M \\
+ & VelocityGAN & -- & -- & -- & -- & -- & -- \\
+ & Conditional DDPM & -- & -- & -- & -- & -- & -- \\
+ & Adapted GFI & 0.2298 & 0.2806 & 0.4469 & 0.2133 & 0.0312 & 41.11M \\
+ & Adapted Auto-Linear & 0.3676 & 0.4531 & 0.0040 & 0.3337 & 0.1258 & 42.32M \\
+ & PDR-FM (Ours) &  &  &  &  &  &  \\
+\hline
+CurveFaultA & Smooth-Dix & -- & -- & -- & -- & -- & 0.00M \\
+ & SV\_Inv\_Net & 0.1714 & 0.2127 & 0.4447 & 0.1612 & 0.0158 & 2.89M \\
+ & VelocityGAN & -- & -- & -- & -- & -- & -- \\
+ & Conditional DDPM & -- & -- & -- & -- & -- & -- \\
+ & Adapted GFI & 0.2117 & 0.2529 & 0.4458 & 0.2005 & 0.0175 & 41.11M \\
+ & Adapted Auto-Linear & 0.3512 & 0.4277 & 0.0011 & 0.3202 & 0.1204 & 42.32M \\
+ & PDR-FM (Ours) &  &  &  &  &  &  \\
+\hline
+CurveFaultB & Smooth-Dix & -- & -- & -- & -- & -- & 0.00M \\
+ & SV\_Inv\_Net & 0.2067 & 0.2578 & 0.3995 & 0.1876 & 0.0380 & 2.89M \\
+ & VelocityGAN & -- & -- & -- & -- & -- & -- \\
+ & Conditional DDPM & -- & -- & -- & -- & -- & -- \\
+ & Adapted GFI & 0.2367 & 0.2913 & 0.4311 & 0.2145 & 0.0426 & 41.11M \\
+ & Adapted Auto-Linear & 0.3757 & 0.4615 & 0.0041 & 0.3384 & 0.1293 & 42.32M \\
+ & PDR-FM (Ours) &  &  &  &  &  &  \\
+\hline
+\end{tabular}
+}
+\caption{Missing-modality OpenFWI diagnostic comparison grouped by OpenFWI subset. Each entry reports the sample-weighted average over the five missing-input settings excluding the full-modality case: w/o well log, w/o horizon, w/o RMS velocity, w/o well+RMS, and PSTM only. Rows marked -- are pending the unified missing-modality runner or completed full-length training checkpoints; SV\_Inv\_Net is held out until its full 200-epoch formal training is complete, and the PDR-FM rows are intentionally left blank pending final checkpoint selection.}
+\label{tab:openfwi_missing_comparison}
+\end{table*}
+
+\section{Method}
+
+\subsection{Overview}
+Given multimodal geophysical observations
+\begin{equation}
+X=\{x_m\}_{m\in\mathcal M},
+\end{equation}
+\begin{equation}
+\mathcal M=\{\mathrm{PSTM},\mathrm{Horizon},\mathrm{RMS},\mathrm{Well}\},
+\end{equation}
+our goal is to estimate a depth-domain velocity model
+\begin{equation}
+V\in\mathbb R^{H\times W}.
+\end{equation}
+Directly conditioning a generator on all observed modalities can blur the distinction between smooth velocity trends and structural discontinuities. We therefore decompose the task into two coupled stages: physics-anchored condition learning and physics-decomposed residual generation. The first stage organizes heterogeneous evidence into numerical and structural conditions; the second stage uses the numerical condition to estimate a background field and then generates the remaining residual with Flow Matching.
+
+We adopt a low-/high-frequency decomposition as the organizing principle:
+\begin{equation}
+B=P_L(V),\qquad S=P_H(V),\qquad P_L(V)+P_H(V)\approx V,
+\end{equation}
+where $P_L$ and $P_H$ denote low- and high-pass operators. The decomposition is not treated as a strict physical identity; instead, it provides a clean separation of responsibilities for the two branches.
+This separation is enforced through an interface contract between representation learning and generation: the numerical condition should support low-frequency background estimation, while the structural condition should support residual structural generation.
+
+\subsection{Physics-Anchored Condition Learning}
+The condition learner is not used as generic feature pretraining. Its role is to construct two downstream interfaces, $C_N$ and $C_S$, that are informative about the observed modalities while obeying the background/structure contract above. We view this as a constrained, physics-aware mutual-information objective: the conditions should preserve joint evidence from the observed modality subset, be calibrated toward physically meaningful frequency anchors, and avoid redundant information between numerical and structural roles. Since the exact constrained objective is not tractable, we optimize a contrastive surrogate whose terms correspond to these requirements.
+
+To ground the learned condition space in the target physics, we construct training-time wavelet anchors from the velocity model:
+\begin{equation}
+A_N=W_L(V),\qquad A_S=W_H(V).
+\end{equation}
+$A_N$ acts as a numerical anchor that captures smooth velocity trends, while $A_S$ acts as a structural anchor that captures interfaces and localized discontinuities. These anchors are used only during training and are never provided at inference time.
+
+Each modality $x_m$ is encoded into a base feature
+\begin{equation}
+F_m=E_m(x_m),
+\end{equation}
+and then projected into structural, numerical, and modality-specific subspaces:
+\begin{align}
+S_m&=P_m^S(F_m),&
+N_m&=P_m^N(F_m),&
+U_m&=P_m^U(F_m).
+\end{align}
+Here $S_m$ captures structural evidence, $N_m$ captures numerical evidence, and $U_m$ retains compressed modality-specific information. We fuse the modality embeddings into an internal representation
+\begin{equation}
+F_{\mathrm{base}}=\Phi(\{F_m\}_{m\in\mathcal M}),
+\end{equation}
+but the main generator does not consume $F_{\mathrm{base}}$ directly. Instead, it is conditioned on the disentangled numerical and structural interfaces described below.
+
+The representation learning objective combines four complementary constraints:
+\begin{equation}
+\mathcal L_{\mathrm{rep}}
+=
+\mathcal L_{\mathrm{symile}}
++ \lambda_A\mathcal L_A
++ \mathcal L_{\mathrm{pair}}
++ \lambda_F\mathcal L_{\mathrm{freq}}
++ \lambda_O\mathcal L_O.
+\end{equation}
+Here $\mathcal L_{\mathrm{symile}}$ encourages joint cross-modal consistency, $\mathcal L_A$ provides physical semantic calibration, $\mathcal L_{\mathrm{pair}}$ preserves instance-level discriminability within each role, and $\mathcal L_{\mathrm{freq}}$ and $\mathcal L_O$ discourage frequency leakage and redundant numerical/structural encoding. These terms are coupled rather than interchangeable: multimodal alignment alone can mix background and structure, anchor alignment alone can ignore cross-modal complementarity, and separation regularizers alone can remove useful signal. Their combination implements the interface contract as a measurable optimization criterion.
+
+The Symile term encourages high-order multimodal consistency by contrasting a matched joint tuple against in-batch mismatched tuples. For sample $i$, let $\Omega_i$ be the set of observed modalities and let $r_{i,m}\in\mathbb R^D$ be the projected representation of modality $m$. We score a candidate tuple $\mathbf j$ by a multilinear interaction
+\begin{equation}
+s(i,\mathbf j;\Omega_i)=
+\sum_{d=1}^{D}\prod_{m\in\Omega_i} r_{j_m,m,d}.
+\end{equation}
+The compact subset-Symile objective is
+\begin{equation}
+\mathcal L_{\mathrm{symile}}
+=
+-\frac{1}{B}\sum_i
+\log
+\frac{\exp s(i,\mathbf i;\Omega_i)}
+{\sum_{\mathbf j\in\mathcal J_i}\exp s(i,\mathbf j;\Omega_i)},
+\end{equation}
+where $\mathbf i$ is the matched tuple and $\mathcal J_i$ denotes the candidate tuple set formed within the batch. Missing modalities only change $\Omega_i$; they are not replaced by pseudo-observations. The full MIP-shuffle construction and missing-modality handling are deferred to the appendix.
+
+The anchor term aligns $N_m$ with $A_N$ and $S_m$ with $A_S$, while the orthogonality term discourages redundant information between the numerical and structural subspaces. Modality reliability is used as adaptive contract enforcement: when a modality is missing or unreliable, weights $w_{m,N}$ and $w_{m,S}$ reduce its contribution to the corresponding role so that corrupted evidence does not dominate the numerical or structural interface.
+
+In compact form, the anchor loss is written as
+\begin{align}
+\mathcal L_A
+=
+\sum_{m\in\mathcal M}
+\Bigl(
+&w_{m,N}\,\ell(q(N_m),q(A_N))
+\nonumber\\
+&+w_{m,S}\,\ell(q(S_m),q(A_S))
+\Bigr),
+\end{align}
+where $\ell$ denotes the InfoNCE loss and $q(\cdot)$ denotes a projection head used for contrastive alignment. When modalities are missing, the loss is applied only to the observed subset; the detailed subset-Symile construction is deferred to the appendix.
+
+To preserve instance-level discriminability under frequency decoupling, we add a lightweight pairwise contrastive regularizer within each representation subspace:
+\begin{equation}
+\mathcal L_{\mathrm{pair}}
+=
+\lambda_{P,N}\mathcal L_{\mathrm{pair},N}
++
+\lambda_{P,S}\mathcal L_{\mathrm{pair},S}.
+\end{equation}
+For each observed modality pair $(m,m')$ with $m\ne m'$, $\mathcal L_{\mathrm{pair},N}$ applies a symmetric InfoNCE loss between $q(N_m)$ and $q(N_{m'})$ for the same velocity sample, with in-batch samples as negatives; $\mathcal L_{\mathrm{pair},S}$ is defined analogously for $q(S_m)$ and $q(S_{m'})$. The pair contribution is reliability-weighted after computing the per-sample loss. This auxiliary term is used only during representation training, does not require the wavelet anchors at inference time, and does not modify the generator architecture.
+
+\subsection{Numerical and Structural Condition Interface}
+The modality-level representations are aggregated into two interfaces:
+\begin{equation}
+C_N=g_N(\{N_m\}_{m\in\mathcal M}),\qquad
+C_S=g_S(\{S_m\}_{m\in\mathcal M}).
+\end{equation}
+$C_N$ summarizes the numerical condition used for background estimation, and $C_S$ summarizes the structural condition used for residual generation. These are not merely intermediate features; they define the contract passed from representation learning to the generator. The background branch may rely on $C_N$ as the source of low-frequency numerical trends, while the residual generator may rely on $C_S$ as the source of structural evidence.
+
+In the main path, $U_m$ is not used as a generator condition; it is retained only as a compressed modality-specific branch for auxiliary diagnostics and ablations. The PDR-FM generator is conditioned on $C_N$, $C_S$, and a low-bandwidth background embedding. It is not allowed to take $F_{\mathrm{base}}$ as a direct shortcut input, because such a bypass would let the generator ignore the numerical/structural contract and would make the physics-anchored condition learner unverifiable.
+
+\subsection{Physics-Decomposed Residual Generation}
+The background branch estimates the low-frequency component from the numerical condition:
+\begin{equation}
+\hat B=f_B(C_N).
+\end{equation}
+It is trained to match the low-frequency target while suppressing unwanted high-frequency leakage:
+\begin{equation}
+\mathcal L_B=\|\hat B-P_L(V)\|_1+\lambda_H\|P_H(\hat B)\|_1.
+\end{equation}
+The residual target is then defined as
+\begin{equation}
+R_{\hat B}=V-\hat B.
+\end{equation}
+This residual formulation gives the generator a simpler target: instead of synthesizing the full velocity field at once, it only needs to model what remains after the background has been explained.
+
+We train the residual generator with Flow Matching. Using Gaussian noise $\xi\sim\mathcal N(0,I)$, we interpolate between noise and the residual target:
+\begin{equation}
+R_t=(1-t)\xi+tR_{\hat B},
+\qquad
+u_t=R_{\hat B}-\xi.
+\end{equation}
+The residual model is optimized by
+\begin{equation}
+\mathcal L_{\mathrm{FM}}
+=
+\mathbb E_{t,\xi,V}
+\left[
+\left\|
+v_\theta(R_t,t,C_S,\psi_B(\hat B))-u_t
+\right\|_2^2
+\right],
+\end{equation}
+where $\psi_B(\hat B)$ is a low-bandwidth background embedding. The key design choice is that the generator receives the structural condition together with a compact background summary, not a full unconstrained background image.
+
+To diagnose whether the background-residual division is effective, we report the residual low-frequency ratio
+\begin{equation}
+\rho_B=
+\frac{\|P_L(V-\hat B)\|_1}{\|V-\hat B\|_1+\epsilon}.
+\end{equation}
+This statistic is used for evaluation and diagnostics rather than as a main inference-time condition. The residual objective may include a fixed low-frequency regularizer
+\begin{equation}
+\mathcal L_{\mathrm{R}}
+=
+\mathcal L_{\mathrm{FM}}
++\lambda_{R,L}\|P_L(\hat R)\|_1,
+\end{equation}
+where $\lambda_{R,L}$ is a fixed hyperparameter rather than a target-dependent or predicted dynamic gate. Here $\hat R$ denotes the generated residual sample. Dynamic background-quality gating is treated as an ablation or diagnostic extension, not as the core formulation.
+
+\subsection{Optimization and Inference}
+We train the model in three stages to reduce gradient conflicts among representation alignment, background fitting, and residual transport. First, we learn the physics-anchored representation so that $N_m$ aligns with $A_N$, $S_m$ aligns with $A_S$, and the representation space is organized into complementary branches. Second, we train the background estimator using $C_N$. Third, we train the residual Flow Matching model with the background branch fixed or checkpointed. End-to-end fine-tuning can be evaluated as an ablation, but is not required by the main formulation.
+
+At inference time, only the observed modalities $X$ are available. The target velocity $V$ and the target-derived anchors $A_N$ and $A_S$ are never used. The model predicts $C_N$ and $C_S$, estimates $\hat B$, samples the residual from the learned flow, and reconstructs
+\begin{equation}
+\hat V=\hat B+\hat R.
+\end{equation}
+This separation makes the anchors purely a training-time calibration mechanism and keeps the inference path free of target leakage.
+
+\appendix
+\section{Additional Details for Symile}
+The main text only states that $\mathcal L_{\mathrm{symile}}$ encourages high-order multimodal consistency. Here we summarize the full construction. Let $z_{\mathcal M}$ denote the fused representation of the observed modality subset and let $z^+$ be the matched joint tuple. Symile contrasts the matched tuple against in-batch mismatched tuples, so the model is rewarded only when the available modalities agree jointly. This is more expressive than pairwise alignment because pairwise consistency can miss interactions among three or more modalities.
+
+With subset-aware masking, the objective is computed only over the modalities that are present. Missing modalities are never treated as pseudo-observations, and they do not participate in negative sampling, anchor alignment, or orthogonality penalties. When the observed subset is too small to define a genuine high-order relation, the training signal degenerates to the anchor-based calibration terms for the available modalities.
+
+\section{Background-Residual Diagnostics}
+The main text uses $\rho_B$ as an evaluation-time residual diagnostic:
+\begin{equation}
+\rho_B=
+\frac{\|P_L(V-\hat B)\|_1}{\|V-\hat B\|_1+\epsilon}.
+\end{equation}
+It measures how much of the background-conditioned residual remains in the low-frequency band. A larger value indicates that the background branch still leaves structured trend error for the residual model to absorb. This statistic is not used as an inference-time condition in the main method. It is reported together with background MAE, background high-frequency leakage, and $E_R/E_V$ to diagnose whether the proposed decomposition actually reduces the residual generation burden.
+
+\section{Theoretical Justification}
+The claims below are stated as justifications for the design, not as universal superiority results.
+
+\paragraph{Claim 1.}
+If $P_L$ is linear and $\hat B\in\mathrm{Range}(P_L)$, then
+\begin{equation}
+P_L(R_{\hat B})=B-\hat B.
+\end{equation}
+\textit{Justification.}
+By definition, $R_{\hat B}=V-\hat B$. Applying $P_L$ and using linearity yields
+\begin{equation}
+P_L(R_{\hat B})=P_L(V)-P_L(\hat B)=B-\hat B.
+\end{equation}
+Thus, the residual low-frequency energy is governed directly by the background estimation error.
+
+\paragraph{Claim 2.}
+If the background estimate is effective, the residual transport problem is lighter than direct full-field Flow Matching.
+\textit{Justification.}
+For Gaussian noise interpolation, the direct target velocity is $u_V=V-\xi$, while the residual target velocity is $u_R=(V-\hat B)-\xi$. When $\mathbb E\|V-\hat B\|^2<\mathbb E\|V\|^2$, the expected squared norm of the residual target is smaller than that of the direct target. This simplifies the transport task, but it does not by itself guarantee higher final accuracy.
+
+\paragraph{Claim 3.}
+A fixed low-frequency residual penalty should be interpreted as a regularizer, not as a physical constraint that must always hold.
+\textit{Justification.}
+Because $P_L(R_{\hat B})=B-\hat B$, a hard penalty on low-frequency residual energy conflicts with the true residual whenever $\hat B$ is imperfect. Therefore, the main method treats residual low-frequency suppression as a fixed regularization choice whose effect must be verified empirically through $\mathrm{MAE}_L$, $\mathrm{MAE}_H$, and $\rho_B$, rather than as a target-dependent dynamic gate.
+
+\section{Ablation Protocol}
+The following diagnostics should be reported in experiments or supplementary material:
+\begin{itemize}
+\item Anchor only vs.\ Symile only vs.\ anchor plus Symile.
+\item With and without reliability weighting.
+\item With and without orthogonality regularization.
+\item $C_N$ only, $C_S$ only, and the full $C_N/C_S$ interface.
+\item Compressed $U_m$ injection versus a direct $F_{\mathrm{base}}$ bypass.
+\item Background-only generation, direct residual generation, and historical dynamic-gate extensions.
+\item Residual low-frequency ratio grouped by background quality.
+\end{itemize}
+
+\bibliography{aaai2026}
+
+\end{document}

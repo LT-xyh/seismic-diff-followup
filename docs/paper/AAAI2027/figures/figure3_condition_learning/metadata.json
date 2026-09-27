@@ -1,0 +1,212 @@
+{
+  "anchor_calibration": {
+    "bootstrap": {
+      "background": {
+        "cluster": "sample_row",
+        "delta_ci95": [
+          0.456634140838466,
+          0.46408655973876156
+        ],
+        "delta_mean": 0.4605504674961952,
+        "matched_median": 0.6949268579483032,
+        "repeats": 1000,
+        "seed": 17,
+        "shuffled_median": 0.274489164352417
+      },
+      "structural": {
+        "cluster": "sample_row",
+        "delta_ci95": [
+          0.3502112790587091,
+          0.3580518605874955
+        ],
+        "delta_mean": 0.3540892255695602,
+        "matched_median": 0.8933831453323364,
+        "repeats": 1000,
+        "seed": 29,
+        "shuffled_median": 0.6446051001548767
+      }
+    },
+    "derangement_offset": 1,
+    "derangement_size": 33600,
+    "fixed_points": 0,
+    "matched_vs_strict_derangement": true,
+    "projector_spaces": "training-objective role projectors",
+    "training_only_anchors": true
+  },
+  "causal_ablation": false,
+  "causal_statement": "Diagnostic evidence from one existing epoch-99 checkpoint; not a causal ablation.",
+  "main_figure_panels": [
+    "anchor_calibration",
+    "role_specialization"
+  ],
+  "auxiliary_diagnostics": {
+    "main_text_evidence": false,
+    "panels": [
+      "cross_modal_retrieval",
+      "reliability_routing"
+    ],
+    "retention_reason": "Retained for audit and possible appendix use; excluded from the main figure because they provide weaker evidence than anchor calibration and role diagnostics.",
+    "archived_figure": {
+      "pdf": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/figure3_condition_learning/appendix_full_condition_diagnostics.pdf",
+      "png": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/figure3_condition_learning/appendix_full_condition_diagnostics.png",
+      "svg": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/figure3_condition_learning/appendix_full_condition_diagnostics.svg"
+    },
+    "source_tables": [
+      "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/figure3_condition_learning/retrieval_matrices.csv",
+      "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/figure3_condition_learning/reliability_routing.csv"
+    ]
+  },
+  "editable_assets": {
+    "powerpoint": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/figure3_condition_learning/figure3_condition_learning_editable.pptx",
+    "powerpoint_metadata": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/figure3_condition_learning/figure3_condition_learning_pptx_metadata.json",
+    "native_editable_shapes": true,
+    "embedded_raster_images": 0
+  },
+  "checkpoint": {
+    "epoch": 99,
+    "loaded_keys": 1070,
+    "missing_keys": 0,
+    "mode": "full",
+    "path": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/joint_full_contrastive_bgfm_pixelfm_predbg_e100/lightning/checkpoints/joint_full_contrastive_bgfm_pixelfm_predbg_e100-epoch_99-loss0.1036.ckpt",
+    "required_prefixes": [
+      "encoder.",
+      "contrastive_loss.projectors."
+    ],
+    "required_prefixes_present": [
+      "encoder.",
+      "contrastive_loss.projectors."
+    ],
+    "sha256": "0d77a529618d8d158af0731752cc68efc01c4f6e2f2adfedaf87d8008f930a36",
+    "skipped_shape_keys": 0,
+    "state_dict_keys": 1070,
+    "unexpected_keys": 0
+  },
+  "checkpoint_epoch": 99,
+  "complete_modality_counts": {
+    "CurveFaultA": 4039,
+    "CurveFaultB": 4034,
+    "CurveVelA": 2208,
+    "CurveVelB": 2310,
+    "FlatFaultA": 4081,
+    "FlatFaultB": 4067,
+    "FlatVelA": 2245,
+    "FlatVelB": 2238
+  },
+  "dataset_counts": {
+    "CurveFaultA": 5440,
+    "CurveFaultB": 5401,
+    "CurveVelA": 2958,
+    "CurveVelB": 3069,
+    "FlatFaultA": 5471,
+    "FlatFaultB": 5351,
+    "FlatVelA": 2930,
+    "FlatVelB": 2980
+  },
+  "dataset_names": [
+    "FlatVelA",
+    "FlatVelB",
+    "CurveVelA",
+    "CurveVelB",
+    "FlatFaultA",
+    "FlatFaultB",
+    "CurveFaultA",
+    "CurveFaultB"
+  ],
+  "evidence_scope": "single_checkpoint_diagnostic",
+  "gallery": {
+    "complete_modalities_only": true,
+    "galleries_per_subset": 10,
+    "gallery_count": 80,
+    "gallery_size": 128,
+    "provenance_csv": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/figure3_condition_learning/retrieval_gallery_provenance.csv",
+    "same_subset": true,
+    "seed": 42
+  },
+  "input_sha256": {
+    "checkpoint": "0d77a529618d8d158af0731752cc68efc01c4f6e2f2adfedaf87d8008f930a36",
+    "config": "1f26a5aa157e8d8c7e1c54e6cd9e0ba10bdf9e9289aff6108247cd547b541f60",
+    "manifest": "10b22bf60842528f843f07f8a374f9920677e1a0d097f53db83e61e100494876",
+    "metrics": "022980957a66e3570792cf7b9cdbf7c390b23167f01e53d262b1db0bc64a9c08"
+  },
+  "inputs": {
+    "checkpoint": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/joint_full_contrastive_bgfm_pixelfm_predbg_e100/lightning/checkpoints/joint_full_contrastive_bgfm_pixelfm_predbg_e100-epoch_99-loss0.1036.ckpt",
+    "config": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/joint_full_contrastive_bgfm_pixelfm_predbg_e100/evaluation_epoch99_full_parallel_bs64/eval_config_epoch99.yaml",
+    "manifest": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/joint_full_contrastive_bgfm_pixelfm_predbg_e100/evaluation_epoch99_global_heldout_full_parallel_bs64/held_out_manifest.csv",
+    "metrics": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/joint_full_contrastive_bgfm_pixelfm_predbg_e100/evaluation_epoch99_global_heldout_full_parallel_bs64/merged_metrics.csv"
+  },
+  "outputs": [
+    "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/figure3_condition_learning/retrieval_matrices.csv",
+    "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/figure3_condition_learning/anchor_calibration.csv",
+    "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/figure3_condition_learning/role_separation.csv",
+    "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/figure3_condition_learning/reliability_routing.csv",
+    "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/figure3_condition_learning/retrieval_gallery_provenance.csv",
+    "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/figure3_condition_learning/figure3_condition_learning.png",
+    "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/figure3_condition_learning/figure3_condition_learning.pdf",
+    "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/figure3_condition_learning/figure3_condition_learning.svg",
+    "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/figure3_condition_learning/figure3_condition_learning_editable.pptx",
+    "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/figure3_condition_learning/figure3_condition_learning_pptx_metadata.json",
+    "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/figure3_condition_learning/appendix_full_condition_diagnostics.pdf",
+    "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/figure3_condition_learning/appendix_full_condition_diagnostics.png",
+    "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/figure3_condition_learning/appendix_full_condition_diagnostics.svg",
+    "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/figure3_condition_learning/metadata.json"
+  ],
+  "role_diagnostics": {
+    "causal_interpretation": false,
+    "metrics": [
+      "eta_B",
+      "eta_S",
+      "chi_BS"
+    ],
+    "sample_level_rows": 33600
+  },
+  "routing": {
+    "aggregation": "mean over all complete-modality held-out records per dataset",
+    "available_modalities_sum_to_one": true,
+    "matrix_shapes": {
+      "background": [
+        8,
+        4
+      ],
+      "structural": [
+        8,
+        4
+      ]
+    },
+    "missing_modalities_zero": true,
+    "nonnegative": true,
+    "raw_rows": 201776,
+    "source": "encoder forward routing_weights",
+    "static_modality_priors_used": false,
+    "summary_rows": 64
+  },
+  "sample_counts": {
+    "complete_modality": 25222,
+    "diagnostics": 33600,
+    "manifest": 33600,
+    "metrics": 33600
+  },
+  "split_audit": {
+    "dataset_names": [
+      "FlatVelA",
+      "FlatVelB",
+      "CurveVelA",
+      "CurveVelB",
+      "FlatFaultA",
+      "FlatFaultB",
+      "CurveFaultA",
+      "CurveFaultB"
+    ],
+    "manifest_count": 33600,
+    "manifest_path": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/joint_full_contrastive_bgfm_pixelfm_predbg_e100/evaluation_epoch99_global_heldout_full_parallel_bs64/held_out_manifest.csv",
+    "overlap_train": 0,
+    "overlap_val": 0,
+    "split_seed": 42,
+    "test_count": 33600,
+    "test_manifest_missing": 0,
+    "test_manifest_unexpected": 0,
+    "train_count": 235200,
+    "train_val_overlap": 0,
+    "val_count": 67200,
+    "well_seed": 1234
+  }
+}

@@ -1,0 +1,22 @@
+extends: adapted_auto_linear_mae_ae_pretrain.yaml
+
+training:
+  ckpt_path: null
+  load_stage_checkpoint: logs/bg_pdr_fm/aaai27/formal/adapted_auto_linear_mae_ae_pretrain/checkpoints/resume_from_epoch5.ckpt
+  max_epochs: 95
+  batch_size: 128
+  devices: 1
+  num_workers: 4
+  persistent_workers: true
+  prefetch_factor: 3
+  dataloader_multiprocessing_context: spawn
+  logging:
+    log_dir: logs/bg_pdr_fm/aaai27/formal/adapted_auto_linear_mae_ae_pretrain_resume_b128w4/lightning
+    log_version: "adapted_auto_linear_mae_ae_pretrain_resume_b128w4_{time}"
+  checkpoint:
+    dirpath: logs/bg_pdr_fm/aaai27/formal/adapted_auto_linear_mae_ae_pretrain_resume_b128w4/checkpoints
+    filename: "adapted-auto-linear-mae-ae-resume-b128w4-{epoch}-loss{val/loss:.4f}"
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/eval_adapted_auto_linear_mae_ae_pretrain_resume_b128w4/adapted_auto_linear
+  checkpoint: logs/bg_pdr_fm/aaai27/formal/adapted_auto_linear_mae_ae_pretrain_resume_b128w4/checkpoints/last.ckpt

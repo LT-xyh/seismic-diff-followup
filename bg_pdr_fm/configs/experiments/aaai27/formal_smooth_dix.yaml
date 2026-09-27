@@ -1,0 +1,17 @@
+extends: _base_formal.yaml
+
+benchmark:
+  variant: smooth_dix
+  capacity_tier: traditional
+  smooth_dix_kernel_size: 9
+
+training:
+  load_stage_checkpoint: null
+  devices: 1
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/eval_smooth_dix/smooth_dix
+  checkpoint: null
+  allow_untrained: true
+  missing_modes:
+    - full

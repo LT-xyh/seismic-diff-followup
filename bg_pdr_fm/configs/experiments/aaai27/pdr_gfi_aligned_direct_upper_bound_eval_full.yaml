@@ -1,0 +1,13 @@
+extends: pdr_gfi_aligned_direct_upper_bound.yaml
+
+training:
+  devices: 1
+  strategy: null
+  ckpt_path: null
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/gfi_aligned_upper_bound/eval_pdr_gfi_aligned_direct_best_full
+  max_batches: null
+  checkpoint: logs/bg_pdr_fm/gfi_aligned_upper_bound/pdr_gfi_aligned_direct/checkpoints/pdr-gfi-aligned-direct-190-loss0.0129.ckpt
+  missing_modes:
+    - full

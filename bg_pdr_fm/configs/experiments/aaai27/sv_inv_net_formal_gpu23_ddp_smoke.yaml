@@ -1,0 +1,163 @@
+data:
+  name: openfwi
+  root_dir: /public/home/xuyinghao/workspace/datasets/openfwi
+  root_candidates:
+  - /public/home/xuyinghao/workspace/datasets/openfwi
+  use_normalize: '-1_1'
+  storage_backend: lmdb
+  lmdb_root: /public/home/xuyinghao/workspace/datasets/openfwi_lmdb
+  normalization_profile: auto
+  normalize_clamp: true
+  target_shape: null
+  well_count_range:
+  - 0
+  - 3
+  well_seed: 1234
+  well_random: null
+  val_split: val
+  split_fractions:
+  - 0.7
+  - 0.2
+  - 0.1
+  split_seed: 42
+  val_fraction: null
+  openfwi_datasets:
+  - FlatVelA
+  - FlatVelB
+  - CurveVelA
+  - CurveVelB
+  - FlatFaultA
+  - FlatFaultB
+  - CurveFaultA
+  - CurveFaultB
+  required_modalities:
+  - depth_vel
+  - migrated_image
+  - horizon
+  - rms_vel
+benchmark:
+  variant: sv_inv_net
+  capacity_tier: adapted_external
+  generator_hidden_channels: 96
+  direct_hidden_channels: 96
+  full_field_backend: simple_fm
+  freeze_background_branch: false
+  sv_inv_net_base_channels: 32
+  sv_inv_net_growth_rate: 16
+  sv_inv_net_dense_layers: 4
+  sv_inv_net_input_hw:
+  - 1000
+  - 70
+model:
+  hidden_channels: 16
+  base_channels: 32
+  feature_channels: 16
+  cond_channels: 32
+  background_hidden_channels: 16
+  latent_channels: 4
+  latent_hw:
+  - 18
+  - 18
+  codec_type: autoencoder
+  codec_checkpoint: checkpoints/bg_pdr_fm/seismic_autoencoder_kl.ckpt
+  codec_module_path: null
+  lowpass_kernel: 5
+  use_unique: false
+  unique_eta: 0.1
+  rho_tau: 1.0
+  residual_backend: simple_fm
+  residual_num_train_timesteps: 1000
+  residual_num_inference_steps: 20
+  residual_loss_type: mse
+loss:
+  bg_weight: 1.0
+  bg_high_weight: 0.05
+  rho_weight: 0.0
+  final_l1_weight: 1.0
+  target_lf_weight: 0.1
+  ssim_weight: 0.1
+quality_gate:
+  mode: none
+contrastive:
+  embed_dim: 128
+  hidden_dim: null
+  temperature: 0.08
+  pairwise_temperature: 0.1
+  symile_structural_weight: 0.25
+  symile_numerical_weight: 0.25
+  pairwise_structural_weight: 0.2
+  pairwise_numerical_weight: 0.3
+  pairwise_reliability_floor: 0.35
+  anchor_weight: 0.1
+  reliability_prior_weight: 0.05
+  sn_ortho_weight: 0.02
+  unique_ortho_weight: 0.02
+  structural_highpass_weight: 0.005
+  numerical_lowpass_weight: 0.005
+  frequency_kernel_size: 5
+  min_symile_group_size: 2
+  strict_derangement: true
+  num_negative_shuffles: 96
+  diagnostics:
+    frequency_metrics: true
+    reliability_metrics: true
+    subset_metrics: true
+  modality_dropout:
+    enabled: false
+    probs:
+      migrated_image: 0.0
+      horizon: 0.0
+      rms_vel: 0.0
+      well_log: 0.0
+  wavelet:
+    level: 1
+    boundary: edge
+    resize_mode: nearest
+    detail_fusion: l2
+training:
+  stage: residual
+  fast_run: false
+  freeze_encoder: true
+  load_stage_checkpoint: null
+  save_stage_outputs: false
+  stage_checkpoint_path: logs/bg_pdr_fm/aaai27/formal/stage_checkpoints
+  lr: 0.0001
+  max_epochs: 1
+  batch_size: 192
+  num_workers: 0
+  persistent_workers: false
+  prefetch_factor: null
+  pin_memory: true
+  precision: bf16-mixed
+  matmul_precision: medium
+  accelerator: gpu
+  devices: 2
+  limit_train_batches: 1
+  limit_val_batches: 1
+  log_every_n_steps: 10
+  logging:
+    log_dir: logs/bg_pdr_fm/aaai27/formal/sv_inv_net/lightning
+    log_version: sv_inv_net_formal_gpu23_ddp_smoke_{time}
+    add_timestamp: false
+  checkpoint:
+    dirpath: logs/bg_pdr_fm/aaai27/formal/sv_inv_net/smoke_checkpoints
+    filename: sv-inv-net-{epoch}-loss{val/loss:.4f}
+    monitor: val/loss
+    mode: min
+    save_top_k: 3
+    save_last: true
+    every_n_epochs: 1
+  strategy: ddp
+diagnostics:
+  enabled: false
+  output_dir: logs/bg_pdr_fm/aaai27/formal/diagnostics
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/eval_sv_inv_net/sv_inv_net
+  split: test
+  max_batches: null
+  save_arrays: false
+  save_panels: false
+  allow_untrained: false
+  checkpoint: logs/bg_pdr_fm/aaai27/formal/sv_inv_net/checkpoints/last.ckpt
+  missing_modes:
+  - full

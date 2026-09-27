@@ -1,0 +1,36 @@
+extends: _base_formal.yaml
+
+benchmark:
+  variant: adapted_auto_linear_original
+  capacity_tier: adapted_external
+  auto_linear_phase: inverse_linear
+  auto_linear_input_hw: [1000, 70]
+  auto_linear_mask_ratio: 0.75
+  auto_linear_converter_rank: 375
+  auto_linear_supervised_loss: l1
+
+training:
+  freeze_encoder: true
+  load_stage_checkpoint: logs/bg_pdr_fm/aaai27/formal/adapted_auto_linear_original_paper35m_ae_pretrain/checkpoints/last.ckpt
+  max_epochs: 100
+  batch_size: 64
+  devices: 4
+  strategy: ddp
+  num_workers: 8
+  persistent_workers: true
+  prefetch_factor: 4
+  lr: 1e-3
+  weight_decay: 0.05
+  scheduler: cosine
+  logging:
+    log_dir: logs/bg_pdr_fm/aaai27/formal/adapted_auto_linear_original_paper35m_multimodal/lightning
+    log_version: "adapted_auto_linear_original_paper35m_multimodal_{time}"
+  checkpoint:
+    dirpath: logs/bg_pdr_fm/aaai27/formal/adapted_auto_linear_original_paper35m_multimodal/checkpoints
+    filename: "adapted-auto-linear-original-paper35m-multimodal-{epoch}-loss{val/loss:.4f}"
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/eval_adapted_auto_linear_original_paper35m_multimodal/adapted_auto_linear_original_paper35m_multimodal
+  checkpoint: logs/bg_pdr_fm/aaai27/formal/adapted_auto_linear_original_paper35m_multimodal/checkpoints/last.ckpt
+  missing_modes:
+    - full

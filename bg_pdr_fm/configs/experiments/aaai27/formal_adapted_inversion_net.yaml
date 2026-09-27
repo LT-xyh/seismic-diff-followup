@@ -1,0 +1,5 @@
+extends: adapted_inversion_net.yaml
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/eval_adapted_inversion_net_official_e100/adapted_inversion_net_official_e100
+  checkpoint: logs/bg_pdr_fm/aaai27/formal/adapted_inversion_net_official_e100/checkpoints/last.ckpt

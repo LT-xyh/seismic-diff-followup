@@ -1,0 +1,17 @@
+extends: _base_smoke.yaml
+
+benchmark:
+  variant: cncs_fm
+  capacity_tier: strong
+  generator_hidden_channels: 192
+  direct_hidden_channels: 192
+  full_field_backend: simple_fm
+
+training:
+  logging:
+    log_version: "cncs_fm_strong_{time}"
+  checkpoint:
+    filename: "cncs-fm-strong-{epoch}-loss{val/loss:.4f}"
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/cncs_fm_strong/evaluation

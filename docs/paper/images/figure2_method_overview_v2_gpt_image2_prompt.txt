@@ -1,0 +1,48 @@
+Use case: scientific-educational
+Asset type: AAAI conference paper figure, rough algorithm architecture overview
+Primary request: Create a clean scientific method overview diagram titled "BG-PDR-FM: Physics-Anchored Background-Gated Residual Flow Matching". The figure should show the full algorithm pipeline and expand the Residual Flow Matching module internally.
+Style/medium: crisp vector-like scientific infographic, white background, thin gray borders, restrained colors, AAAI paper style, readable at two-column full-width size.
+Composition/framing: wide landscape 16:9. Use a left-to-right pipeline with four grouped regions: inputs, condition learning, background branch, residual Flow Matching. Keep generous whitespace and large labels.
+Color palette: blue for numerical/background path, green for structural/residual path, amber for background-quality gate, dark gray for neutral text and arrows.
+Text (verbatim, keep labels exact and readable):
+"BG-PDR-FM: Physics-Anchored Background-Gated Residual Flow Matching"
+"Multimodal inputs"
+"PSTM"
+"Horizon"
+"RMS velocity"
+"Well log"
+"Modality encoders"
+"Training-only anchors"
+"A_N"
+"A_S"
+"Condition learner"
+"C_N"
+"C_S"
+"Background branch"
+"B_hat = f_B(C_N)"
+"Residual target"
+"R_B = V - B_hat"
+"Residual Flow Matching"
+"Noise xi"
+"R_t = (1-t)xi + t R_B"
+"v_theta(R_t,t | C_S, psi_B(B_hat), rho_hat_B)"
+"R_hat"
+"Background-quality gate"
+"rho_hat_B"
+"V_hat = B_hat + R_hat"
+Layout details:
+- Left region: four compact input cards labeled PSTM, Horizon, RMS velocity, Well log.
+- Next region: modality encoders feed a condition learner. Show training-only anchors A_N and A_S in a dashed top strip connected to the condition learner. Make clear anchors are training-only.
+- Condition learner outputs two large conditions: C_N in blue and C_S in green.
+- Background branch: C_N goes to B_hat = f_B(C_N). B_hat also feeds psi_B(B_hat) into the residual module.
+- Residual Flow Matching region: do not draw it as a plain black-box. Draw an internal mini-trajectory from Noise xi to residual target R_B with the formula R_t = (1-t)xi + t R_B. Place a compact vector-field box labeled v_theta(R_t,t | C_S, psi_B(B_hat), rho_hat_B). Output R_hat.
+- Show rho_hat_B as an amber background-quality gate feeding the vector-field box and modulating the residual low-frequency constraint.
+- Final merge: B_hat and R_hat merge into V_hat = B_hat + R_hat.
+Important constraints:
+- This is an algorithm overview, not a full U-Net diagram.
+- Keep text sparse and large.
+- Do not include loss-function blocks except the residual target formula and the FM interpolation formula.
+- Do not include experimental result heatmaps, training curves, numeric tables, or dense equations.
+- Do not show A_N, A_S, V, or rho_B as inference inputs. Anchors should appear only in the dashed training-only strip.
+- Do not include F_base as a generator shortcut.
+Avoid: decorative gradients, dark background, 3D glossy render, photorealistic lab scenes, crowded arrows, tiny labels, watermarks, logos, unrelated modules.

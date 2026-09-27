@@ -1,0 +1,7 @@
+extends: adapted_upfwi.yaml
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/eval_adapted_upfwi_official_e100/adapted_upfwi_official_e100
+  checkpoint: logs/bg_pdr_fm/aaai27/formal/adapted_upfwi_official_e100/checkpoints/last.ckpt
+  missing_modes:
+    - full

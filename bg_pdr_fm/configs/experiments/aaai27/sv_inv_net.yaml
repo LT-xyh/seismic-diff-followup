@@ -1,0 +1,31 @@
+extends: _base_formal.yaml
+
+benchmark:
+  variant: sv_inv_net
+  capacity_tier: adapted_external
+  sv_inv_net_base_channels: 32
+  sv_inv_net_growth_rate: 16
+  sv_inv_net_dense_layers: 4
+  sv_inv_net_input_hw: [1000, 70]
+
+training:
+  freeze_encoder: true
+  load_stage_checkpoint: null
+  max_epochs: 200
+  batch_size: 192
+  devices: 1
+  logging:
+    log_dir: logs/bg_pdr_fm/aaai27/formal/sv_inv_net/lightning
+    log_version: "sv_inv_net_{time}"
+  checkpoint:
+    dirpath: logs/bg_pdr_fm/aaai27/formal/sv_inv_net/checkpoints
+    filename: "sv-inv-net-{epoch}-loss{val/loss:.4f}"
+
+loss:
+  ssim_weight: 0.1
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/eval_sv_inv_net/sv_inv_net
+  checkpoint: logs/bg_pdr_fm/aaai27/formal/sv_inv_net/checkpoints/last.ckpt
+  missing_modes:
+    - full

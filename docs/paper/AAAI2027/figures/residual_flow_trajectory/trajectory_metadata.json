@@ -1,0 +1,155 @@
+{
+  "figure_title": "Prediction-Consistent Residual Flow Trajectory",
+  "config_path": "/public/home/xuyinghao/workspace/seismic-diff/bg_pdr_fm/configs/openfwi_lmdb_joint_full_contrastive_bgfm_pixelfm_predbg_e100.yaml",
+  "config_sha256": "71ad383a22e83f78cd04200a2ec48467c80cc76e7d8df258a5ab30af82884607",
+  "checkpoint": {
+    "path": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/joint_full_contrastive_bgfm_pixelfm_predbg_e100/lightning/checkpoints/joint_full_contrastive_bgfm_pixelfm_predbg_e100-epoch_99-loss0.1036.ckpt",
+    "sha256": "0d77a529618d8d158af0731752cc68efc01c4f6e2f2adfedaf87d8008f930a36",
+    "epoch": 99,
+    "global_step": 91900,
+    "missing_keys": [],
+    "unexpected_keys": [],
+    "state_dict_keys": 1070
+  },
+  "official_evaluation_dir": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/joint_full_contrastive_bgfm_pixelfm_predbg_e100/evaluation_epoch99_global_heldout_full_parallel_bs64",
+  "official_manifest": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/joint_full_contrastive_bgfm_pixelfm_predbg_e100/evaluation_epoch99_global_heldout_full_parallel_bs64/held_out_manifest.csv",
+  "official_metrics": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/joint_full_contrastive_bgfm_pixelfm_predbg_e100/evaluation_epoch99_global_heldout_full_parallel_bs64/merged_metrics.csv",
+  "selected_manifest_record": {
+    "dataset_id": "5",
+    "dataset_name": "FlatFaultB",
+    "source_sample_index": "27006",
+    "worker": "user_selected_figure2_asset"
+  },
+  "selected_official_metrics": null,
+  "selected_evaluation_metrics_available": false,
+  "provenance_scope": "not_in_official_global_heldout",
+  "dataset_split": "all",
+  "selection_rule": "user-specified Fig. 2 asset: FlatFaultB source_sample_index=27006; not in official global held-out manifest",
+  "subset_ssim_median": null,
+  "dataset_index": 28286,
+  "trace_seed": 2027,
+  "steps": 50,
+  "delta_t": 0.02,
+  "cuda_visible_devices": "3",
+  "model": {
+    "codec_type": "identity",
+    "residual_backend": "unet_fm_film",
+    "residual_condition_merge": "concat",
+    "residual_background_context_source": "codec_latent",
+    "latent_hw": [
+      70,
+      70
+    ],
+    "condition_formula": "c_R = [C_str; psi_bg(B_hat)]",
+    "path_formula": "R_t = (1-t) xi + t(V-B_hat)",
+    "euler_formula": "R_{k+1} = R_k + (1/50) v_theta(R_k,t_k,c_R)"
+  },
+  "array_shapes": {
+    "residual_states": [
+      51,
+      1,
+      70,
+      70
+    ],
+    "velocity_fields": [
+      50,
+      1,
+      70,
+      70
+    ],
+    "euler_deltas": [
+      50,
+      1,
+      70,
+      70
+    ],
+    "times": [
+      50
+    ],
+    "noise": [
+      1,
+      70,
+      70
+    ],
+    "condition_structural": [
+      32,
+      70,
+      70
+    ],
+    "background_context": [
+      32,
+      70,
+      70
+    ],
+    "merged_condition": [
+      64,
+      70,
+      70
+    ],
+    "channel_rms_structural": [
+      70,
+      70
+    ],
+    "channel_rms_background_context": [
+      70,
+      70
+    ],
+    "background_hat": [
+      1,
+      70,
+      70
+    ],
+    "residual_hat": [
+      1,
+      70,
+      70
+    ],
+    "velocity_hat": [
+      1,
+      70,
+      70
+    ],
+    "target_velocity": [
+      1,
+      70,
+      70
+    ]
+  },
+  "figure_files": {
+    "pdf": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/residual_flow_trajectory/residual_flow_trajectory.pdf",
+    "svg": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/residual_flow_trajectory/residual_flow_trajectory.svg",
+    "png": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/residual_flow_trajectory/residual_flow_trajectory.png"
+  },
+  "color_limits": {
+    "feature_rms": [
+      0.0,
+      1.2106242501735605
+    ],
+    "residual_state": [
+      -3.8077375888824463,
+      3.8077375888824463
+    ],
+    "velocity_field": [
+      -3.8656580448150635,
+      3.8656580448150635
+    ],
+    "background_and_final_velocity": [
+      -0.9458022713661194,
+      0.9458022713661194
+    ],
+    "final_residual": [
+      -0.5660951733589172,
+      0.5660951733589172
+    ]
+  },
+  "validation": {
+    "trace_final_vs_production_max_abs": 0.0,
+    "composition_max_abs": 0.0,
+    "trace_final_vs_production_assert_close": true,
+    "composition_assert_close": true,
+    "all_arrays_finite": true,
+    "state_count": 51,
+    "velocity_count": 50,
+    "delta_count": 50
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "figure_mode": "posthoc_spatial_registration_diagnostic",
+  "figure_title": "Post-hoc Spatial Registration Diagnostic",
+  "source": {
+    "source_kind": "independent_rendered_raster_proxy",
+    "raw_scalar_arrays_found": false,
+    "crop_used": false,
+    "composite_attachment": {
+      "provided": true,
+      "path": "/public/home/xuyinghao/.codex/attachments/3553c7ea-8bd3-4cf9-a723-bc6a0aeeb055/codex-clipboard-552750d5-8764-4fa7-ab5e-b64b4210c61e.png",
+      "sha256": "55e830295916c45b9b0d65df499fab85f320828e97a5e31b8b1f2623f2b8bde6",
+      "shape": [
+        189,
+        495
+      ],
+      "mode": "RGB",
+      "used_for_field_extraction": false,
+      "reason": "Independent 900 x 900 subfigure assets were found in the repository, so no composite crop was used."
+    },
+    "scalar_decode": "signed red-minus-blue proxy from the common RdBu_r rendered PNGs",
+    "generation_script": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/images/make_figure2_assets.py",
+    "generation_note": "The repository generator constructs noise and intermediate as a signed visual proxy from the structure tile; no checkpoint R_t tensor is stored.",
+    "sources": {
+      "noise": {
+        "path": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/images/figure2_assets/transport_burden/subfigures/stage1_noise_xi_900.png",
+        "sha256": "ebc271a397cf58eff6930f8ab7ff3218ef13ce28ef4abe685274493c551a9c31",
+        "shape": [
+          900,
+          900
+        ]
+      },
+      "intermediate": {
+        "path": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/images/figure2_assets/transport_burden/subfigures/stage2_interpolated_Rt_900.png",
+        "sha256": "3ab1fbfec3426c09b340dc3b9b2684b7de2402aa9d1b84a3f6520123028491e1",
+        "shape": [
+          900,
+          900
+        ]
+      },
+      "target": {
+        "path": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/images/figure2_assets/transport_burden/subfigures/stage3_target_residual_Rhat_900.png",
+        "sha256": "7596c25ac263c1fd8518af9eee53dd1e70ee3618d6fac221d87f08c4f92e9c59",
+        "shape": [
+          900,
+          900
+        ]
+      }
+    }
+  },
+  "registration": {
+    "method": "skimage.registration.optical_flow_tvl1",
+    "reference": "R_Bhat",
+    "moving": "R_t",
+    "mapping": "G(x)=x+D(x); R_warp(x)=S(R_t,G(x))",
+    "registration_max_size": 300,
+    "registration_view_shape": [
+      300,
+      300
+    ],
+    "scale_to_full_resolution": [
+      3.0,
+      3.0
+    ],
+    "attachment": 15.0,
+    "tightness": 0.3,
+    "num_warp": 5,
+    "num_iter": 10,
+    "prefilter": true
+  },
+  "before": {
+    "mae": 0.11873220652341843,
+    "rmse": 0.1535472273826599,
+    "ssim": 0.03611944324728874
+  },
+  "after": {
+    "mae": 0.10410329699516296,
+    "rmse": 0.13458506762981415,
+    "ssim": 0.04933074443519887
+  },
+  "improvement": {
+    "mae_absolute": 0.014628909528255463,
+    "mae_relative": 0.12320927873407368,
+    "ssim_absolute": 0.013211301187910134
+  },
+  "displacement": {
+    "mean_magnitude_pixels": 1.986350178718567,
+    "median_magnitude_pixels": 1.4778791666030884,
+    "max_magnitude_pixels": 10.735734939575195,
+    "p95_magnitude_pixels": 5.200927138328551
+  },
+  "jacobian": {
+    "min": -2.076995849609375,
+    "p01": 0.28163557648658755,
+    "median": 0.9910035133361816,
+    "p99": 1.4720190358161929,
+    "max": 4.707212924957275,
+    "folding_fraction": 0.004844444444444445,
+    "folding_pixels": 3924,
+    "total_pixels": 810000
+  },
+  "decision": {
+    "errors_improve": true,
+    "structure_improves": true,
+    "no_severe_folding": true,
+    "posthoc_registration_supported": true,
+    "model_internal_rfw_supported": false,
+    "source_kind": "independent_rendered_raster_proxy",
+    "folding_threshold": 0.01,
+    "interpretation": "Post-hoc registration is numerically supported for this image pair, but the source is not a raw model state."
+  },
+  "outputs": {
+    "pdf": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/posthoc_rfw_diagnostic/posthoc_rfw_diagnostic.pdf",
+    "png": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/posthoc_rfw_diagnostic/posthoc_rfw_diagnostic.png",
+    "svg": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/posthoc_rfw_diagnostic/posthoc_rfw_diagnostic.svg"
+  },
+  "no_paper_tex_modified": true
+}

@@ -1,0 +1,57 @@
+dataset_name,filename,image_role,method,source_sample_index,ssim,velocity_vmax_mps,velocity_vmin_mps
+CurveFaultA,curvefaulta_026193__ground_truth__ssim_1.0000.png,target,Ground Truth,26193,1.0,4500.0,1500.0
+CurveFaultA,curvefaulta_026193__inversionnet__ssim_0.9984.png,prediction,InversionNet,26193,0.9984372854232788,4500.0,1500.0
+CurveFaultA,curvefaulta_026193__velocitygan__ssim_0.9926.png,prediction,VelocityGAN,26193,0.9925658702850342,4500.0,1500.0
+CurveFaultA,curvefaulta_026193__upfwi__ssim_0.9939.png,prediction,UPFWI,26193,0.9939385652542114,4500.0,1500.0
+CurveFaultA,curvefaulta_026193__auto_linear__ssim_0.9938.png,prediction,Auto-Linear,26193,0.9938073754310608,4500.0,1500.0
+CurveFaultA,curvefaulta_026193__latent_u_net__large__ssim_0.9988.png,prediction,Latent U-Net (Large),26193,0.9987662434577942,4500.0,1500.0
+CurveFaultA,curvefaulta_026193__pd_bg_rfm__ssim_0.9991.png,prediction,PD-BG-RFM,26193,0.9991075992584229,4500.0,1500.0
+CurveFaultB,curvefaultb_007449__ground_truth__ssim_1.0000.png,target,Ground Truth,7449,1.0,4500.0,1500.0
+CurveFaultB,curvefaultb_007449__inversionnet__ssim_0.9750.png,prediction,InversionNet,7449,0.9750271439552307,4500.0,1500.0
+CurveFaultB,curvefaultb_007449__velocitygan__ssim_0.9592.png,prediction,VelocityGAN,7449,0.95917809009552,4500.0,1500.0
+CurveFaultB,curvefaultb_007449__upfwi__ssim_0.9740.png,prediction,UPFWI,7449,0.9740296602249146,4500.0,1500.0
+CurveFaultB,curvefaultb_007449__auto_linear__ssim_0.9628.png,prediction,Auto-Linear,7449,0.962837278842926,4500.0,1500.0
+CurveFaultB,curvefaultb_007449__latent_u_net__large__ssim_0.9935.png,prediction,Latent U-Net (Large),7449,0.9934570789337158,4500.0,1500.0
+CurveFaultB,curvefaultb_007449__pd_bg_rfm__ssim_0.9937.png,prediction,PD-BG-RFM,7449,0.9936561584472656,4500.0,1500.0
+CurveVelA,curvevela_003929__ground_truth__ssim_1.0000.png,target,Ground Truth,3929,1.0,4500.0,1500.0
+CurveVelA,curvevela_003929__inversionnet__ssim_0.9955.png,prediction,InversionNet,3929,0.9954764246940613,4500.0,1500.0
+CurveVelA,curvevela_003929__velocitygan__ssim_0.9917.png,prediction,VelocityGAN,3929,0.9916510581970215,4500.0,1500.0
+CurveVelA,curvevela_003929__upfwi__ssim_0.9952.png,prediction,UPFWI,3929,0.9952243566513062,4500.0,1500.0
+CurveVelA,curvevela_003929__auto_linear__ssim_0.9835.png,prediction,Auto-Linear,3929,0.9835176467895508,4500.0,1500.0
+CurveVelA,curvevela_003929__latent_u_net__large__ssim_0.9991.png,prediction,Latent U-Net (Large),3929,0.9991322159767151,4500.0,1500.0
+CurveVelA,curvevela_003929__pd_bg_rfm__ssim_0.9993.png,prediction,PD-BG-RFM,3929,0.9993228912353516,4500.0,1500.0
+CurveVelB,curvevelb_026377__ground_truth__ssim_1.0000.png,target,Ground Truth,26377,1.0,4500.0,1500.0
+CurveVelB,curvevelb_026377__inversionnet__ssim_0.9825.png,prediction,InversionNet,26377,0.9824850559234619,4500.0,1500.0
+CurveVelB,curvevelb_026377__velocitygan__ssim_0.9520.png,prediction,VelocityGAN,26377,0.9520283341407776,4500.0,1500.0
+CurveVelB,curvevelb_026377__upfwi__ssim_0.9754.png,prediction,UPFWI,26377,0.9754490852355957,4500.0,1500.0
+CurveVelB,curvevelb_026377__auto_linear__ssim_0.8768.png,prediction,Auto-Linear,26377,0.876822829246521,4500.0,1500.0
+CurveVelB,curvevelb_026377__latent_u_net__large__ssim_0.9986.png,prediction,Latent U-Net (Large),26377,0.9986297488212585,4500.0,1500.0
+CurveVelB,curvevelb_026377__pd_bg_rfm__ssim_0.9981.png,prediction,PD-BG-RFM,26377,0.9981406331062317,4500.0,1500.0
+FlatFaultA,flatfaulta_010401__ground_truth__ssim_1.0000.png,target,Ground Truth,10401,1.0,4500.0,1500.0
+FlatFaultA,flatfaulta_010401__inversionnet__ssim_0.9985.png,prediction,InversionNet,10401,0.998525857925415,4500.0,1500.0
+FlatFaultA,flatfaulta_010401__velocitygan__ssim_0.9354.png,prediction,VelocityGAN,10401,0.9354024529457092,4500.0,1500.0
+FlatFaultA,flatfaulta_010401__upfwi__ssim_0.9897.png,prediction,UPFWI,10401,0.9896574020385742,4500.0,1500.0
+FlatFaultA,flatfaulta_010401__auto_linear__ssim_0.9944.png,prediction,Auto-Linear,10401,0.9943908452987671,4500.0,1500.0
+FlatFaultA,flatfaulta_010401__latent_u_net__large__ssim_0.9987.png,prediction,Latent U-Net (Large),10401,0.9986817240715027,4500.0,1500.0
+FlatFaultA,flatfaulta_010401__pd_bg_rfm__ssim_0.9989.png,prediction,PD-BG-RFM,10401,0.9989336729049683,4500.0,1500.0
+FlatFaultB,flatfaultb_021686__ground_truth__ssim_1.0000.png,target,Ground Truth,21686,1.0,4500.0,1500.0
+FlatFaultB,flatfaultb_021686__inversionnet__ssim_0.9913.png,prediction,InversionNet,21686,0.9913457036018372,4500.0,1500.0
+FlatFaultB,flatfaultb_021686__velocitygan__ssim_0.9825.png,prediction,VelocityGAN,21686,0.9824554324150085,4500.0,1500.0
+FlatFaultB,flatfaultb_021686__upfwi__ssim_0.9873.png,prediction,UPFWI,21686,0.9872503876686096,4500.0,1500.0
+FlatFaultB,flatfaultb_021686__auto_linear__ssim_0.9643.png,prediction,Auto-Linear,21686,0.9642661809921265,4500.0,1500.0
+FlatFaultB,flatfaultb_021686__latent_u_net__large__ssim_0.9984.png,prediction,Latent U-Net (Large),21686,0.9983599185943604,4500.0,1500.0
+FlatFaultB,flatfaultb_021686__pd_bg_rfm__ssim_0.9981.png,prediction,PD-BG-RFM,21686,0.9981251955032349,4500.0,1500.0
+FlatVelA,flatvela_000101__ground_truth__ssim_1.0000.png,target,Ground Truth,101,1.0,4500.0,1500.0
+FlatVelA,flatvela_000101__inversionnet__ssim_0.8725.png,prediction,InversionNet,101,0.8724575638771057,4500.0,1500.0
+FlatVelA,flatvela_000101__velocitygan__ssim_-0.0231.png,prediction,VelocityGAN,101,-0.023057160899043083,4500.0,1500.0
+FlatVelA,flatvela_000101__upfwi__ssim_0.8907.png,prediction,UPFWI,101,0.8907343149185181,4500.0,1500.0
+FlatVelA,flatvela_000101__auto_linear__ssim_0.8870.png,prediction,Auto-Linear,101,0.8870392441749573,4500.0,1500.0
+FlatVelA,flatvela_000101__latent_u_net__large__ssim_0.7691.png,prediction,Latent U-Net (Large),101,0.769079327583313,4500.0,1500.0
+FlatVelA,flatvela_000101__pd_bg_rfm__ssim_0.9636.png,prediction,PD-BG-RFM,101,0.9635729789733887,4500.0,1500.0
+FlatVelB,flatvelb_029501__ground_truth__ssim_1.0000.png,target,Ground Truth,29501,1.0,4500.0,1500.0
+FlatVelB,flatvelb_029501__inversionnet__ssim_0.9993.png,prediction,InversionNet,29501,0.9993027448654175,4500.0,1500.0
+FlatVelB,flatvelb_029501__velocitygan__ssim_0.9918.png,prediction,VelocityGAN,29501,0.9918429255485535,4500.0,1500.0
+FlatVelB,flatvelb_029501__upfwi__ssim_0.9994.png,prediction,UPFWI,29501,0.9993881583213806,4500.0,1500.0
+FlatVelB,flatvelb_029501__auto_linear__ssim_0.9501.png,prediction,Auto-Linear,29501,0.9501144886016846,4500.0,1500.0
+FlatVelB,flatvelb_029501__latent_u_net__large__ssim_0.9992.png,prediction,Latent U-Net (Large),29501,0.999178946018219,4500.0,1500.0
+FlatVelB,flatvelb_029501__pd_bg_rfm__ssim_0.9983.png,prediction,PD-BG-RFM,29501,0.9982516169548035,4500.0,1500.0

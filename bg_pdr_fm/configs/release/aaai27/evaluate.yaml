@@ -1,0 +1,20 @@
+extends: base.yaml
+
+release:
+  profile: aaai27-evaluate
+
+evaluation:
+  output_dir: release_outputs/aaai27/evaluation
+  split: test
+  shuffle: false
+  max_batches: null
+  save_arrays: false
+  save_panels: false
+  allow_untrained: false
+  checkpoints:
+    full: release_outputs/aaai27/checkpoints/joint_full.ckpt
+    contrastive: null
+    background: null
+    residual: null
+  structural_ablation: none
+  residual_override: none

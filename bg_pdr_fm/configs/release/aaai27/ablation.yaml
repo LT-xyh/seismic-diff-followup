@@ -1,0 +1,18 @@
+extends: train.yaml
+
+release:
+  profile: aaai27-ablation
+
+training:
+  ablation:
+    residual_target_source: lowpass
+
+ablation:
+  concat_full_field:
+    benchmark_variant: concat_fm
+    full_field_condition_merge: add
+    full_field_background_context_source: none
+  prediction_consistency:
+    residual_target_source: lowpass
+    residual_background_source: predicted
+    residual_background_context_source: codec_latent

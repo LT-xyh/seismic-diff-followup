@@ -1,0 +1,20 @@
+extends: _base_formal.yaml
+
+benchmark:
+  variant: concat_fm
+  capacity_tier: matched
+  generator_hidden_channels: 96
+  direct_hidden_channels: 96
+  full_field_backend: simple_fm
+
+training:
+  logging:
+    log_dir: logs/bg_pdr_fm/aaai27/formal/concat_fm_matched/lightning
+    log_version: "formal_concat_fm_matched_{time}"
+  checkpoint:
+    dirpath: logs/bg_pdr_fm/aaai27/formal/concat_fm_matched/checkpoints
+    filename: "concat-fm-matched-{epoch}-loss{val/loss:.4f}"
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/formal/concat_fm_matched/evaluation
+  checkpoint: logs/bg_pdr_fm/aaai27/formal/concat_fm_matched/checkpoints/last.ckpt

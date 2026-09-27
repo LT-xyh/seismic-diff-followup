@@ -1,0 +1,82 @@
+datasets:
+  root_dir: /public/home/xuyinghao/workspace/datasets/openfwi
+  use_data: ["depth_vel"]
+  dataset_name: ["FlatVelA", "FlatVelB", "CurveVelA", "CurveVelB", "FlatFaultA", "FlatFaultB", "CurveFaultA", "CurveFaultB"]
+  use_normalize: "-1_1"
+  storage_backend: lmdb
+  lmdb_root: /public/home/xuyinghao/workspace/datasets/openfwi_lmdb
+  normalization_profile: seismic_global
+  normalize_clamp: true
+  split_fractions: [0.7, 0.2, 0.1]
+  split_seed: 42
+  depth_velocity:
+    shape: [1, 70, 70]
+
+autoencoder_conf:
+  sample_size: 72
+  down_block_types: ["DownEncoderBlock2D", "DownEncoderBlock2D", "DownEncoderBlock2D"]
+  up_block_types: ["UpDecoderBlock2D", "UpDecoderBlock2D", "UpDecoderBlock2D"]
+  block_out_channels: [64, 128, 256]
+  layers_per_block: 2
+  norm_num_groups: 32
+  latent_channels: 4
+  latent_hw: [18, 18]
+
+training:
+  fast_run: False
+  ckpt_path: null
+  export_checkpoint_path: checkpoints/bg_pdr_fm/seismic_autoencoder_kl.ckpt
+  loss:
+    l1_weight: 1.0
+    mse_weight: 0.1
+    gradient_weight: 0.5
+    high_frequency_weight: 0.1
+    kl_weight: 5e-4
+  kl_anneal:
+    strategy: linear_epoch
+    warmup_epochs: 30
+    start: 0.0
+    end: 5e-4
+    free_bits: 0.0
+  lr: 1e-4
+  use_ema: true
+  gradient_clip_val: 1.0
+  max_epochs: 150
+  min_epochs: 5
+  accelerator: gpu
+  devices: [4, 5, 6, 7]
+  matmul_precision: medium
+  precision: bf16-mixed
+  log_every_n_steps: 1
+  limit_train_batches: null
+  limit_val_batches: null
+  dataloader:
+    batch_size: 128
+    num_workers: 4
+    prefetch_factor: 3
+    persistent_workers: true
+    pin_memory: true
+  logging:
+    log_dir: logs/autoencoder/seismic_kl
+    log_version: ""
+  callbacks:
+    early_stopping:
+      monitor: val/MAE
+      mode: min
+      patience: 5
+    checkpoint:
+      filename: epoch_{epoch}-mae{val/MAE:.4f}
+      save_top_k: 3
+      monitor: val/MAE
+      mode: min
+
+evaluation:
+  run_after_train: true
+  openfwi_split: test
+  checkpoint: checkpoints/bg_pdr_fm/seismic_autoencoder_kl.ckpt
+  output_dir: logs/autoencoder/seismic_kl/evaluation
+  max_batches: null
+  max_samples: 512
+  batch_size: 64
+  num_workers: 0
+  marmousi_root: /public/home/xuyinghao/workspace/datasets/marmousi

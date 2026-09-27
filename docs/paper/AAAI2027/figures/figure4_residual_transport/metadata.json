@@ -1,0 +1,330 @@
+{
+  "bootstrap": {
+    "aggregation": "sample-level bootstrap over per-record q_T",
+    "repeats": 2000,
+    "seed": 2027
+  },
+  "branch_decomposition_in_main_figure": false,
+  "color_limits": {
+    "error": [
+      0.0,
+      848.54736328125
+    ],
+    "residual": [
+      -1266.521240234375,
+      1266.521240234375
+    ],
+    "velocity": [
+      1907.6787109375,
+      4381.103515625
+    ]
+  },
+  "color_normalization": {
+    "error": "shared physical-unit sequential magma scale beginning at zero",
+    "residual": "shared physical-unit zero-centered symmetric coolwarm scale",
+    "velocity": "shared physical-unit sequential viridis scale"
+  },
+  "figure": "Figure 4",
+  "formal_manifest": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/joint_full_contrastive_bgfm_pixelfm_predbg_e100/evaluation_epoch99_global_heldout_full_parallel_bs64/held_out_manifest.csv",
+  "formal_metrics": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/joint_full_contrastive_bgfm_pixelfm_predbg_e100/evaluation_epoch99_global_heldout_full_parallel_bs64/merged_metrics.csv",
+  "heldout_audit": {
+    "dataset_counts": {
+      "CurveFaultA": 5440,
+      "CurveFaultB": 5401,
+      "CurveVelA": 2958,
+      "CurveVelB": 3069,
+      "FlatFaultA": 5471,
+      "FlatFaultB": 5351,
+      "FlatVelA": 2930,
+      "FlatVelB": 2980
+    },
+    "manifest_rows": 33600,
+    "metric_rows": 33600,
+    "missing_test": 0,
+    "unexpected": 0,
+    "unique_identities": 33600
+  },
+  "main_figure_content": "full-test q_T distribution only",
+  "normalization_conversion": {
+    "field": "depth_vel",
+    "formula": "physical_value = low + (stored_value + 1) * 0.5 * (high - low)",
+    "mode": "-1_1",
+    "physical_range_m_per_s": [
+      1500.0,
+      4500.0
+    ],
+    "profile": "openfwi",
+    "residual_conversion": "physical residuals are formed after affine denormalization"
+  },
+  "panel_a_is_best_case_not_representative": true,
+  "panel_a_replay_note": "Identities are selected from formal metrics; residual/final tiles are fixed-seed bounded replays because the formal evaluator did not save prediction arrays or sampler RNG states.",
+  "panel_a_selection": "argmin (MAE, RMSE, -SSIM, source_sample_index) per subset",
+  "panel_b_record_count": 33600,
+  "provenance_note": "Panel (a) is deterministic best-MAE qualitative evidence, not a representative sample.",
+  "q_t_definition": "(mean((V - B_hat)^2) + 1) / (mean(V^2) + 1)",
+  "q_t_subset_summary": [
+    {
+      "dataset_name": "FlatVelA",
+      "fraction_q_t_lt_1": 1.0,
+      "mean_q_t": 0.7869689931438237,
+      "mean_q_t_ci_high": 0.7897841605020262,
+      "mean_q_t_ci_low": 0.7842291965770437,
+      "median_q_t": 0.7853785753250122,
+      "n": 2930,
+      "std_q_t": 0.07748385838055225
+    },
+    {
+      "dataset_name": "FlatVelB",
+      "fraction_q_t_lt_1": 1.0,
+      "mean_q_t": 0.7731080904102966,
+      "mean_q_t_ci_high": 0.7757734788764243,
+      "mean_q_t_ci_low": 0.7704335782161895,
+      "median_q_t": 0.770665168762207,
+      "n": 2980,
+      "std_q_t": 0.07471770017440496
+    },
+    {
+      "dataset_name": "CurveVelA",
+      "fraction_q_t_lt_1": 1.0,
+      "mean_q_t": 0.7867193592408769,
+      "mean_q_t_ci_high": 0.7893737383791327,
+      "mean_q_t_ci_low": 0.7838808016066942,
+      "median_q_t": 0.7843932807445526,
+      "n": 2958,
+      "std_q_t": 0.07669176544948487
+    },
+    {
+      "dataset_name": "CurveVelB",
+      "fraction_q_t_lt_1": 1.0,
+      "mean_q_t": 0.779616950680045,
+      "mean_q_t_ci_high": 0.7822637775018884,
+      "mean_q_t_ci_low": 0.7770534009309458,
+      "median_q_t": 0.7772539854049683,
+      "n": 3069,
+      "std_q_t": 0.07047261857865161
+    },
+    {
+      "dataset_name": "FlatFaultA",
+      "fraction_q_t_lt_1": 1.0,
+      "mean_q_t": 0.7744478454452135,
+      "mean_q_t_ci_high": 0.777320141405864,
+      "mean_q_t_ci_low": 0.7716880487025143,
+      "median_q_t": 0.7724248766899109,
+      "n": 5471,
+      "std_q_t": 0.10514459927755285
+    },
+    {
+      "dataset_name": "FlatFaultB",
+      "fraction_q_t_lt_1": 1.0,
+      "mean_q_t": 0.7586379087187379,
+      "mean_q_t_ci_high": 0.7601595445356287,
+      "mean_q_t_ci_low": 0.7571458600763628,
+      "median_q_t": 0.7562074661254883,
+      "n": 5351,
+      "std_q_t": 0.056402488890932245
+    },
+    {
+      "dataset_name": "CurveFaultA",
+      "fraction_q_t_lt_1": 1.0,
+      "mean_q_t": 0.7756293172674144,
+      "mean_q_t_ci_high": 0.7782488420383785,
+      "mean_q_t_ci_low": 0.7729621497445794,
+      "median_q_t": 0.7727174758911133,
+      "n": 5440,
+      "std_q_t": 0.10002095541436694
+    },
+    {
+      "dataset_name": "CurveFaultB",
+      "fraction_q_t_lt_1": 1.0,
+      "mean_q_t": 0.7576191988703808,
+      "mean_q_t_ci_high": 0.7590715555424845,
+      "mean_q_t_ci_low": 0.7561229080932932,
+      "median_q_t": 0.755208432674408,
+      "n": 5401,
+      "std_q_t": 0.05498422911441067
+    }
+  ],
+  "q_t_summary": {
+    "aggregation": "sample-level bootstrap over per-record q_T",
+    "bootstrap_repeats": 2000,
+    "bootstrap_seed": 2027,
+    "fraction_q_t_lt_1": 1.0,
+    "mean_q_t": 0.7719417243042872,
+    "mean_q_t_ci_high": 0.7727534199832007,
+    "mean_q_t_ci_low": 0.7710701187147448,
+    "median_q_t": 0.7681810557842255,
+    "n": 33600,
+    "std_q_t": 0.08068496843852636
+  },
+  "replay": {
+    "checkpoint": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/joint_full_contrastive_bgfm_pixelfm_predbg_e100/lightning/checkpoints/joint_full_contrastive_bgfm_pixelfm_predbg_e100-epoch_99-loss0.1036.ckpt",
+    "checkpoint_info": {
+      "loaded_keys": 1070,
+      "missing_keys": 0,
+      "mode": "full",
+      "path": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/joint_full_contrastive_bgfm_pixelfm_predbg_e100/lightning/checkpoints/joint_full_contrastive_bgfm_pixelfm_predbg_e100-epoch_99-loss0.1036.ckpt",
+      "skipped_shape_keys": 0,
+      "unexpected_keys": 0
+    },
+    "checkpoint_sha256": "0d77a529618d8d158af0731752cc68efc01c4f6e2f2adfedaf87d8008f930a36",
+    "config": "/public/home/xuyinghao/workspace/seismic-diff/logs/bg_pdr_fm/joint_full_contrastive_bgfm_pixelfm_predbg_e100/evaluation_epoch99_global_heldout_full_parallel_bs64/worker_00/eval_config.yaml",
+    "dataset_split": "global test then identity filter",
+    "euler_steps": 50,
+    "inference_seed": 2027,
+    "normalization_conversion": {
+      "field": "depth_vel",
+      "formula": "physical_value = low + (stored_value + 1) * 0.5 * (high - low)",
+      "mode": "-1_1",
+      "physical_range_m_per_s": [
+        1500.0,
+        4500.0
+      ],
+      "profile": "openfwi",
+      "residual_conversion": "physical residuals are formed after affine denormalization"
+    },
+    "normalization_mode": "-1_1",
+    "normalization_profile": "openfwi",
+    "normalized_arrays": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/figure4_residual_transport/replay_arrays_normalized.npz",
+    "physical_arrays": "/public/home/xuyinghao/workspace/seismic-diff/docs/paper/AAAI2027/figures/figure4_residual_transport/replay_arrays.npz",
+    "replay_metric_checks": {
+      "CurveFaultA": {
+        "mae_delta": 0.0020243930571465464,
+        "mae_formal": 0.0026541335973888636,
+        "mae_matches_formal": 0.0,
+        "mae_replay": 0.00467852665453541,
+        "q_t_delta": -3.120879799034526e-08,
+        "q_t_formal": 0.9363130331039429,
+        "q_t_replay": 0.9363130018951449
+      },
+      "CurveFaultB": {
+        "mae_delta": 0.0024255181993452866,
+        "mae_formal": 0.008525186218321323,
+        "mae_matches_formal": 0.0,
+        "mae_replay": 0.01095070441766661,
+        "q_t_delta": -2.1401773464546636e-08,
+        "q_t_formal": 0.7317848801612854,
+        "q_t_replay": 0.7317848587595119
+      },
+      "CurveVelA": {
+        "mae_delta": 0.0011652695419913043,
+        "mae_formal": 0.00361508852802217,
+        "mae_matches_formal": 0.0,
+        "mae_replay": 0.004780358070013474,
+        "q_t_delta": -2.2877985061953154e-09,
+        "q_t_formal": 0.8675258159637451,
+        "q_t_replay": 0.8675258136759466
+      },
+      "CurveVelB": {
+        "mae_delta": 0.0007006672134965046,
+        "mae_formal": 0.004943551030009985,
+        "mae_matches_formal": 0.0,
+        "mae_replay": 0.00564421824350649,
+        "q_t_delta": -2.3513538893737973e-08,
+        "q_t_formal": 0.9428232908248901,
+        "q_t_replay": 0.9428232673113512
+      },
+      "FlatFaultA": {
+        "mae_delta": 0.0018698684177456465,
+        "mae_formal": 0.0022291969507932663,
+        "mae_matches_formal": 0.0,
+        "mae_replay": 0.004099065368538913,
+        "q_t_delta": 2.81714518379772e-08,
+        "q_t_formal": 0.9595932364463806,
+        "q_t_replay": 0.9595932646178325
+      },
+      "FlatFaultB": {
+        "mae_delta": 0.003649645360680867,
+        "mae_formal": 0.006505616474896669,
+        "mae_matches_formal": 0.0,
+        "mae_replay": 0.010155261835577536,
+        "q_t_delta": 2.6765399230299636e-08,
+        "q_t_formal": 0.8724007606506348,
+        "q_t_replay": 0.872400787416034
+      },
+      "FlatVelA": {
+        "mae_delta": 0.0023543760283108875,
+        "mae_formal": 0.0021841698326170444,
+        "mae_matches_formal": 0.0,
+        "mae_replay": 0.004538545860927932,
+        "q_t_delta": -1.4310689411267674e-08,
+        "q_t_formal": 0.9193591475486755,
+        "q_t_replay": 0.9193591332379861
+      },
+      "FlatVelB": {
+        "mae_delta": 0.0024900604054635886,
+        "mae_formal": 0.003070591017603874,
+        "mae_matches_formal": 0.0,
+        "mae_replay": 0.005560651423067463,
+        "q_t_delta": -3.798364323071013e-08,
+        "q_t_formal": 0.7839672565460205,
+        "q_t_replay": 0.7839672185623773
+      }
+    },
+    "selected_identities": {
+      "CurveFaultA": {
+        "dataset_id": 6,
+        "source_sample_index": 1220
+      },
+      "CurveFaultB": {
+        "dataset_id": 7,
+        "source_sample_index": 4692
+      },
+      "CurveVelA": {
+        "dataset_id": 2,
+        "source_sample_index": 10700
+      },
+      "CurveVelB": {
+        "dataset_id": 3,
+        "source_sample_index": 15941
+      },
+      "FlatFaultA": {
+        "dataset_id": 4,
+        "source_sample_index": 6511
+      },
+      "FlatFaultB": {
+        "dataset_id": 5,
+        "source_sample_index": 12648
+      },
+      "FlatVelA": {
+        "dataset_id": 0,
+        "source_sample_index": 14135
+      },
+      "FlatVelB": {
+        "dataset_id": 1,
+        "source_sample_index": 17501
+      }
+    },
+    "split_audit": {
+      "manifest_count": 33600,
+      "overlap_train": 0,
+      "overlap_val": 0,
+      "test_count": 33600,
+      "test_manifest_missing": 0,
+      "test_manifest_unexpected": 0,
+      "train_count": 235200,
+      "train_val_overlap": 0,
+      "val_count": 67200
+    }
+  },
+  "selected_source_indices": {
+    "CurveFaultA": 1220,
+    "CurveFaultB": 4692,
+    "CurveVelA": 10700,
+    "CurveVelB": 15941,
+    "FlatFaultA": 6511,
+    "FlatFaultB": 12648,
+    "FlatVelA": 14135,
+    "FlatVelB": 17501
+  },
+  "subset_order": [
+    "FlatVelA",
+    "FlatVelB",
+    "CurveVelA",
+    "CurveVelB",
+    "FlatFaultA",
+    "FlatFaultB",
+    "CurveFaultA",
+    "CurveFaultB"
+  ],
+  "title": "Empirical Characterization of Background-Guided Residual Transport"
+}

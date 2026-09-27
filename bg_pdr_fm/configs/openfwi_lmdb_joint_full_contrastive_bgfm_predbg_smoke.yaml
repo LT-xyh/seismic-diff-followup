@@ -1,0 +1,170 @@
+data:
+  name: openfwi
+  root_dir: /public/home/xuyinghao/workspace/datasets/openfwi
+  root_candidates:
+    - /public/home/xuyinghao/workspace/datasets/openfwi
+  use_normalize: "-1_1"
+  storage_backend: lmdb
+  lmdb_root: /public/home/xuyinghao/workspace/datasets/openfwi_lmdb
+  normalization_profile: auto
+  normalize_clamp: true
+  target_shape: null
+  well_count_range: [0, 3]
+  well_seed: 1234
+  well_random: null
+  val_split: val
+  split_fractions: [0.7, 0.2, 0.1]
+  split_seed: 42
+  val_fraction: null
+  openfwi_datasets:
+    - FlatVelA
+    - FlatVelB
+    - CurveVelA
+    - CurveVelB
+    - FlatFaultA
+    - FlatFaultB
+    - CurveFaultA
+    - CurveFaultB
+  required_modalities:
+    - depth_vel
+    - migrated_image
+    - horizon
+    - rms_vel
+
+model:
+  hidden_channels: 16
+  base_channels: 32
+  feature_channels: 16
+  cond_channels: 32
+  background_backend: unet_direct
+  background_condition_source: encoder_numerical
+  background_hidden_channels: 192
+  background_output_mode: direct
+  background_upsample_mode: bilinear
+  residual_background_source: predicted
+  residual_background_context_source: codec_latent
+  latent_channels: 4
+  latent_hw: [18, 18]
+  codec_type: autoencoder
+  codec_checkpoint: checkpoints/bg_pdr_fm/seismic_autoencoder_kl.ckpt
+  codec_module_path: null
+  lowpass_kernel: 5
+  use_unique: false
+  unique_eta: 0.1
+  rho_tau: 1.0
+  residual_backend: unet_fm_film
+  residual_backend_hidden_channels: 128
+  residual_condition_merge: concat
+  residual_num_train_timesteps: 1000
+  residual_num_inference_steps: 50
+  residual_loss_type: mse
+
+loss:
+  bg_target: lowpass
+  bg_l1_weight: 1.0
+  bg_l2_weight: 0.5
+  bg_high_weight: 0.0
+  bg_multiscale_weight: 0.0
+  bg_multiscale_high_weight: 0.0
+  bg_scales: []
+  bg_low_residual_weight: 0.0
+  rho_weight: 0.0
+  final_l1_weight: 1.0
+  target_lf_weight: 0.2
+
+quality_gate:
+  mode: none
+
+contrastive:
+  embed_dim: 128
+  hidden_dim: null
+  temperature: 0.1
+  symile_structural_weight: 1.0
+  symile_numerical_weight: 1.0
+  anchor_weight: 0.5
+  reliability_prior_weight: 0.05
+  sn_ortho_weight: 0.05
+  unique_ortho_weight: 0.05
+  min_symile_group_size: 2
+  strict_derangement: true
+  diagnostics:
+    frequency_metrics: true
+    reliability_metrics: true
+    subset_metrics: true
+  modality_dropout:
+    enabled: false
+    probs:
+      migrated_image: 0.0
+      horizon: 0.0
+      rms_vel: 0.0
+      well_log: 0.0
+  wavelet:
+    level: 1
+    boundary: edge
+    resize_mode: nearest
+    detail_fusion: l2
+
+training:
+  stage: joint_full
+  fast_run: false
+  fast_run_stages: null
+  freeze_encoder: false
+  load_stage_checkpoint: logs/bg_pdr_fm/contrastive_train/stage_checkpoints/contrastive_last.ckpt
+  save_stage_outputs: true
+  joint:
+    lambda_contrastive: 0.01
+    encoder_backbone_lr: 1.0e-6
+    encoder_head_lr: 3.0e-6
+    contrastive_lr: 3.0e-6
+    adapter_lr: 3.0e-6
+    background_lr: 1.0e-4
+    residual_lr: 5.0e-5
+    warm_start_checkpoints:
+      contrastive: logs/bg_pdr_fm/contrastive_train/stage_checkpoints/contrastive_last.ckpt
+      background: logs/bg_pdr_fm/background_train_unet_direct_h192_l1l2_e100/stage_checkpoints/background_last.ckpt
+      residual: logs/bg_pdr_fm/residual_train_smooth_hc64_nogate_unetfm_film_predbg_e100/stage_checkpoints/residual_last.ckpt
+  stage_checkpoint_path: logs/bg_pdr_fm/joint_full_contrastive_bgfm_predbg_e100_smoke/stage_checkpoints
+  lr: 0.00005
+  max_epochs: 1
+  batch_size: 200
+  num_workers: 0
+  persistent_workers: false
+  prefetch_factor: null
+  pin_memory: true
+  precision: bf16-mixed
+  matmul_precision: medium
+  accelerator: gpu
+  devices: 1
+  limit_train_batches: 1
+  limit_val_batches: 1
+  log_every_n_steps: 10
+  logging:
+    log_dir: logs/bg_pdr_fm/joint_full_contrastive_bgfm_predbg_e100_smoke/lightning
+    log_version: joint_full_contrastive_bgfm_predbg_e100
+  checkpoint:
+    dirpath: logs/bg_pdr_fm/joint_full_contrastive_bgfm_predbg_e100_smoke/lightning/checkpoints
+    filename: joint_full_contrastive_bgfm_predbg_e100-epoch_{epoch}-loss{val/loss:.4f}
+    monitor: val/loss
+    mode: min
+    save_top_k: -1
+    save_last: true
+    every_n_epochs: 10
+
+diagnostics:
+  enabled: true
+  output_dir: logs/bg_pdr_fm/joint_full_contrastive_bgfm_predbg_e100/diagnostics
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/joint_full_contrastive_bgfm_predbg_e100/evaluation
+  split: test
+  max_batches: null
+  save_arrays: true
+  save_panels: true
+  allow_untrained: false
+  checkpoints:
+    full: null
+    contrastive: logs/bg_pdr_fm/contrastive_train/stage_checkpoints/contrastive_last.ckpt
+    background: logs/bg_pdr_fm/background_train_unet_direct_h192_l1l2_e100/stage_checkpoints/background_last.ckpt
+    residual: logs/bg_pdr_fm/joint_full_contrastive_bgfm_predbg_e100/stage_checkpoints/residual_last.ckpt
+  structural_ablation: none
+  residual_override: none

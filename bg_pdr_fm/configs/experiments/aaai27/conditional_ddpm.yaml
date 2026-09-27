@@ -1,0 +1,33 @@
+extends: _base_formal.yaml
+
+benchmark:
+  variant: conditional_ddpm
+  capacity_tier: adapted_external
+  ddpm_sample_size: 70
+  ddpm_condition_input_hw: [1000, 70]
+  ddpm_condition_dim: 256
+  ddpm_num_condition_tokens: 16
+  ddpm_block_out_channels: [64, 128, 256]
+  ddpm_inference_steps: 50
+
+training:
+  freeze_encoder: true
+  load_stage_checkpoint: null
+  max_epochs: 200
+  batch_size: 8
+  devices: 1
+  logging:
+    log_dir: logs/bg_pdr_fm/aaai27/formal/conditional_ddpm/lightning
+    log_version: "conditional_ddpm_{time}"
+  checkpoint:
+    dirpath: logs/bg_pdr_fm/aaai27/formal/conditional_ddpm/checkpoints
+    filename: "conditional-ddpm-{epoch}-loss{val/loss:.4f}"
+
+model:
+  residual_num_train_timesteps: 1000
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/eval_conditional_ddpm/conditional_ddpm
+  checkpoint: logs/bg_pdr_fm/aaai27/formal/conditional_ddpm/checkpoints/last.ckpt
+  missing_modes:
+    - full

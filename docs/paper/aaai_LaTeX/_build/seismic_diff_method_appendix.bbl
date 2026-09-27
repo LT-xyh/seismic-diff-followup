@@ -1,0 +1,78 @@
+\begin{thebibliography}{11}
+\providecommand{\natexlab}[1]{#1}
+
+\bibitem[{Deng et~al.(2022)Deng, Feng, Wang, Zhang, Jin, Feng, Zeng, Chen, and
+  Lin}]{deng2022openfwi}
+Deng, C.; Feng, S.; Wang, H.; Zhang, X.; Jin, P.; Feng, Y.; Zeng, Q.; Chen, Y.;
+  and Lin, Y. 2022.
+\newblock {OpenFWI}: Large-Scale Multi-Structural Benchmark Datasets for
+  Seismic Full Waveform Inversion.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~35, 6007--6020.
+
+\bibitem[{Ho, Jain, and Abbeel(2020)}]{ho2020ddpm}
+Ho, J.; Jain, A.; and Abbeel, P. 2020.
+\newblock Denoising Diffusion Probabilistic Models.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~33, 6840--6851.
+
+\bibitem[{Lipman et~al.(2023)Lipman, Chen, Ben-Hamu, Nickel, and
+  Le}]{lipman2023flowmatching}
+Lipman, Y.; Chen, R. T.~Q.; Ben-Hamu, H.; Nickel, M.; and Le, M. 2023.
+\newblock Flow Matching for Generative Modeling.
+\newblock In \emph{International Conference on Learning Representations}.
+
+\bibitem[{Rombach et~al.(2022)Rombach, Blattmann, Lorenz, Esser, and
+  Ommer}]{rombach2022ldm}
+Rombach, R.; Blattmann, A.; Lorenz, D.; Esser, P.; and Ommer, B. 2022.
+\newblock High-Resolution Image Synthesis with Latent Diffusion Models.
+\newblock In \emph{Proceedings of the IEEE/CVF Conference on Computer Vision
+  and Pattern Recognition}, 10684--10695.
+
+\bibitem[{Saporta et~al.(2024)Saporta, Puli, Goldstein, and
+  Ranganath}]{saporta2024symile}
+Saporta, A.; Puli, A.; Goldstein, M.; and Ranganath, R. 2024.
+\newblock Contrasting with {Symile}: Simple Model-Agnostic Representation
+  Learning for Unlimited Modalities.
+\newblock In \emph{Advances in Neural Information Processing Systems}.
+
+\bibitem[{Shan et~al.(2026)Shan, Ren, Li, and Cheng}]{shan2026reddiffeq}
+Shan, Y.; Ren, Z.; Li, Z.; and Cheng, J. 2026.
+\newblock Solving Full-Waveform Inversion with Deep Priors and Diffusion
+  Models.
+\newblock \emph{Communications Physics}, 9(1): 1--13.
+
+\bibitem[{Virieux and Operto(2009)}]{virieux2009overview}
+Virieux, J.; and Operto, S. 2009.
+\newblock An Overview of Full-Waveform Inversion in Exploration Geophysics.
+\newblock \emph{Geophysics}, 74(6): WCC1--WCC26.
+
+\bibitem[{Wang et~al.(2024{\natexlab{a}})Wang, Fang, Wu, Zhang, Si, Xu, and
+  Lin}]{wang2024wavediffusion}
+Wang, L.; Fang, Z.; Wu, Y.; Zhang, Y.; Si, Q.; Xu, Y.; and Lin, Y.
+  2024{\natexlab{a}}.
+\newblock {WaveDiffusion}: Exploring Full Waveform Inversion via Joint
+  Diffusion in the Latent Space.
+\newblock arXiv:2410.09002.
+
+\bibitem[{Wang et~al.(2024{\natexlab{b}})Wang, Ge, Fan, Xu, Jia, Li, and
+  Sun}]{wang2024controllable}
+Wang, Z.; Ge, Z.; Fan, T.; Xu, X.; Jia, X.; Li, H.; and Sun, H.
+  2024{\natexlab{b}}.
+\newblock Controllable Seismic Velocity Synthesis Using Generative Diffusion
+  Models.
+\newblock arXiv:2402.06277.
+
+\bibitem[{Wu and Lin(2020)}]{wu2020inversionnet}
+Wu, Y.; and Lin, Y. 2020.
+\newblock {InversionNet}: An Efficient and Accurate Data-Driven Full Waveform
+  Inversion.
+\newblock \emph{IEEE Transactions on Computational Imaging}, 6: 419--433.
+
+\bibitem[{Zhang, Rao, and Agrawala(2023)}]{zhang2023controlnet}
+Zhang, L.; Rao, A.; and Agrawala, M. 2023.
+\newblock Adding Conditional Control to Text-to-Image Diffusion Models.
+\newblock In \emph{Proceedings of the IEEE/CVF International Conference on
+  Computer Vision}, 3836--3847.
+
+\end{thebibliography}

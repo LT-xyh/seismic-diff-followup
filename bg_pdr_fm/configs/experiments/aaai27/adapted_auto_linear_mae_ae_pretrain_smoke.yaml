@@ -1,0 +1,23 @@
+extends: adapted_auto_linear_mae_ae_pretrain.yaml
+
+training:
+  max_epochs: 1
+  batch_size: 2
+  devices: 1
+  limit_train_batches: 1
+  limit_val_batches: 1
+  num_workers: 0
+  persistent_workers: false
+  prefetch_factor: null
+  logging:
+    log_dir: logs/bg_pdr_fm/aaai27/smoke/adapted_auto_linear_mae_ae_pretrain/lightning
+    log_version: "adapted_auto_linear_mae_ae_pretrain_smoke_{time}"
+  checkpoint:
+    dirpath: logs/bg_pdr_fm/aaai27/smoke/adapted_auto_linear_mae_ae_pretrain/checkpoints
+    filename: "adapted-auto-linear-mae-ae-smoke-{epoch}-loss{val/loss:.4f}"
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/smoke/eval_adapted_auto_linear_mae_ae_pretrain/adapted_auto_linear
+  checkpoint: logs/bg_pdr_fm/aaai27/smoke/adapted_auto_linear_mae_ae_pretrain/checkpoints/last.ckpt
+  missing_modes:
+    - full

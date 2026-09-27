@@ -1,0 +1,14 @@
+extends: _base_smoke.yaml
+
+benchmark:
+  variant: mm_invnet
+  capacity_tier: reference
+
+training:
+  logging:
+    log_version: "mm_invnet_{time}"
+  checkpoint:
+    filename: "mm-invnet-{epoch}-loss{val/loss:.4f}"
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/mm_invnet/evaluation

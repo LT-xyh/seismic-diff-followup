@@ -1,0 +1,20 @@
+# Reproduced software versions reported in paper.tex, Appendix: Implementation
+# and Evaluation Protocols. Python interpreter: 3.10.20.
+torch==2.7.1
+lightning==2.5.2
+numpy==1.24.3
+scipy==1.15.3
+scikit-image==0.25.2
+
+# Direct runtime, configuration, data, and test dependencies verified in the
+# retained research environment. The PyTorch wheel platform is selected by the
+# installer; no machine-specific wheel index is embedded here.
+omegaconf==2.3.0
+PyYAML==6.0.2
+lmdb==2.2.0
+pytest==9.0.3
+diffusers==0.33.1
+pytorch-ignite==0.5.2
+python-pptx==1.0.2
+scikit-learn==1.6.1
+matplotlib==3.7.5

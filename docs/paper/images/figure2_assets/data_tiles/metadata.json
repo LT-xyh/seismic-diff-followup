@@ -1,0 +1,84 @@
+{
+  "dataset": "FlatFaultB",
+  "sample_index": 27006,
+  "note": "PoSTM and RMS are exported as 1:1 visual thumbnails for manual drawing; original shapes are recorded below.",
+  "original_shapes": {
+    "pstm": [
+      1000,
+      70
+    ],
+    "rms": [
+      1000,
+      70
+    ],
+    "horizon": [
+      70,
+      70
+    ],
+    "well": [
+      70,
+      70
+    ],
+    "velocity": [
+      70,
+      70
+    ]
+  },
+  "colorbars": {
+    "rms_velocity": {
+      "range_m_per_s": [
+        1600.0,
+        4400.0
+      ],
+      "ticks": [
+        1600.0,
+        3000,
+        4400.0
+      ]
+    },
+    "velocity": {
+      "range_m_per_s": [
+        1600.0,
+        4400.0
+      ],
+      "ticks": [
+        1600.0,
+        3000,
+        4400.0
+      ]
+    },
+    "structure": {
+      "range_m_per_s": [
+        -800.0,
+        800.0
+      ],
+      "ticks": [
+        -800.0,
+        0,
+        800.0
+      ]
+    }
+  },
+  "finite_ranges": {
+    "depth_vel": [
+      1679.0,
+      4383.0
+    ],
+    "rms": [
+      1679.0,
+      4111.87548828125
+    ],
+    "well": [
+      1679.0,
+      4233.0
+    ],
+    "structure": [
+      -775.56005859375,
+      657.199951171875
+    ]
+  },
+  "well_columns": [
+    20,
+    43
+  ]
+}

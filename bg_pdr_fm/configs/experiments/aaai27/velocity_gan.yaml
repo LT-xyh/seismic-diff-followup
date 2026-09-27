@@ -1,0 +1,38 @@
+extends: _base_formal.yaml
+
+benchmark:
+  variant: velocity_gan
+  capacity_tier: adapted_external
+  velocity_gan_input_hw: [1000, 70]
+  velocity_gan_l1_weight: 100.0
+  velocity_gan_mse_weight: 0.0
+  velocity_gan_adversarial_weight: 1.0
+  velocity_gan_gradient_penalty_weight: 10.0
+  velocity_gan_n_critic: 5
+  velocity_gan_lr_g: 1e-4
+  velocity_gan_lr_d: 1e-4
+
+training:
+  freeze_encoder: true
+  load_stage_checkpoint: null
+  max_epochs: 100
+  batch_size: 64
+  num_workers: 8
+  persistent_workers: true
+  prefetch_factor: 4
+  precision: 32-true
+  weight_decay: 1e-4
+  scheduler: none
+  devices: 1
+  logging:
+    log_dir: logs/bg_pdr_fm/aaai27/formal/velocity_gan_official_e100/lightning
+    log_version: "velocity_gan_official_e100_{time}"
+  checkpoint:
+    dirpath: logs/bg_pdr_fm/aaai27/formal/velocity_gan_official_e100/checkpoints
+    filename: "velocity-gan-official-e100-{epoch}-loss{val/loss:.4f}"
+
+evaluation:
+  output_dir: logs/bg_pdr_fm/aaai27/eval_velocity_gan_official_e100/velocity_gan_official_e100
+  checkpoint: logs/bg_pdr_fm/aaai27/formal/velocity_gan_official_e100/checkpoints/last.ckpt
+  missing_modes:
+    - full

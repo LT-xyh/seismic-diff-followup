@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="620" height="330" viewBox="0 0 620 330">
+<defs>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#64748B" />
+  </marker>
+  <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#2563EB" />
+  </marker>
+  <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#16A34A" />
+  </marker>
+  <marker id="arrow-orange" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#F59E0B" />
+  </marker>
+  <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#DC2626" />
+  </marker>
+  <style>
+    .title { font: 700 18px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #111827; }
+    .subtitle { font: 500 12px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #64748B; }
+    .label { font: 600 13px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #111827; }
+    .small { font: 500 11px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #64748B; }
+    .formula { font: 600 13px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #111827; }
+    .tiny { font: 500 9px 'Microsoft YaHei', 'Noto Sans CJK SC', Arial, sans-serif; fill: #64748B; }
+  </style>
+</defs>
+
+<rect x="0" y="0" width="620" height="330" fill="white"/>
+<text x="24" y="36" class="title" text-anchor="start">Training-Only Anchor Calibration</text>
+<text x="24" y="56" class="subtitle" text-anchor="start">Anchors are derived from V during training and never used at inference</text>
+<rect x="42" y="96" width="156" height="108" rx="8" fill="#F0FDF4" stroke="#BBF7D0" stroke-width="1.2" />
+<text x="120" y="128" class="formula" text-anchor="middle" fill="#16A34A">A_B = W_L(V)</text>
+<text x="120" y="154" class="small" text-anchor="middle">low-frequency</text>
+<text x="120" y="176" class="small" text-anchor="middle">background anchor</text>
+<rect x="42" y="226" width="156" height="74" rx="8" fill="#FFF7ED" stroke="#F59E0B" stroke-width="1.2" stroke-dasharray="7 5"/>
+<text x="120" y="256" class="label" text-anchor="middle" fill="#F59E0B">training only</text>
+<text x="120" y="278" class="small" text-anchor="middle">not in inference</text>
+<rect x="420" y="96" width="156" height="108" rx="8" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.2" />
+<text x="498" y="128" class="formula" text-anchor="middle" fill="#2563EB">A_S = W_H(V)</text>
+<text x="498" y="154" class="small" text-anchor="middle">high-frequency</text>
+<text x="498" y="176" class="small" text-anchor="middle">structure anchor</text>
+<rect x="252" y="102" width="118" height="78" rx="8" fill="white" stroke="#CBD5E1" stroke-width="1.2" />
+<text x="311" y="132" class="formula" text-anchor="middle" fill="#16A34A">C_B</text>
+<text x="311" y="156" class="formula" text-anchor="middle" fill="#2563EB">C_S</text>
+<line x1="198" y1="148" x2="252" y2="140" stroke="#F59E0B" stroke-width="1.8" marker-end="url(#arrow-orange)" stroke-dasharray="7 5"/>
+<line x1="420" y1="148" x2="370" y2="152" stroke="#F59E0B" stroke-width="1.8" marker-end="url(#arrow-orange)" stroke-dasharray="7 5"/>
+<text x="310" y="220" class="label" text-anchor="middle">L_A calibrates physical semantics</text>
+<text x="310" y="246" class="small" text-anchor="middle">L_symile preserves cross-modal consistency</text>
+<text x="310" y="270" class="small" text-anchor="middle">L_rel handles missing or unreliable modalities</text>
+
+</svg>
