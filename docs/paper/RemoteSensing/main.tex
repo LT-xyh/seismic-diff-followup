@@ -1,0 +1,39 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{array}
+
+\newcommand{\method}{BG-RFM}
+\newcommand{\historicalmethod}{PD-BG-RFM}
+\newcommand{\resultplaceholder}[1]{\textcolor{red}{[RS-E01-Lite: #1]}}
+
+\title{Background-Guided Residual Flow Matching for Multi-Constraint Seismic Velocity Model Building}
+\author{[Author list to be restored from submission metadata]}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Initial velocity model building benefits from heterogeneous geophysical constraints that describe different aspects of the subsurface. RMS velocity and sparse wells provide strong information about large-scale velocity magnitude, whereas post-stack migrated images and interpreted horizons provide dense structural cues. Most learned approaches nevertheless fuse these observations and assign the complete velocity field to a single predictor or generator. We propose Background-Guided Residual Flow Matching (\method), which explicitly separates reconstruction responsibilities while retaining multimodal conditioning. A role-aware condition encoder provides background-oriented and structure-oriented interfaces. The background branch deterministically predicts a smooth velocity component, and the residual branch applies conditional Flow Matching to the correction relative to that prediction. Crucially, the same predicted background defines the residual target during training, conditions the residual vector field, and is reused in final velocity composition, yielding a prediction-consistent reconstruction path. We evaluate the method on eight OpenFWI subsets using RMS velocity, post-stack migrated images, horizons, and sparse wells under a common 33,600-record held-out protocol. \resultplaceholder{insert unified MAE/RMSE/SSIM result sentence}. With 10.6M trainable parameters, the framework provides a compact way to allocate deterministic estimation to background recovery and generative transport to the remaining correction.
+\end{abstract}
+
+\noindent\textbf{Keywords:} initial velocity model building; seismic velocity reconstruction; Flow Matching; multimodal geophysical constraints; residual generative modeling; OpenFWI
+
+\input{sections/01_introduction}
+\input{sections/02_related_work}
+\input{sections/03_materials_methods}
+\input{sections/04_results}
+\input{sections/05_discussion}
+\input{sections/06_conclusions}
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}

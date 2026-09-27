@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\caption{Multimodal task definition used in the Remote Sensing evaluation.}
+\label{tab:task-contract}
+\begin{tabular}{llll}
+\toprule
+Quantity & Domain & Shape & Role \\
+\midrule
+Target velocity $V$ & depth & $1\times70\times70$ & prediction target \\
+RMS velocity $V_{\mathrm{rms}}$ & time & $1\times1000\times70$ & kinematic/scale cue \\
+Migrated image $M$ & time & $1\times1000\times70$ & structural cue \\
+Horizon map $H$ & depth & $1\times70\times70$ & interface cue \\
+Sparse well map $W$ & depth & $1\times70\times70$ & local velocity anchor \\
+\bottomrule
+\end{tabular}
+\end{table}

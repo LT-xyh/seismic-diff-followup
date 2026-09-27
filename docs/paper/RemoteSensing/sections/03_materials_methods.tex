@@ -1,0 +1,123 @@
+\section{Materials and Methods}
+
+\subsection{Problem Formulation and Observation Contract}
+
+Let
+\[
+X=\{M,H,V_{\mathrm{rms}},W\}
+\]
+denote the available multimodal observations, where $M$ is the post-stack migrated image, $H$ is an interpreted-horizon map, $V_{\mathrm{rms}}$ is the RMS-velocity field, and $W$ is a sparse well-velocity map. The target is the depth-domain velocity model
+\[
+V\in\mathbb{R}^{1\times 70\times 70}.
+\]
+RMS velocity and the migrated image are represented on a $1000\times70$ time--lateral grid, whereas horizons, wells, and the target use the $70\times70$ depth grid. The model receives only the observation set at inference; target-derived decomposition variables are restricted to training supervision or diagnostic analysis.
+
+\input{tables/task_definition}
+
+The benchmark is constructed from the eight OpenFWI subsets FlatVel-A/B, CurveVel-A/B, FlatFault-A/B, and CurveFault-A/B \citep{deng2022openfwi}. For each reference velocity model, synthetic processed/interpreted observations are generated offline to represent a post-stack model-building workflow. This construction defines a controlled multimodal benchmark rather than a claim that these interpreted products are independent field measurements.
+
+\paragraph{RMS velocity.}
+For each lateral position, depth samples are mapped to two-way time through
+\begin{equation}
+t(z,x)=2\int_0^z \frac{1}{V(z',x)}\,\mathrm{d}z',
+\end{equation}
+and RMS velocity is computed after interpolation onto a uniform time grid:
+\begin{equation}
+V_{\mathrm{rms}}^2(t,x)=\frac{1}{t}\int_0^t v^2(\tau,x)\,\mathrm{d}\tau.
+\end{equation}
+
+\paragraph{Post-stack migrated image.}
+OpenFWI shot records are processed through a common-midpoint workflow, normal-moveout correction using the associated RMS velocity, stacking, and post-stack time migration. The resulting migrated section provides a dense structural observation on the time--lateral grid.
+
+\paragraph{Horizons and wells.}
+The benchmark horizon map is constructed from strong vertical velocity gradients in the reference model using a fixed quantile-based rule. Sparse wells are produced by retaining selected velocity columns together with a binary observation mask. Training wells may vary across epochs, whereas validation and test wells are deterministic under the fixed well seed.
+
+\subsection{Role-Aware Multi-Source Conditioning}
+
+The heterogeneous inputs differ in sampling domain and information density, but the method does not impose a hard modality partition. Each modality is encoded by a modality-specific subencoder and mapped into two learned role representations,
+\begin{equation}
+\mathcal E_m(x_m)=\left(Z_m^{\mathrm{bg}},Z_m^{\mathrm{str}},r_m\right),
+\end{equation}
+where $Z_m^{\mathrm{bg}}$ and $Z_m^{\mathrm{str}}$ are background-oriented and structure-oriented feature maps and $r_m$ contains learned reliability scores. Availability and quality information are combined with these scores to produce normalized role-specific fusion weights. The fused conditions are
+\begin{equation}
+C_k=\mathcal G_k\left(\sum_{m\in\Omega} w_m^k Z_m^k\right),
+\qquad k\in\{\mathrm{bg},\mathrm{str}\},
+\end{equation}
+where $\Omega$ is the set of observed modalities. $\mathcal G_{\mathrm{bg}}$ is identity in the current implementation, while $\mathcal G_{\mathrm{str}}$ is a lightweight spatial adapter.
+
+Training-only multimodal alignment and role-calibration losses encourage the two interfaces to preserve complementary information. These auxiliary terms support representation learning but are not inference inputs and are not used as evidence for a universal decomposition of geophysical information. Detailed alignment and regularization terms can be reported in supplementary material.
+
+\subsection{Deterministic Background Prediction}
+
+A background network predicts
+\begin{equation}
+\hat B=f_{\mathrm{bg}}(C_{\mathrm{bg}})
+\end{equation}
+on the target velocity grid. A fixed low-pass operator $P_L$ defines the background supervision target. The background loss is
+\begin{equation}
+\mathcal L_{\mathrm{bg}}
+=
+\|\hat B-P_L(V)\|_1
++\lambda_{\mathrm{bg},2}
+\|\hat B-P_L(V)\|_2^2.
+\end{equation}
+The purpose of this branch is operational: estimate the smooth component that can be predicted directly from the multimodal condition and provide a concrete reference for the residual task.
+
+\subsection{Prediction-Consistent Residual Flow Matching}
+
+The residual target is defined relative to the actual predicted background,
+\begin{equation}
+R_{\hat B}=V-\hat B,
+\label{eq:rs_pred_residual}
+\end{equation}
+rather than relative to an oracle background unavailable at inference. During residual optimization, a stop-gradient copy $\bar B=\mathrm{sg}[\hat B]$ is used so the residual objective does not redefine the exclusive optimization responsibility of the background branch.
+
+The residual vector field receives the structural condition and an embedding of the same predicted background,
+\begin{equation}
+c=[C_{\mathrm{str}};\psi_{\mathrm{bg}}(\bar B)].
+\end{equation}
+For $t\sim\mathcal U(0,1)$ and Gaussian base noise $\xi\sim\mathcal N(0,I)$, the straight interpolation path is
+\begin{equation}
+R_t=(1-t)\xi+tR_{\hat B},
+\qquad
+u_t=R_{\hat B}-\xi.
+\end{equation}
+The conditional Flow Matching objective is
+\begin{equation}
+\mathcal L_{\mathrm{FM}}
+=
+\mathbb E\left[
+\|v_\theta(R_t,t,c)-u_t\|_2^2
+\right].
+\end{equation}
+The current model additionally uses reconstruction-oriented terms on the one-step endpoint estimate to align the generated residual with the final composed velocity model. These terms supervise the actual residual target rather than forcing its low-pass component to vanish.
+
+The defining consistency property follows directly from the composition
+\begin{equation}
+\hat V=\hat B+\hat R.
+\end{equation}
+Combining this with Eq.~\eqref{eq:rs_pred_residual} gives
+\begin{equation}
+\hat V-V=\hat R-R_{\hat B}.
+\label{eq:rs_composition_identity}
+\end{equation}
+Thus, when training and inference use the same background reference, final reconstruction error is exactly the residual estimation error relative to that reference. This identity is the central reason for reusing $\hat B$ across supervision, conditioning, and composition; no claim about universally reduced conditional entropy is required.
+
+\subsection{Joint Training and Observed-Only Inference}
+
+The joint objective can be written as
+\begin{equation}
+\mathcal L=
+\mathcal L_R+\mathcal L_{\mathrm{bg}}+\lambda_C\mathcal L_C,
+\end{equation}
+where $\mathcal L_C$ trains the role-aware condition interfaces, $\mathcal L_{\mathrm{bg}}$ trains deterministic background prediction, and $\mathcal L_R$ trains prediction-relative residual transport. Target-derived decomposition quantities and training-only anchors are never exposed to the public inference boundary.
+
+At inference, the model receives only the four observed modalities and their masks. It forms $(C_{\mathrm{bg}},C_{\mathrm{str}})$, predicts $\hat B$, integrates the learned residual vector field from the Gaussian base, and outputs $\hat V=\hat B+\hat R$. The current release configuration uses 50 Euler steps for residual integration.
+
+\subsection{Experimental Protocol}
+
+The complete multimodal corpus contains 336,000 aligned records over eight OpenFWI subsets. A deterministic global split with fractions 0.7/0.2/0.1 and split seed 42 yields 33,600 held-out records. Test-time wells are deterministic under well seed 1234. The common held-out identity is represented by \texttt{dataset\_id}, \texttt{dataset\_name}, and \texttt{source\_sample\_index}.
+
+RS-E01-Lite re-evaluates retained checkpoints on the same held-out membership, normalization, and evaluator. The default journal comparison contains adapted InversionNet, adapted VelocityGAN, adapted Latent U-Net, and \method. Adapted UPFWI is included only if the final comparison remains scientifically clear. These are matched-input estimator adaptations and are not presented as reproductions of the original source-native observation protocols.
+
+The mandatory metrics are mean absolute error (MAE), root-mean-square error (RMSE), and structural similarity (SSIM) \citep{wang2004ssim}. Parameter count is reported as a supporting measure of model compactness. Low- and high-pass MAE are secondary and will only be retained if the unified evaluation confirms that their definitions and values are internally consistent across every method.

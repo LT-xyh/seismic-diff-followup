@@ -1,0 +1,31 @@
+\section{Results}
+
+\subsection{Unified Matched-Input Comparison}
+
+Table~\ref{tab:rs-main} is reserved for the unified RS-E01-Lite evaluation. All rows will use the same 33,600 held-out records, the same target normalization, and the same evaluator. Historical AAAI values are intentionally not copied into this table.
+
+\input{tables/main_quantitative}
+
+\resultplaceholder{Replace this paragraph after RS-E01-Lite. State the main MAE/RMSE/SSIM findings without claiming universal superiority. Explicitly report the compact 10.6M parameter count and compare it with the retained adapted references. If different methods lead different metrics, describe the trade-off rather than forcing an overall winner.}
+
+\subsection{Qualitative Structural Reconstruction}
+
+The qualitative comparison will use a documented fixed selection rule over held-out records and shared velocity/error scales. The final figure should include the target, the strongest one or two retained matched-input references, and \method. Complex curved and faulted examples are prioritized because they expose structural localization errors that are not fully described by a single global error metric.
+
+\begin{figure}[t]
+    \centering
+    \fbox{\parbox[c][0.24\textheight][c]{0.92\linewidth}{
+    \centering
+    \textbf{Figure 3 placeholder}\\
+    Fixed-rule held-out qualitative comparison:\\
+    Target $\mid$ strongest baseline(s) $\mid$ BG-RFM $\mid$ absolute error
+    }}
+    \caption{Planned matched-input qualitative comparison using fixed held-out cases and common velocity/error scales. Final panels will be regenerated from the accepted RS-E01-Lite artifact set.}
+    \label{fig:qualitative}
+\end{figure}
+
+\subsection{Design Attribution}
+
+The first submission will include only attribution evidence whose checkpoint, configuration, and evaluator provenance can be stated cleanly. The intended scientific question is whether assigning a deterministic background branch and defining the residual relative to its prediction provides a useful reconstruction organization compared with relevant full-field or residual controls.
+
+\resultplaceholder{Insert a compact attribution result only if the retained historical artifact passes provenance review. Otherwise narrow the contribution language and omit this subsection from the first submission.}
