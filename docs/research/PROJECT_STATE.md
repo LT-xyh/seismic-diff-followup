@@ -4,13 +4,16 @@ Updated: 2026-09-27
 
 ## Paper
 
-- Submission: AAAI 2027, PD-BG-RFM.
-- Status: rejected by the program chairs on 2026-09-25.
-- Submission snapshot: `docs/paper/aaaii/`.
-- Editable manuscript: `docs/paper/AAAI2027/`.
-- OpenReview forum: user-provided forum URL `https://openreview.net/forum?id=FhcayzchcU`.
+- Historical submission: AAAI 2027, PD-BG-RFM.
+- AAAI status: rejected by the program chairs on 2026-09-25.
+- Current target: **Remote Sensing**.
+- Practical target: formal acceptance notification.
+- Historical submission snapshot: `docs/paper/aaaii/`.
+- Historical editable manuscript: `docs/paper/AAAI2027/`.
+- Remote Sensing workspace: `docs/research/remote_sensing/`.
+- Evidence audit: `docs/research/REMOTE_SENSING_EVIDENCE_AUDIT.md`.
 
-The visible review feedback was largely positive on readability but requested an operational definition of “physics-decoupled,” a clearer method overview, explicit filter/boundary details, and more careful contextualization of cross-protocol results. The full decision and all reviewer scores must be treated as external evidence until captured in a permitted project note.
+The journal revision is intentionally narrower than the AAAI narrative. The working core is role-aware multi-source conditioning, deterministic background prediction, and prediction-consistent residual Flow Matching.
 
 ## Code
 
@@ -25,26 +28,36 @@ The canonical development source is the repository root:
 
 ## Reproducibility contract
 
-- Training seed: 2027.
+- Historical training seed: 2027.
 - Split seed: 42.
 - Well seed: 1234.
-- Formal profile: `bg_pdr_fm/configs/release/aaai27/train.yaml`.
-- Evaluation traverses the materialized held-out membership without shuffling.
+- Historical formal profile: `bg_pdr_fm/configs/release/aaai27/train.yaml`.
+- Evaluation traverses held-out membership without shuffling.
 - Data, LMDB stores, checkpoints, and logs remain outside the GitHub source release.
+
+For Remote Sensing, the final quantitative package must freeze one held-out manifest, evaluator, normalization contract, and result provenance per method.
 
 ## Evidence status
 
-- Source organization and release validator: available in the repository.
-- CPU smoke path: must be verified on the current branch before claiming pass.
-- Full eight-subset benchmark: historical result, not a newly replicated result.
-- Multi-seed stability: not yet established.
-- Input-noise/missing-modality robustness: not yet established.
-- Real-data transfer: not established.
+- Source organization and release validator: available.
+- Remote Sensing evidence audit: completed in commit `0bb320b`.
+- Historical AAAI benchmark tables: research evidence, not final journal replication.
+- Historical matched-input InversionNet frequency metric provenance: unresolved.
+- Direct background evaluation: implementation support exists; clean journal result pending.
+- Attribution controls: historical/partial artifacts exist; common-evaluator result pending.
+- Perturbation robustness: clean journal result pending.
+- Multi-seed stability: not established; now treated as a gated experiment after the clean comparison.
+- Real-data transfer: not established and not a first-pass requirement.
+- 3D validation: not established and not a first-pass requirement.
 
-## Main scientific risks
+## Current blockers
 
-1. “Physics-decoupled” may overstate a method that currently has no explicit wave-equation or forward-operator constraint.
-2. PCA rank and straight-path energy diagnostics do not by themselves prove lower conditional complexity or easier learned transport.
-3. The source-native comparison mixes observation protocols; matched-input results must carry the main comparison burden.
-4. A single training trajectory is insufficient evidence for stable ranking.
-5. Synthetic multimodal observations may not represent realistic observation noise or interpretation error.
+1. Recover the exact external checkpoints/manifests needed for the final comparison.
+2. Freeze one common held-out manifest/evaluator.
+3. Supersede or resolve the historical InversionNet `MAE_L` inconsistency.
+
+## Current execution order
+
+`RS-A0 -> RS-E01 -> RS-E02 -> RS-E03A -> RS-E04/RS-E05 -> evidence gate -> train only what remains necessary`
+
+See `docs/research/remote_sensing/EXPERIMENT_QUEUE.md`.

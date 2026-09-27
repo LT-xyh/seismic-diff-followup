@@ -1,0 +1,137 @@
+# Remote Sensing Handoff
+
+Updated: 2026-09-27
+
+## Objective
+
+Turn the PD-BG-RFM research line into a focused Remote Sensing paper as efficiently as possible, with **formal acceptance notification** as the practical target.
+
+The revision is not a rebuttal document and should not mechanically answer every AAAI comment. Reviewer feedback is used as evidence about where the previous narrative was vulnerable.
+
+## Repository state
+
+- AAAI research handoff source: `4b91f626`
+- Remote Sensing evidence audit: `0bb320b`
+- Evidence audit:
+  - `docs/research/REMOTE_SENSING_EVIDENCE_AUDIT.md`
+  - `docs/research/REMOTE_SENSING_RESULT_MAP.csv`
+
+### Immutable historical material
+
+- `docs/paper/aaaii/`
+
+Do not edit historical submission artifacts.
+
+### Development material
+
+- `bg_pdr_fm/`
+- `scripts/aaai27/`
+- `reproducibility/`
+- `tests/`
+- future Remote Sensing manuscript source
+- this directory
+
+## Strongest defensible scientific story
+
+The paper should center on:
+
+1. **Role-aware use of heterogeneous geophysical constraints.**
+2. **Deterministic prediction of a background velocity component.**
+3. **Prediction-relative residual Flow Matching.**
+4. **Prediction consistency**: the same predicted background is used to define the residual target, condition residual transport, and compose the final velocity estimate.
+5. **Compact reconstruction with strong structural fidelity under a common multimodal input contract.**
+
+The broad claim that the method proves a universal reduction in "conditional complexity" is not required for the journal paper.
+
+The historical name **PD-BG-RFM** remains valid for code and provenance. The paper-facing name is not frozen. Until final title selection, use **Background-Guided Residual Flow Matching (BG-RFM)** as a neutral working label. Do not make "physics-decoupled" the headline unless the manuscript gives a precise operational meaning that does not imply wave-equation or forward-operator decoupling.
+
+## Current evidence status
+
+The repository implementation, configs, evaluator, and historical manuscript are sufficiently organized to begin manuscript restructuring.
+
+However, the final Remote Sensing quantitative package must not simply copy the AAAI tables.
+
+Highest-priority evidence issue:
+
+- Historical matched-input InversionNet reports `MAE=0.0149` and `MAE_L=0.0180`.
+- This pair is incompatible with the current positive averaging-kernel low-pass metric under the same normalized error field.
+- Exact historical provenance is unresolved.
+- Therefore, the final matched-input table must come from one frozen evaluator + held-out manifest + checkpoint mapping.
+
+Other historical results are useful as research assets, but their status must be determined from run manifests rather than from manuscript tables alone.
+
+## Execution philosophy
+
+Use a staged evidence strategy.
+
+### Stage 0 — freeze the empirical contract
+
+Before new training:
+
+- identify the retained checkpoints and manifests required for the final comparisons;
+- freeze a held-out manifest;
+- freeze one evaluator implementation;
+- evaluate available checkpoints under that common contract;
+- resolve or replace the historical inconsistent frequency metrics.
+
+### Stage 1 — cheap, high-information evaluation
+
+Prefer evaluation-only work using existing checkpoints:
+
+- direct background quality;
+- common-evaluator matched-input comparison;
+- existing attribution checkpoints;
+- bounded RMS/horizon perturbations;
+- inference-step/runtime sweep.
+
+### Stage 2 — train only when the Stage 1 result leaves a claim unsupported
+
+New training is allowed only when it strengthens a retained headline claim.
+
+Examples:
+- train a deterministic residual control only if no valid checkpoint exists;
+- run additional seeds only if the final paper wants a stable ranking claim and the clean margin is small enough that seed variability could change the conclusion.
+
+## Scope controls
+
+Do not make the following default requirements for the first Remote Sensing submission:
+
+- full 3D implementation;
+- field-data transfer;
+- downstream FWI;
+- downstream migration;
+- broad architecture search;
+- large hyperparameter sweeps;
+- extra baselines that do not test the paper's core claim.
+
+They can become future work or later revision tasks if an editor/reviewer specifically requires them.
+
+## Work-session responsibilities
+
+### Main GPT work session
+
+Own:
+- paper narrative;
+- claim/evidence mapping;
+- repository code changes possible through GitHub;
+- experiment specifications;
+- manuscript restructuring;
+- interpretation of results;
+- decision whether a result belongs in the main paper, supplement, or nowhere.
+
+### Codex runtime executor
+
+Use only for:
+- locating external checkpoints/logs on the real machine;
+- GPU training;
+- large evaluation jobs;
+- timing/memory measurement on real hardware;
+- environment-specific debugging.
+
+Codex should return facts and artifacts, not decide the scientific story.
+
+## Immediate next action
+
+Start with **RS-A0 / RS-E01** from `EXPERIMENT_QUEUE.md`.
+
+Do not start new training before the clean common-evaluator result exists.
