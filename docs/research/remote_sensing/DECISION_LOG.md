@@ -74,3 +74,36 @@ Not first-pass requirements:
 - downstream migration.
 
 These remain optional follow-up work unless later evidence or reviewer feedback makes them necessary.
+
+## 2026-09-27 — RS-0A source handoff gate closed
+
+Decision: **RS-0A = PASS / CLOSED**.
+
+Root cause: the follow-up handoff repository omitted the canonical tracked `bg_pdr_fm/data/` package.
+
+Authoritative source:
+- workspace: `/public/home/xuyinghao/workspace/seismic-diff`
+- source commit: `75dcf1c5bb539aef97d4aaeadf01b54584108b09`
+
+Restored canonical package:
+- `bg_pdr_fm/data/`
+
+A second independent release issue was found: `TensorBoardLogger` is unconditionally constructed by the training/smoke path, but the release dependency contract did not declare a TensorBoard backend.
+
+Authoritative environment:
+- Python: `/public/home/xuyinghao/miniconda3/envs/seg/bin/python`
+- `tensorboard==2.20.0`
+- `tensorboardX`: not installed
+
+Resolution:
+- restored the canonical data package in `e37ef863`;
+- declared `tensorboard==2.20.0`, added it to the validator dependency contract, and added regression coverage in `e8fcd641`;
+- merged PR #1 with merge commit `4c046a4a68dd4fa2d1b26a8283a68febf5fd26a2`.
+
+Verification on `main`:
+- release validator: PASS;
+- release tests: PASS;
+- CPU smoke: PASS;
+- GitHub Actions `quality`: PASS.
+
+This debugging history is internal reproducibility evidence only and must not be turned into manuscript content.

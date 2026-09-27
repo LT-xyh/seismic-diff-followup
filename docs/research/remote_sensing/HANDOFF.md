@@ -12,9 +12,32 @@ The revision is not a rebuttal document and should not mechanically answer every
 
 - AAAI research handoff source: `4b91f626`
 - Remote Sensing evidence audit: `0bb320b`
+- RS-0A source-handoff merge: `4c046a4a68dd4fa2d1b26a8283a68febf5fd26a2`
 - Evidence audit:
   - `docs/research/REMOTE_SENSING_EVIDENCE_AUDIT.md`
   - `docs/research/REMOTE_SENSING_RESULT_MAP.csv`
+
+### RS-0A source-handoff closure
+
+**RS-0A = PASS / CLOSED.**
+
+Root cause: the follow-up handoff repository omitted the canonical tracked `bg_pdr_fm/data/` package.
+
+Authoritative source:
+- `/public/home/xuyinghao/workspace/seismic-diff`
+- source commit `75dcf1c5bb539aef97d4aaeadf01b54584108b09`
+
+The canonical `bg_pdr_fm/data/` package is restored.
+
+A second release-contract issue was also closed: the training/smoke path unconditionally constructs `TensorBoardLogger`, so the authoritative runtime dependency `tensorboard==2.20.0` is now pinned and enforced by the release validator. The retained environment does not use `tensorboardX`.
+
+Verified on `main`:
+- release validator: PASS;
+- release tests: PASS;
+- CPU smoke: PASS;
+- GitHub Actions `quality`: PASS.
+
+This history is internal reproducibility/project evidence and is not manuscript content.
 
 ### Immutable historical material
 
@@ -68,10 +91,10 @@ Use a staged evidence strategy.
 
 Before new training:
 
-- identify the retained checkpoints and manifests required for the final comparisons;
-- freeze a held-out manifest;
-- freeze one evaluator implementation;
-- evaluate available checkpoints under that common contract;
+- inventory retained checkpoints, resolved configs, manifests, record IDs, and existing metric artifacts;
+- identify the authoritative 33,600-record global held-out manifest used by the formal Table 2 tooling;
+- freeze one evaluator and normalization contract only after asset inventory review;
+- then re-evaluate available checkpoints under that common contract;
 - resolve or replace the historical inconsistent frequency metrics.
 
 ### Stage 1 — cheap, high-information evaluation
@@ -132,6 +155,6 @@ Codex should return facts and artifacts, not decide the scientific story.
 
 ## Immediate next action
 
-Start with **RS-A0 / RS-E01** from `EXPERIMENT_QUEUE.md`.
+Start **RS-A0 — Freeze Empirical Assets**.
 
-Do not start new training before the clean common-evaluator result exists.
+Do not start RS-E01 evaluation or any new training until the retained asset inventory and common held-out record contract have been reviewed.

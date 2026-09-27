@@ -26,6 +26,17 @@ The canonical development source is the repository root:
 
 `docs/paper/aaaii/pd_bg_rfm_code/` is a historical release copy and may contain a nested Git repository. It is not the development source.
 
+### RS-0A source-handoff status
+
+**RS-0A = CLOSED.**
+
+The canonical `bg_pdr_fm/data/` package was recovered from:
+
+- workspace: `/public/home/xuyinghao/workspace/seismic-diff`
+- source commit: `75dcf1c5bb539aef97d4aaeadf01b54584108b09`
+
+The release dependency contract now includes `tensorboard==2.20.0`, matching the retained research environment. PR #1 was merged as `4c046a4a68dd4fa2d1b26a8283a68febf5fd26a2`; release validator, release tests, CPU smoke, and GitHub Actions quality all passed on `main`.
+
 ## Reproducibility contract
 
 - Historical training seed: 2027.
@@ -34,11 +45,13 @@ The canonical development source is the repository root:
 - Historical formal profile: `bg_pdr_fm/configs/release/aaai27/train.yaml`.
 - Evaluation traverses held-out membership without shuffling.
 - Data, LMDB stores, checkpoints, and logs remain outside the GitHub source release.
+- The formal Table 2 tooling expects a canonical global held-out set of 33,600 records keyed by `dataset_id`, `dataset_name`, and `source_sample_index`.
 
 For Remote Sensing, the final quantitative package must freeze one held-out manifest, evaluator, normalization contract, and result provenance per method.
 
 ## Evidence status
 
+- Canonical source handoff and release CI: PASS / CLOSED.
 - Source organization and release validator: available.
 - Remote Sensing evidence audit: completed in commit `0bb320b`.
 - Historical AAAI benchmark tables: research evidence, not final journal replication.
@@ -52,12 +65,14 @@ For Remote Sensing, the final quantitative package must freeze one held-out mani
 
 ## Current blockers
 
-1. Recover the exact external checkpoints/manifests needed for the final comparison.
-2. Freeze one common held-out manifest/evaluator.
+1. Inventory the exact retained external checkpoints/configs/manifests/record IDs needed for the Remote Sensing comparison package.
+2. Freeze one common held-out manifest/evaluator contract from the retained assets.
 3. Supersede or resolve the historical InversionNet `MAE_L` inconsistency.
 
 ## Current execution order
 
-`RS-A0 -> RS-E01 -> RS-E02 -> RS-E03A -> RS-E04/RS-E05 -> evidence gate -> train only what remains necessary`
+`RS-A0 -> PI asset gate -> RS-E01 -> RS-E02 -> RS-E03A -> RS-E04/RS-E05 -> evidence gate -> train only what remains necessary`
+
+No new training starts during RS-A0.
 
 See `docs/research/remote_sensing/EXPERIMENT_QUEUE.md`.
