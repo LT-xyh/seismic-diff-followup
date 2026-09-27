@@ -26,6 +26,7 @@ CANONICAL_CONFIGS = (
 REQUIRED_REQUIREMENTS = {
     "torch",
     "lightning",
+    "tensorboard",
     "numpy",
     "scipy",
     "scikit-image",

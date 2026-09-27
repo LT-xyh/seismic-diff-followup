@@ -63,3 +63,14 @@ def test_release_branch_does_not_track_generated_release_artifacts() -> None:
         or Path(path).name.endswith(".frame.png")
     ]
     assert generated == [], "generated or machine-local files remain tracked: " + ", ".join(generated[:20])
+
+
+def test_release_requirements_include_tensorboard_backend() -> None:
+    requirements_path = REPO_ROOT / "reproducibility" / "requirements.txt"
+    requirements = {
+        line.split("==", 1)[0].split(">=", 1)[0].strip().lower()
+        for line in requirements_path.read_text(encoding="utf-8").splitlines()
+        if line.strip() and not line.lstrip().startswith("#")
+    }
+
+    assert "tensorboard" in requirements
