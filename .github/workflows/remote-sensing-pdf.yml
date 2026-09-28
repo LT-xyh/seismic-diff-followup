@@ -1,0 +1,40 @@
+name: remote-sensing-pdf
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - remote-sensing/submission-sprint
+    paths:
+      - 'docs/paper/RemoteSensing/**'
+      - '.github/workflows/remote-sensing-pdf.yml'
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    container:
+      image: texlive/texlive:latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile MDPI manuscript
+        working-directory: docs/paper/RemoteSensing/mdpi
+        run: |
+          pdflatex -interaction=nonstopmode -halt-on-error template.tex
+          bibtex template
+          pdflatex -interaction=nonstopmode -halt-on-error template.tex
+          pdflatex -interaction=nonstopmode -halt-on-error template.tex
+      - name: Compile supplement
+        working-directory: docs/paper/RemoteSensing
+        run: |
+          pdflatex -interaction=nonstopmode -halt-on-error supplement.tex
+          bibtex supplement
+          pdflatex -interaction=nonstopmode -halt-on-error supplement.tex
+          pdflatex -interaction=nonstopmode -halt-on-error supplement.tex
+      - name: Create blind-review package
+        run: |
+          mkdir -p blind_review
+          cp docs/paper/RemoteSensing/mdpi/template.pdf blind_review/RemoteSensing_BG-RFM_blind.pdf
+          cp docs/paper/RemoteSensing/supplement.pdf blind_review/RemoteSensing_BG-RFM_supplement_blind.pdf
+          cd blind_review && zip RemoteSensing_BG-RFM_blind_package.zip *.pdf
+      - uses: actions/upload-artifact@v4
+        with:
+          name: remote-sensing-blind-review
+          path: blind_review/

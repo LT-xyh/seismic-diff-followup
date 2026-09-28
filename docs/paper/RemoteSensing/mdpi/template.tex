@@ -1,0 +1,68 @@
+% MDPI / Remote Sensing submission wrapper.
+% Scientific content frozen at 96fddfcab601dc61562b73998a74572dde4a160f.
+\documentclass[remotesensing,article,submit,pdftex,moreauthors]{Definitions/mdpi}
+
+\firstpage{1}
+\pubvolume{1}
+\issuenum{1}
+\articlenumber{0}
+\pubyear{2026}
+\copyrightyear{2026}
+\datereceived{}
+\daterevised{}
+\dateaccepted{}
+\datepublished{}
+
+\makeatletter
+\def\input@path{{../}}
+\makeatother
+
+\Title{Background-Guided Residual Flow Matching for Multi-Constraint Seismic Velocity Model Building}
+\Author{Anonymous Authors}
+\AuthorNames{Anonymous Authors}
+\address{Affiliations withheld for blind review.}
+\corres{Corresponding author information: [ADMINISTRATIVE PLACEHOLDER]}
+
+\abstract{Initial velocity model building benefits from heterogeneous geophysical constraints that describe different aspects of the subsurface. RMS velocity and sparse wells provide strong information about large-scale velocity magnitude, whereas post-stack migrated images and interpreted horizons provide dense structural cues. Most learned approaches nevertheless fuse these observations and assign the complete velocity field to a single predictor or generator. We propose Background-Guided Residual Flow Matching (BG-RFM), which explicitly separates reconstruction responsibilities while retaining multimodal conditioning. A role-aware condition encoder provides background-oriented and structure-oriented interfaces. The background branch deterministically predicts a smooth velocity component, and the residual branch applies conditional Flow Matching to the correction relative to that prediction. Crucially, the same predicted background defines the residual target during training, conditions the residual vector field, and is reused in final velocity composition, yielding a prediction-consistent reconstruction path. We evaluate the method on eight OpenFWI subsets using RMS velocity, post-stack migrated images, horizons, and sparse wells under a common 33,600-record held-out protocol. On this unified benchmark, the proposed model achieves an RMSE of 0.0269 and an SSIM of 0.9916 with 10.6M trainable parameters. The results support a parameter-compact formulation that allocates deterministic estimation to background recovery and generative transport to the remaining correction.}
+
+\keyword{initial velocity model building; seismic velocity reconstruction; Flow Matching; multimodal geophysical constraints; residual generative modeling; OpenFWI}
+
+\newcommand{\method}{BG-RFM}
+\newcommand{\historicalmethod}{PD-BG-RFM}
+
+\begin{document}
+
+\input{sections/01_introduction}
+\input{sections/02_related_work}
+\input{sections/03_materials_methods}
+\input{sections/04_results}
+\input{sections/05_discussion}
+\input{sections/06_conclusions}
+
+\vspace{6pt}
+\supplementary{The Supplementary Material contains the extended condition-learning objective, effective-rank characterization, missing-modality stress tests, additional design diagnostics, baseline-adaptation details, and extended qualitative evidence.}
+
+\authorcontributions{[ADMINISTRATIVE PLACEHOLDER: provide the verified CRediT author-contribution statement.]}
+\funding{[ADMINISTRATIVE PLACEHOLDER: provide exact funding agency names, grant numbers, and APC funding statement, or confirm no external funding.]}
+\institutionalreview{Not applicable.}
+\informedconsent{Not applicable.}
+\dataavailability{The study uses the publicly available OpenFWI benchmark. The multimodal RMS-velocity, migrated-image, horizon, and sparse-well observations analyzed in this work are derived from the OpenFWI source data using the processing and sampling procedures described in the Materials and Methods section. Large processed arrays and checkpoints are not stored in the source repository. Source code, release configurations, data adapters, and evaluation utilities are available at \url{https://github.com/LT-xyh/seismic-diff-followup}. The exact submission revision will be archived or tagged before final submission.}
+\acknowledgments{[ADMINISTRATIVE PLACEHOLDER: provide acknowledgments and the final journal-required GenAI disclosure, if applicable.]}
+\conflictsofinterest{[ADMINISTRATIVE PLACEHOLDER: confirm the authors' conflict-of-interest statement.]}
+
+\abbreviations{Abbreviations}{
+\begin{tabular}{@{}ll}
+BG-RFM & Background-Guided Residual Flow Matching\\
+FWI & Full-waveform inversion\\
+FM & Flow Matching\\
+PoSTM & Post-stack time migration\\
+RMS & Root-mean-square\\
+SSIM & Structural similarity index measure
+\end{tabular}}
+
+\begin{adjustwidth}{-\extralength}{0cm}
+\reftitle{References}
+\bibliography{../references}
+\end{adjustwidth}
+
+\end{document}
