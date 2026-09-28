@@ -37,15 +37,18 @@
 
 \abstract{Initial velocity model building benefits from heterogeneous geophysical constraints that describe different aspects of the subsurface. RMS velocity and sparse wells provide strong information about large-scale velocity magnitude, whereas post-stack migrated images and interpreted horizons provide dense structural cues. Most learned approaches nevertheless fuse these observations and assign the complete velocity field to a single predictor or generator. We propose Background-Guided Residual Flow Matching (BG-RFM), which explicitly separates reconstruction responsibilities while retaining multimodal conditioning. A role-aware condition encoder provides background-oriented and structure-oriented interfaces. The background branch deterministically predicts a smooth velocity component, and the residual branch applies conditional Flow Matching to the correction relative to that prediction. Crucially, the same predicted background defines the residual target during training, conditions the residual vector field, and is reused in final velocity composition, yielding a prediction-consistent reconstruction path. We evaluate the method on eight OpenFWI subsets using RMS velocity, post-stack migrated images, horizons, and sparse wells under a common 33,600-record held-out protocol. On this unified benchmark, the proposed model achieves an RMSE of 0.0269 and an SSIM of 0.9916 with 10.6M trainable parameters. The results support a parameter-compact formulation that allocates deterministic estimation to background recovery and generative transport to the remaining correction.}
 \keyword{initial velocity model building; seismic velocity reconstruction; Flow Matching; multimodal geophysical constraints; residual generative modeling; OpenFWI}
-\addhighlights{\textbf{What are the main findings?}
-\begin{itemize}[leftmargin=*]
+\addhighlights{yes}
+\renewcommand{\addhighlights}{%
+\noindent\textbf{What are the main findings?}
+\begin{itemize}[labelsep=2.5mm,topsep=-3pt]
 \item Role-aware conditioning separates background and residual reconstruction responsibilities.
 \item The predicted background is reused for residual definition, residual conditioning, and final composition.
-\end{itemize}
+\end{itemize}\vspace{3pt}
 \textbf{What is the implication of the main finding?}
-\begin{itemize}[leftmargin=*]
+\begin{itemize}[labelsep=2.5mm,topsep=-3pt]
 \item BG-RFM provides a parameter-compact, prediction-consistent generative formulation for multi-constraint seismic velocity model building.
-\end{itemize}}
+\end{itemize}
+}
 
 \begin{document}
 
