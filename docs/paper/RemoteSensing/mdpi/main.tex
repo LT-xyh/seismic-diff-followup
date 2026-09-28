@@ -154,8 +154,9 @@ with $\Omega$ the observed modality set. In the reported configuration, the back
 Training-only multimodal alignment, role calibration, and separation terms encourage the two interfaces to preserve complementary information. They do not constitute inference inputs and are not interpreted as a proof that the modalities are physically separable. Full definitions of the auxiliary condition objective are provided in Supplementary Section~S1.
 
 
-\begin{figure*}[H]
+\begin{figure}[H]
 \centering
+\resizebox{0.95\linewidth}{!}{%
 \begin{tikzpicture}[
   font=\small,
   node distance=8mm and 11mm,
@@ -192,10 +193,11 @@ Training-only multimodal alignment, role calibration, and separation terms encou
 \draw[flow] (fm) -- (rhat);
 \draw[flow] (rhat) -- (final);
 \draw[reuse] (bhat.south west) |- node[pos=.72, below, font=\scriptsize]{3. final composition} (final.west);
-\end{tikzpicture}
+\end{tikzpicture}}%
+
 \caption{BG-RFM overview. The same predicted background $\hat B$ is reused in three places: it defines the prediction-relative residual target during training, conditions the residual vector field together with $C_{\mathrm{str}}$, and is added back in the final composition. Dashed red arrows denote target-derived training-only information; inference uses observed constraints only.}
 \label{fig:bg-rfm-overview}
-\end{figure*}
+\end{figure}
 
 
 \subsection{Deterministic Background Prediction}
@@ -312,12 +314,12 @@ Across the listed matched-input references, BG-RFM uses the fewest trainable par
 Aggregate errors do not fully describe whether faults, curved interfaces, and layer boundaries are positioned consistently. Figure~\ref{fig:qualitative} therefore reuses the fixed-rule held-out qualitative panel from the completed experimental package. The cases span progressively more complex OpenFWI families and use common display conventions, allowing visual comparison of structural continuity, interface position, and localized error.
 
 
-\begin{figure*}[H]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\fulllength]{figures/table2_representative_cases.png}
 \caption{Fixed-rule qualitative comparison on the globally held-out set. One case per OpenFWI subset is selected by the retained historical rule that maximizes the immutable formal SSIM margin within that subset; the selection is therefore illustrative rather than evidence of aggregate superiority. Velocity maps use a fixed 1500--4500~m/s scale and absolute-error maps use a fixed 0--750~m/s display range. The Supplementary Material also retains explicit failure cases.}
 \label{fig:qualitative}
-\end{figure*}
+\end{figure}
 
 
 The qualitative examples are consistent with the quantitative picture in Table~\ref{tab:rs-main}: BG-RFM reconstructs coherent large-scale velocity organization while retaining fine structural corrections, but it is not uniformly the closest prediction on every sample or subset. This is expected from the method's design claim. The deterministic branch supplies a stable background reference, whereas the Flow Matching branch is responsible for the remaining correction. Supplementary Section~S6 retains the broader representative, advantage, and failure-case panels so that the visual evidence is not restricted to favorable examples.
@@ -353,7 +355,7 @@ The retained diagnostics provide two complementary views of why the formulation 
 Second, the learned condition interfaces and residual transport can be inspected after training. The historical condition analysis reports matched--deranged anchor-similarity margins of 0.46 for the background role and 0.35 for the structural role. For residual transport, every one of the 33,600 held-out records satisfies $q_T<1$ under the normalized straight-path diagnostic, with mean $q_T=0.772$ and bootstrap 95\% confidence interval $[0.771,0.773]$. This corresponds to a lower normalized straight-path target energy after subtracting the predicted background in that diagnostic coordinate system. It should be read as a post-hoc characterization of the routed target, not as a causal explanation of reconstruction accuracy.
 
 
-\begin{figure*}[H]
+\begin{figure}[H]
 \centering
 \begin{minipage}[t]{0.48\fulllength}
 \centering
@@ -368,10 +370,10 @@ Second, the learned condition interfaces and residual transport can be inspected
 \end{minipage}
 \caption{Training-set empirical characterization. (\textbf{a}) Modality-to-target alignment diagnostics summarize complementary tendencies of the four constraints. (\textbf{b}) Participation-ratio effective rank characterizes the smooth background and structural complement. These diagnostics motivate role-aware responsibility allocation but are not treated as proof of lower conditional complexity.}
 \label{fig:data-characterization}
-\end{figure*}
+\end{figure}
 
 
-\begin{figure*}[H]
+\begin{figure}[H]
 \centering
 \begin{minipage}[t]{0.48\fulllength}
 \centering
@@ -386,7 +388,7 @@ Second, the learned condition interfaces and residual transport can be inspected
 \end{minipage}
 \caption{Diagnostics supporting interpretation of the model. (\textbf{a}) Condition-routing diagnostics characterize agreement of the learned role interfaces with their training-time anchors and intended frequency tendencies. (\textbf{b}) The normalized straight-path target-energy ratio $q_T$ characterizes the transport target after subtracting the predicted background. Both panels are empirical diagnostics rather than causal proofs of performance.}
 \label{fig:diagnostics}
-\end{figure*}
+\end{figure}
 
 
 Additional condition-routing details, the full effective-rank table, missing-modality stress tests, and extended qualitative panels are provided in the Supplementary Material.
