@@ -1,30 +1,37 @@
 # Remote Sensing Manuscript Workspace
 
-This directory is the active manuscript workspace for the journal revision of PD-BG-RFM.
+This directory is the active manuscript package for the journal revision of PD-BG-RFM.
 
-Working manuscript-facing name: **BG-RFM**  
+Manuscript-facing name: **BG-RFM**  
 Working title: **Background-Guided Residual Flow Matching for Multi-Constraint Seismic Velocity Model Building**
 
 ## Status
 
-The project is in **submission sprint mode**.
+The project is in **final manuscript production**.
 
-The manuscript is being reconstructed from the scientific core rather than edited line-by-line from the AAAI submission. The historical AAAI snapshot under `docs/paper/aaaii/` remains immutable.
+The manuscript is reconstructed from the strongest scientifically valid AAAI evidence plus the authoritative RS-E01-Lite unified evaluation. The historical AAAI snapshot under `docs/paper/aaaii/` remains immutable.
 
-Only the exact quantitative values and numerical interpretation of the main matched-input comparison are intentionally left unresolved pending **RS-E01-Lite**.
+No additional experiment is a submission prerequisite.
 
-## Files
+## Main files
 
-- `main.tex`: content-first manuscript entry point.
-- `sections/`: journal-oriented section drafts.
-- `tables/`: task definition and RS-E01-Lite result table.
-- `MANUSCRIPT_PLAN.md`: story, section architecture, figure/table plan, and AAAI material disposition.
-- `references.bib`: copied from the editable AAAI source as a starting bibliography.
+- `main.tex`: complete free-format journal draft.
+- `supplement.tex`: populated supplementary material.
+- `sections/`: main manuscript sections.
+- `tables/`: task, quantitative, and design-analysis tables.
+- `figures/`: manuscript figure assembly files.
+- `FIGURE_PLAN.md`: final figure roles and reused source assets.
+- `NUMERICAL_AUDIT.md`: final numerical consistency ledger.
+- `SUBMISSION_STATUS.md`: manuscript and packaging readiness.
+- `MANUSCRIPT_PLAN.md`: retained story/evidence design history.
+- `references.bib`: bibliography source.
 
-## Formatting note
+## Formatting strategy
 
-The current source uses a lightweight `article` class so the scientific text remains easy to edit and review. After the scientific structure and RS-E01-Lite table are frozen, migrate the content into the current MDPI/Remote Sensing LaTeX template without changing the scientific claims.
+Remote Sensing currently permits free-format initial submission, provided the required scientific and back-matter sections are present. The current manuscript therefore prioritizes a stable scientific draft. At final packaging, migrate the text into the current MDPI Remote Sensing LaTeX template without changing scientific claims or numerical values.
 
-## Submission rule
+## Evidence rule
 
-Do not copy historical AAAI quantitative tables into the final journal manuscript. The main comparison table must be populated only from the unified RS-E01-Lite package.
+- RS-E01-Lite supplies the authoritative main matched-input table.
+- Historical AAAI ablations, diagnostics, qualitative panels, and missing-modality tests may be reused as scientific source evidence unless a specific result is known to be incorrect.
+- Do not use the unresolved historical InversionNet MAE_L = 0.0180 value.

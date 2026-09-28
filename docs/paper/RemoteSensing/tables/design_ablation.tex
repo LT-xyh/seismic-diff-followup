@@ -1,0 +1,17 @@
+\begin{table}[t]
+\centering
+\caption{Historical controlled design analysis retained from the AAAI experimental package. All variants used the same held-out protocol and training budget within that ablation study. The table is used as architectural evidence rather than as a new common-protocol baseline ranking.}
+\label{tab:design-ablation}
+\begin{tabular}{lrrr}
+\toprule
+Variant & MAE $\downarrow$ & RMSE $\downarrow$ & SSIM $\uparrow$ \\
+\midrule
+Concat-FM & 0.0225 & 0.0340 & 0.9865 \\
+Role-aware full-field FM & 0.0205 & 0.0320 & 0.9880 \\
+Uniform fusion & 0.0163 & 0.0290 & 0.9898 \\
+w/o prediction consistency & 0.0190 & 0.0340 & 0.9875 \\
+w/o background context & 0.0230 & 0.0410 & 0.9820 \\
+BG-RFM & 0.0150 & 0.0270 & 0.9913 \\
+\bottomrule
+\end{tabular}
+\end{table}

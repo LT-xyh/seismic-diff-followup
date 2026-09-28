@@ -1,0 +1,38 @@
+\begin{figure*}[t]
+\centering
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.45}
+\begin{tabular}{c c c}
+\multicolumn{3}{c}{\fbox{\parbox{0.86\textwidth}{\centering
+\textbf{Observed multi-source constraints}\\
+RMS velocity \quad migrated image \quad interpreted horizons \quad sparse wells}}}\\
+\multicolumn{3}{c}{$\downarrow$}\\
+\multicolumn{3}{c}{\fbox{\parbox{0.68\textwidth}{\centering
+\textbf{Role-aware condition encoder}\\
+learned background-oriented interface $C_{\mathrm{bg}}$ and structure-oriented interface $C_{\mathrm{str}}$}}}\\
+& \swarrow \hspace{2.5cm} \searrow & \\
+\fbox{\parbox{0.27\textwidth}{\centering
+\textbf{Deterministic background}\\
+$\hat B=f_{\mathrm{bg}}(C_{\mathrm{bg}})$}}
+&
+&
+\fbox{\parbox{0.27\textwidth}{\centering
+\textbf{Structural condition}\\
+$C_{\mathrm{str}}$}}\\
+\multicolumn{3}{c}{$\downarrow$}\\[-2pt]
+\fbox{\parbox{0.27\textwidth}{\centering
+\textbf{Training reference}\\
+$R_{\hat B}=V-\hat B$}}
+&
+\fbox{\parbox{0.31\textwidth}{\centering
+\textbf{Residual Flow Matching}\\
+conditioned on $[C_{\mathrm{str}};\psi_{\mathrm{bg}}(\hat B)]$\\
+$\xi\rightarrow\hat R$}}
+&
+\fbox{\parbox{0.27\textwidth}{\centering
+\textbf{Final composition}\\
+$\hat V=\hat B+\hat R$}}\\
+\end{tabular}
+\caption{Conceptual overview of BG-RFM. The same predicted background $\hat B$ is reused in three places: it defines the prediction-relative residual target during training, conditions residual transport together with the structural interface, and is added back during final composition. Target-derived quantities appear only on the training path; inference uses observed constraints only.}
+\label{fig:bg-rfm-overview}
+\end{figure*}
