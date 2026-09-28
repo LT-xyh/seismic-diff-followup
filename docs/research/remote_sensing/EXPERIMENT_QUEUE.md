@@ -1,5 +1,29 @@
 # Remote Sensing Experiment Queue
 
+## Final manuscript production freeze
+
+**Effective 2026-09-28.**
+
+No additional experiment is a prerequisite for the first Remote Sensing submission.
+
+RS-E01-Lite is complete and is the authoritative unified main comparison.
+
+All remaining items in this file are retained as historical plans or possible reviewer-triggered follow-up only. They must not block manuscript completion.
+
+Do not initiate:
+- new training;
+- multi-seed experiments;
+- robustness experiments;
+- additional baselines;
+- 3D or field-data experiments;
+- downstream FWI/migration experiments;
+- reconstruction of missing historical checkpoints;
+- open-ended artifact archaeology.
+
+Historical AAAI experiments remain usable scientific source evidence unless a specific result is known to be incorrect.
+
+---
+
 ## Submission sprint override
 
 **Effective 2026-09-27.**
@@ -49,7 +73,7 @@ The queue is intentionally staged to minimize unnecessary GPU work.
 
 ## RS-A0 — Recover and freeze empirical assets
 
-**Priority:** BLOCKER  
+**Priority:** CLOSED / HISTORICAL  
 **Owner:** Main GPT designs retrieval specification; Codex performs server-side lookup if artifacts are outside GitHub.  
 **Training:** none.
 
@@ -75,7 +99,7 @@ At least one PD-BG-RFM checkpoint and the checkpoints needed for the clean compa
 
 ## RS-E01 — Common-evaluator matched-input reconstruction
 
-**Priority:** REPLACED BY RS-E01-Lite for first submission  
+**Priority:** COMPLETE — RS-E01-Lite AUTHORITATIVE  
 **Owner:** GPT prepares/fixes evaluation code and result schema; Codex executes on retained checkpoints.  
 **Training:** none if usable checkpoints exist.
 
@@ -305,6 +329,6 @@ Historical six-mode evaluation exists. First identify which artifact version is 
 
 # Execution order
 
-`RS-A0 provenance check -> RS-E01-Lite -> submit; RS-E02–RS-E06 only if manuscript evidence fails or reviewers request them`
+`manuscript completion -> numerical consistency pass -> blind review -> submit; RS-E02–RS-E06 only if requested after review`
 
 This ordering maximizes information gained before expensive training.

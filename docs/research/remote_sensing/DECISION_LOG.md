@@ -139,3 +139,36 @@ The working journal title is:
 > **Background-Guided Residual Flow Matching for Multi-Constraint Seismic Velocity Model Building**
 
 The manuscript-facing working name is **BG-RFM**. Historical `PD-BG-RFM` terminology remains valid for code and provenance.
+
+
+## 2026-09-28 — Final manuscript production stage
+
+Decision: enter **final Remote Sensing manuscript production**.
+
+The next milestone is a complete manuscript suitable for blind review, not another experiment.
+
+Evidence policy:
+- the AAAI manuscript remains the scientific source manuscript unless a specific result is known to be incorrect;
+- RS-E01-Lite is the authoritative unified main comparison and an additional clean evaluation asset;
+- historical ablations, qualitative results, missing-modality tests, PCA/effective-rank analyses, condition diagnostics, residual/transport diagnostics, architecture details, and supplementary implementation material may be reused when they strengthen the retained paper story;
+- missing modern `run_manifest.json` provenance alone is not a reason to discard an otherwise valid historical experiment;
+- the known suspicious historical InversionNet `MAE_L=0.0180` value remains excluded unless independently verified.
+
+Submission-blocking experiments: **none**.
+
+Do not request new training, multi-seed experiments, robustness experiments, additional baselines, 3D/field/downstream FWI experiments, checkpoint reconstruction, or open-ended historical artifact archaeology before submission.
+
+Historical diagnostics are interpreted as empirical characterization, not formal causal proof:
+- PCA/effective rank -> data-level characterization;
+- transport-energy analysis -> transport diagnostic;
+- missing-modality tests -> supporting stress evidence;
+- historical ablations -> design evidence without overclaiming causal isolation.
+
+Main manuscript emphasis:
+1. role-aware use of heterogeneous constraints;
+2. deterministic background estimation;
+3. prediction-relative residual Flow Matching;
+4. prediction consistency through reuse of the same predicted background;
+5. compact parameterization and supporting empirical evidence.
+
+Do not claim universal accuracy dominance or faster inference.

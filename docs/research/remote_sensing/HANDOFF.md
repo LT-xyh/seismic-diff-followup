@@ -192,6 +192,29 @@ RS-E02 through RS-E06 remain documented but are **deferred / reviewer-triggered*
 
 No new training is required before the first Remote Sensing submission.
 
-## Immediate next action
+## Final manuscript production
 
-Advance Track A immediately while finishing only the provenance work needed to launch RS-E01-Lite. Do not delay manuscript reconstruction for optional experiments.
+The project is now in **final manuscript production**.
+
+RS-E01-Lite is complete and supplies the authoritative unified matched-input table. No additional experiment is a prerequisite for first submission.
+
+The AAAI manuscript is the scientific source manuscript for reusable historical evidence. Reorganize valid prior experiments around the BG-RFM journal story rather than rebuilding them.
+
+Reuse when scientifically useful:
+- controlled ablations;
+- qualitative comparisons;
+- missing-modality stress tests;
+- effective-rank/PCA characterization;
+- condition-routing diagnostics;
+- residual/transport diagnostics;
+- architecture and implementation details;
+- parameter accounting.
+
+Do not reuse the known suspicious historical InversionNet `MAE_L=0.0180` value.
+
+The active manuscript is:
+- `docs/paper/RemoteSensing/`
+
+The next milestone is a **complete draft suitable for blind review**.
+
+No new training, baseline expansion, multi-seed campaign, robustness study, 3D study, field-data study, downstream FWI study, or historical checkpoint reconstruction is authorized as a submission prerequisite.
