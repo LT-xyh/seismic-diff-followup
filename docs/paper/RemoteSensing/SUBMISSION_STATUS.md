@@ -69,3 +69,24 @@ Administrative/format:
 ## Submission principle
 
 Do not launch new experiments to resolve formatting, metadata, or presentation issues.
+
+
+## Blind-review targeted revision
+
+Independent blind review requested targeted clarification rather than new experiments.
+
+Completed:
+- novelty positioned as reconstruction organization rather than a new Flow-Matching mathematics;
+- full-field background-centered path interpretation added;
+- composition-error equality identified explicitly as an algebraic identity;
+- task statement narrowed to reconstruction from already available processed/interpreted constraints;
+- synthetic RMS information content distinguished from uncertain field-derived RMS products;
+- common evaluation protocol expanded;
+- baseline adaptations expanded;
+- qualitative examples labeled as performance-selected high-margin cases;
+- reviewer-facing method labels aligned;
+- observation-removal language changed from generic robustness/complementarity claims to sensitivity/dependence language;
+- internal project vocabulary removed from reviewer-facing prose.
+
+Pending factual gate:
+- final freeze of the detailed Table 3 intervention definitions for Uniform fusion, w/o prediction consistency, and w/o background context awaits the dedicated implementation fact audit. Do not infer missing details from variant names.

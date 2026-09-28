@@ -100,16 +100,16 @@ and the vector-field term is
 \end{equation}
 The evaluated residual network is a full-resolution FiLM-conditioned U-Net \citep{perez2018film} with 128 hidden channels and an identity codec on the $70\times70$ velocity grid.
 
-The prediction-relative formulation has a simple full-field interpretation. Define
+The prediction-relative formulation also has a simple full-field interpretation. Because the stop-gradient operator changes only the backward path, $\bar B$ and $\hat B$ have the same forward value. Defining
 \begin{equation}
-Y_t=\bar B+R_t.
+Y_t=\hat B+R_t
 \end{equation}
-Then
+therefore gives
 \begin{equation}
-Y_t=(1-t)(\bar B+\xi)+tV.
+Y_t=(1-t)(\hat B+\xi)+tV.
 \label{eq:background-centered-path}
 \end{equation}
-Thus, in full-field coordinates, the same standard linear Flow-Matching path transports a stochastic base centered on the predicted background toward $V$. BG-RFM therefore does not define a new Flow-Matching mathematics; it changes how the geophysical reconstruction problem is organized and conditioned.
+In full-field coordinates, prediction-relative residual Flow Matching can thus be viewed as standard linear transport from a stochastic base centered on the predicted background toward $V$. BG-RFM does not introduce a new mathematical class of Flow Matching; its contribution is the geophysical reconstruction organization and the shared predicted-background reference used across supervision, conditioning, and composition.
 
 The residual loss also includes the composed reconstruction and the low-pass content of the actual prediction-relative residual:
 \begin{align}
