@@ -1,0 +1,73 @@
+name: remote-sensing-final-package
+
+on:
+  pull_request:
+    paths:
+      - 'docs/paper/RemoteSensing/mdpi/**'
+      - '.github/workflows/remote-sensing-final-package.yml'
+  workflow_dispatch:
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile submission-placeholder manuscript
+        uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: docs/paper/RemoteSensing/mdpi
+          root_file: main.tex
+          latexmk_use_xelatex: false
+          args: -pdf -file-line-error -halt-on-error -interaction=nonstopmode
+
+      - name: Compile blind manuscript
+        uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: docs/paper/RemoteSensing/mdpi
+          root_file: main_blind.tex
+          latexmk_use_xelatex: false
+          args: -pdf -file-line-error -halt-on-error -interaction=nonstopmode
+
+      - name: Compile submission-placeholder supplement
+        uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: docs/paper/RemoteSensing/mdpi
+          root_file: supplement.tex
+          latexmk_use_xelatex: false
+          args: -pdf -file-line-error -halt-on-error -interaction=nonstopmode
+
+      - name: Compile blind supplement
+        uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: docs/paper/RemoteSensing/mdpi
+          root_file: supplement_blind.tex
+          latexmk_use_xelatex: false
+          args: -pdf -file-line-error -halt-on-error -interaction=nonstopmode
+
+      - name: Build source and blind-review packages
+        shell: bash
+        run: |
+          set -euxo pipefail
+          cd docs/paper/RemoteSensing/mdpi
+          cp main_blind.pdf BG-RFM_RemoteSensing_Blind_Manuscript.pdf
+          cp supplement_blind.pdf BG-RFM_RemoteSensing_Blind_Supplement.pdf
+          mkdir -p source-package
+          cp main.tex supplement.tex references.bib source-package/
+          cp -r Definitions figures source-package/
+          zip -qr BG-RFM_RemoteSensing_Source.zip source-package
+          zip -q BG-RFM_RemoteSensing_Blind_Review.zip             BG-RFM_RemoteSensing_Blind_Manuscript.pdf             BG-RFM_RemoteSensing_Blind_Supplement.pdf
+
+      - name: Upload final packaging artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: remote-sensing-final-package
+          path: |
+            docs/paper/RemoteSensing/mdpi/main.pdf
+            docs/paper/RemoteSensing/mdpi/supplement.pdf
+            docs/paper/RemoteSensing/mdpi/BG-RFM_RemoteSensing_Blind_Manuscript.pdf
+            docs/paper/RemoteSensing/mdpi/BG-RFM_RemoteSensing_Blind_Supplement.pdf
+            docs/paper/RemoteSensing/mdpi/BG-RFM_RemoteSensing_Source.zip
+            docs/paper/RemoteSensing/mdpi/BG-RFM_RemoteSensing_Blind_Review.zip
+            docs/paper/RemoteSensing/mdpi/main.log
+            docs/paper/RemoteSensing/mdpi/supplement.log
