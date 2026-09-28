@@ -164,7 +164,7 @@ Training-only multimodal alignment, role calibration, and separation terms encou
   cond/.style={box, fill=blue!5},
   bg/.style={box, fill=orange!12, very thick},
   res/.style={box, fill=green!7},
-  out/.style={box, fill=purple!7},
+  outputbox/.style={box, fill=purple!7},
   flow/.style={-Latex, thick},
   reuse/.style={-Latex, very thick, orange!80!black},
   train/.style={-Latex, dashed, thick, red!70!black}
@@ -177,8 +177,8 @@ Training-only multimodal alignment, role calibration, and separation terms encou
 \node[obs, left=13mm of bhat, minimum width=2.0cm] (v) {Target $V$\\training only};
 \node[res, below=11mm of cstr, minimum width=5.2cm] (fm) {Residual Flow Matching\\$[C_{\mathrm{str}};\psi_{\mathrm{bg}}(\hat B)]$};
 \node[res, below=11mm of bhat, minimum width=4.1cm] (rt) {Residual target\\$R_{\hat B}=V-\hat B$};
-\node[out, below=13mm of fm, minimum width=4.6cm] (rhat) {Residual estimate $\hat R$};
-\node[out, below=13mm of rt, xshift=33mm, minimum width=5.2cm] (final) {\textbf{Final velocity}\\$\hat V=\hat B+\hat R$};
+\node[outputbox, below=13mm of fm, minimum width=4.6cm] (rhat) {Residual estimate $\hat R$};
+\node[outputbox, below=13mm of rt, xshift=33mm, minimum width=5.2cm] (final) {\textbf{Final velocity}\\$\hat V=\hat B+\hat R$};
 
 \draw[flow] (obs) -- (enc);
 \draw[flow] (enc) -- (cbg);
