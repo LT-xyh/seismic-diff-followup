@@ -51,7 +51,7 @@ Training-only multimodal alignment, role calibration, and separation terms encou
 
 \subsection{Deterministic Background Prediction}
 
-A full-resolution U-Net predicts
+A full-resolution U-Net \citep{ronneberger2015unet} predicts
 \begin{equation}
 \hat B=f_{\mathrm{bg}}(C_{\mathrm{bg}})
 \end{equation}
@@ -111,7 +111,7 @@ The joint objective is
 \mathcal L=
 \mathcal L_R+\mathcal L_{\mathrm{bg}}+\lambda_C\mathcal L_C,
 \end{equation}
-where $\mathcal L_C$ trains the role-aware conditions, $\mathcal L_{\mathrm{bg}}$ trains deterministic background prediction, and $\mathcal L_R$ trains residual transport. The final configuration uses a 192-hidden-channel background U-Net and a 128-hidden-channel FiLM residual U-Net operating directly on the $70\times70$ velocity grid. The complete model has 10.6M trainable parameters.
+where $\mathcal L_C$ trains the role-aware conditions, $\mathcal L_{\mathrm{bg}}$ trains deterministic background prediction, and $\mathcal L_R$ trains residual transport. The final configuration uses a 192-hidden-channel background U-Net and a 128-hidden-channel FiLM \citep{perez2018film} residual U-Net operating directly on the $70\times70$ velocity grid. The complete model has 10.6M trainable parameters.
 
 At inference, the model receives only the observed modalities and masks, forms $(C_{\mathrm{bg}},C_{\mathrm{str}})$, predicts $\hat B$, integrates the learned residual vector field from the Gaussian base, and returns $\hat V=\hat B+\hat R$. The reported evaluation uses 50 Euler steps. Because this iterative solve requires repeated vector-field evaluations, parameter compactness is not equated with lower wall-clock latency.
 
