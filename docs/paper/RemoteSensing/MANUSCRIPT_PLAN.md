@@ -127,11 +127,11 @@ The caption should state which products are time-domain or depth-domain and that
 
 Use documented held-out selections, common color scales, target, two/three strongest references, and BG-RFM.
 
-### Figure 4 / Table 3 — Attribution evidence
+### Table 3 — Design analysis
 
-Use only if the retained historical evidence can be linked to a sufficiently clear checkpoint/config/evaluator contract.
+Reuse the completed historical controlled ablation table as architectural evidence. Missing modern run-manifest metadata is not a submission blocker when the scientific result itself is not known to be incorrect. Interpret the table as support for the combined design rather than complete causal isolation of every component.
 
-Do not retrain solely to complete a large attribution matrix before first submission.
+Do not retrain or reconstruct missing checkpoints for first submission.
 
 ## AAAI material disposition
 
@@ -152,11 +152,11 @@ Do not retrain solely to complete a large attribution matrix before first submis
 - full condition-learning objective;
 - training-only wavelet-anchor details;
 - extended reliability diagnostics;
-- PCA effective-rank analysis;
-- transport-energy diagnostic;
-- extended missing-modality tables;
-- theorem derivations if retained at all;
-- detailed baseline accounting.
+- full PCA/effective-rank procedure and per-subset table;
+- extended transport-energy derivation;
+- missing-modality table;
+- detailed baseline adaptation/accounting;
+- extended qualitative and failure-case panels.
 
 ### Delete from the journal main narrative
 

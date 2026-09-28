@@ -61,7 +61,9 @@ Administrative/format:
 - finalize acknowledgment and any journal-required generative-AI disclosure;
 - archive/tag the exact code revision used for submission;
 - run the dedicated final numerical consistency pass;
+- prepare the mandatory Remote Sensing cover letter after all authors confirm the required submission statements;
 - migrate the free-format LaTeX draft to the current MDPI Remote Sensing template at final packaging;
+- verify final template pagination against the journal's current Article guidance;
 - compile and visually inspect the final template package.
 
 ## Submission principle
