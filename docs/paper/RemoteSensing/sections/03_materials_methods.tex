@@ -1,89 +1,96 @@
 \section{Materials and Methods}
 
-\subsection{Problem Formulation and Observation Contract}
+\subsection{Task Definition and Synthetic Observation Contract}
 
-Let
+This study considers velocity-model reconstruction when four processed or interpreted constraints are already available:
 \[
-X=\{M,H,V_{\mathrm{rms}},W\}
+X=\{M,H,V_{\mathrm{rms}},W\},
 \]
-denote the available multimodal observations, where $M$ is the post-stack migrated image, $H$ is an interpreted-horizon map, $V_{\mathrm{rms}}$ is the RMS-velocity field, and $W$ is a sparse well-velocity map. The target is the depth-domain velocity model
+where $M$ is a post-stack migrated image, $H$ is an interpreted-horizon map, $V_{\mathrm{rms}}$ is RMS velocity, and $W$ is a sparse well-velocity map with an associated mask. The target is the depth-domain velocity model
 \[
 V\in\mathbb{R}^{1\times70\times70}.
 \]
-RMS velocity and the migrated image are represented on a $1000\times70$ time--lateral grid, whereas horizons, wells, and the target use the $70\times70$ depth grid. Only observed quantities and their masks cross the public inference boundary; target-derived decomposition quantities are restricted to training supervision or post-hoc diagnostics.
+The task is therefore not raw-shot end-to-end inversion. RMS velocity and the migrated image are represented on a $1000\times70$ time--lateral grid, while horizons, wells, and the target use the $70\times70$ depth grid.
 
 \input{tables/task_definition}
 
-The benchmark is constructed from FlatVel-A/B, CurveVel-A/B, FlatFault-A/B, and CurveFault-A/B in OpenFWI \citep{deng2022openfwi}. For each reference velocity model, processed/interpreted observations are generated offline to emulate a post-stack model-building workflow. This defines a controlled multimodal benchmark and should not be interpreted as independent field acquisition of every constraint.
+The benchmark is constructed from FlatVel-A/B, CurveVel-A/B, FlatFault-A/B, and CurveFault-A/B in OpenFWI \citep{deng2022openfwi}. The processed/interpreted constraints are generated offline from each synthetic reference model and its associated seismic data. This constitutes a \emph{controlled synthetic observation contract}. It differs from a field setting in which RMS velocity, horizons, migration images, and wells have heterogeneous and uncertain estimation errors.
 
 \paragraph{RMS velocity.}
 For each lateral position, depth samples are mapped to two-way time through
 \begin{equation}
 t(z,x)=2\int_0^z \frac{1}{V(z',x)}\,\mathrm{d}z',
 \end{equation}
-and RMS velocity is computed after interpolation to a uniform time grid:
+and the RMS field is computed after interpolation to a uniform time grid:
 \begin{equation}
 V_{\mathrm{rms}}^2(t,x)=\frac{1}{t}\int_0^t v^2(\tau,x)\,\mathrm{d}\tau.
 \end{equation}
+Because this quantity is derived directly from the known synthetic target, it can encode substantially more columnwise velocity information than an RMS product estimated from noisy, band-limited field observations. The benchmark therefore measures reconstruction under informative processed constraints, not performance under realistic RMS-estimation uncertainty.
 
 \paragraph{Post-stack migrated image.}
-OpenFWI shot records are processed by common-midpoint grouping, normal-moveout correction using the associated RMS velocity, stacking, and post-stack time migration. The resulting section provides dense structural information on the time--lateral grid.
+OpenFWI shot records are processed by common-midpoint grouping, normal-moveout correction using the associated RMS field, stacking, and post-stack time migration. The resulting image provides a dense structural observation on the time--lateral grid.
 
 \paragraph{Horizons and wells.}
-The benchmark horizon map is constructed from strong vertical velocity gradients using a fixed quantile rule. Sparse wells retain selected velocity columns together with a binary observation mask. Well locations vary during training and are deterministic for validation and testing under the fixed well seed.
+The benchmark horizon map is generated from strong vertical velocity gradients using a fixed quantile rule. Sparse wells retain zero to three selected velocity columns together with a binary mask. Validation and test wells are deterministic under well seed 1234.
 
 \subsection{Role-Aware Multi-Source Conditioning}
 
-The modalities differ in domain, density, and semantic content, but the network does not impose a hard modality partition. Each modality is encoded into background-oriented and structure-oriented representations,
+The modalities differ in sampling domain, density, and information content, but BG-RFM does not impose a one-modality/one-role partition. Each modality is encoded into background-oriented and structure-oriented representations,
 \begin{equation}
 \mathcal E_m(x_m)=\left(Z_m^{\mathrm{bg}},Z_m^{\mathrm{str}},r_m\right),
 \end{equation}
-where $r_m$ contains learned role-specific reliability scores. Availability, externally supplied quality, and predicted reliability define normalized fusion weights. The two fused interfaces are
+where $r_m$ contains learned role-specific reliability scores. Availability, externally supplied quality, and predicted reliability define normalized fusion weights. The two role interfaces are
 \begin{equation}
-C_k=\mathcal G_k\left(\sum_{m\in\Omega} w_m^k Z_m^k\right),
+C_k=\mathcal G_k\left(\sum_{m\in\Omega}w_m^k Z_m^k\right),
 \qquad k\in\{\mathrm{bg},\mathrm{str}\},
 \end{equation}
-with $\Omega$ the observed modality set. In the reported configuration, the background adapter is identity and the structural adapter is a lightweight spatial mapping.
-
-Training-only multimodal alignment, role calibration, and separation terms encourage the two interfaces to preserve complementary information. They do not constitute inference inputs and are not interpreted as a proof that the modalities are physically separable. Full definitions of the auxiliary condition objective are provided in Supplementary Section~S1.
+with $\Omega$ the observed modality set. The final model uses 16-channel modality/role features and a 32-channel structural condition adapter. Training-only alignment, anchor-calibration, separation, and reliability terms are specified in Supplementary Section~S1; they are not inference inputs.
 
 \input{figures/figure1_schematic}
 
 \subsection{Deterministic Background Prediction}
 
-A full-resolution U-Net \citep{ronneberger2015unet} predicts
+The background branch is a full-resolution U-Net \citep{ronneberger2015unet} with 192 hidden channels:
 \begin{equation}
-\hat B=f_{\mathrm{bg}}(C_{\mathrm{bg}})
+\hat B=f_{\mathrm{bg}}(C_{\mathrm{bg}}).
 \end{equation}
-on the velocity grid. A fixed low-pass operator $P_L$ defines the supervision target:
+The supervision target uses the exact low-pass operator implemented throughout the study,
+\begin{equation}
+P_L(X)=\operatorname{AvgPool}_{5\times5}(X;\,\text{stride}=1,\text{padding}=2),
+\end{equation}
+with the framework's default inclusion of padded values in the average. The complementary operator is $P_H=I-P_L$. The active background objective is
 \begin{equation}
 \mathcal L_{\mathrm{bg}}
 =
 \|\hat B-P_L(V)\|_1
-+\lambda_{\mathrm{bg},2}\|\hat B-P_L(V)\|_2^2.
++0.5\,\|\hat B-P_L(V)\|_2^2.
+\label{eq:bg-loss-final}
 \end{equation}
-The branch is not intended to produce the final model alone. Its role is to provide a deterministic background estimate and a concrete reference for the remaining correction.
+No background high-frequency penalty, multiscale term, or learned quality gate is active in the evaluated configuration.
 
-\subsection{Prediction-Consistent Residual Flow Matching}
+\subsection{Prediction-Relative Flow Matching}
 
-The residual target is defined relative to the actual predicted background,
+The residual target is defined relative to the background that is actually available at inference:
 \begin{equation}
-R_{\hat B}=V-\hat B,
+R_{\hat B}=V-\hat B.
 \label{eq:rs_pred_residual}
 \end{equation}
-rather than an oracle background unavailable at inference. During residual optimization, a stop-gradient copy $\bar B=\mathrm{sg}[\hat B]$ prevents the residual loss from redefining the exclusive optimization responsibility of the background branch.
-
-The residual vector field receives the structural condition and an embedding of the same predicted background,
+During residual optimization, the forward value of the prediction is preserved but detached from the residual gradient path,
+\begin{equation}
+\bar B=\operatorname{sg}[\hat B].
+\end{equation}
+The residual vector field receives the structural condition and a learned embedding of this detached background,
 \begin{equation}
 c=[C_{\mathrm{str}};\psi_{\mathrm{bg}}(\bar B)].
 \end{equation}
-For $t\sim\mathcal U(0,1)$ and $\xi\sim\mathcal N(0,I)$,
+
+BG-RFM uses the standard linear Flow-Matching path. For $t\sim\mathcal U(0,1)$ and $\xi\sim\mathcal N(0,I)$,
 \begin{equation}
-R_t=(1-t)\xi+tR_{\hat B},
+R_t=(1-t)\xi+t(V-\bar B),
 \qquad
-u_t=R_{\hat B}-\xi,
+u_t=(V-\bar B)-\xi ,
 \end{equation}
-and the Flow Matching objective is
+and the vector-field term is
 \begin{equation}
 \mathcal L_{\mathrm{FM}}
 =
@@ -91,34 +98,68 @@ and the Flow Matching objective is
 \|v_\theta(R_t,t,c)-u_t\|_2^2
 \right].
 \end{equation}
-Reconstruction-oriented endpoint terms additionally align the sampled residual with the composed velocity estimate; their full form is given in Supplementary Section~S1.
+The evaluated residual network is a full-resolution FiLM-conditioned U-Net \citep{perez2018film} with 128 hidden channels and an identity codec on the $70\times70$ velocity grid.
 
-The defining consistency property follows from
+The prediction-relative formulation has a simple full-field interpretation. Define
+\begin{equation}
+Y_t=\bar B+R_t.
+\end{equation}
+Then
+\begin{equation}
+Y_t=(1-t)(\bar B+\xi)+tV.
+\label{eq:background-centered-path}
+\end{equation}
+Thus, in full-field coordinates, the same standard linear Flow-Matching path transports a stochastic base centered on the predicted background toward $V$. BG-RFM therefore does not define a new Flow-Matching mathematics; it changes how the geophysical reconstruction problem is organized and conditioned.
+
+The residual loss also includes the composed reconstruction and the low-pass content of the actual prediction-relative residual:
+\begin{align}
+\widetilde R
+&=R_t+(1-t)v_\theta(R_t,t,c),\\
+\mathcal L_R
+&=
+\mathcal L_{\mathrm{FM}}
++\|\bar B+\widetilde R-V\|_1
++0.2\,\|P_L(\widetilde R)-P_L(V-\bar B)\|_1.
+\label{eq:residual-loss-final}
+\end{align}
+The residual branch does not back-propagate through $\bar B$; background parameters receive their direct background supervision instead.
+
+\subsection{Prediction Consistency and Joint Objective}
+
+At inference the final estimate is
 \begin{equation}
 \hat V=\hat B+\hat R.
 \end{equation}
-Combining this with Eq.~\eqref{eq:rs_pred_residual} gives
+Together with Eq.~\eqref{eq:rs_pred_residual},
 \begin{equation}
 \hat V-V=\hat R-R_{\hat B}.
 \label{eq:rs_composition_identity}
 \end{equation}
-Thus final reconstruction error is measured against the residual target defined by the same background used at inference. This identity motivates reusing $\hat B$ for residual supervision, vector-field conditioning, and composition without requiring a universal conditional-entropy argument.
+Equation~\eqref{eq:rs_composition_identity} is an \emph{algebraic identity}. It states the error accounting induced by using the same background reference; it does not establish that the residual target is intrinsically easier to learn. Whether prediction-relative supervision and background context are useful is tested empirically by the controlled interventions in Table~\ref{tab:design-ablation}.
 
-\subsection{Joint Training and Inference}
-
-The joint objective is
+Joint optimization uses
 \begin{equation}
-\mathcal L=
-\mathcal L_R+\mathcal L_{\mathrm{bg}}+\lambda_C\mathcal L_C,
+\mathcal L=\mathcal L_R+\mathcal L_{\mathrm{bg}}+0.01\,\mathcal L_C ,
 \end{equation}
-where $\mathcal L_C$ trains the role-aware conditions, $\mathcal L_{\mathrm{bg}}$ trains deterministic background prediction, and $\mathcal L_R$ trains residual transport. The final configuration uses a 192-hidden-channel background U-Net and a 128-hidden-channel FiLM \citep{perez2018film} residual U-Net operating directly on the $70\times70$ velocity grid. The complete model has 10.6M trainable parameters.
+where $\mathcal L_C$ is the role-aware condition objective. In the final configuration the two subset-Symile role terms have unit weight, anchor calibration has weight 0.5, and the reliability and two orthogonality regularizers each have weight 0.05; modality dropout is disabled. Supplementary Section~S1 gives the complete definitions.
 
-At inference, the model receives only the observed modalities and masks, forms $(C_{\mathrm{bg}},C_{\mathrm{str}})$, predicts $\hat B$, integrates the learned residual vector field from the Gaussian base, and returns $\hat V=\hat B+\hat R$. The reported evaluation uses 50 Euler steps. Because this iterative solve requires repeated vector-field evaluations, parameter compactness is not equated with lower wall-clock latency.
+The model is jointly optimized for 100 epochs with batch size 64 on four devices using DDP and bfloat16 mixed precision. AdamW is used without a learning-rate scheduler. Parameter-group learning rates are $10^{-6}$ for the encoder backbone, $3\times10^{-6}$ for encoder heads, the contrastive module, and condition adapters, $10^{-4}$ for the background branch, and $5\times10^{-5}$ for the residual branch. The joint run is initialized from previously trained condition, background, and residual stage checkpoints and then optimized under the joint objective. The complete evaluated model contains 10.6M trainable parameters.
 
-\subsection{Experimental Protocol}
+\subsection{Inference and Evaluation Protocol}
 
-The multimodal corpus contains 336,000 aligned records across eight OpenFWI subsets. A deterministic global split of 0.7/0.2/0.1 with split seed 42 yields 33,600 held-out records. Test-time wells are deterministic under well seed 1234. Record identity is fixed by \texttt{dataset\_id}, \texttt{dataset\_name}, and \texttt{source\_sample\_index}.
+At inference, only the observed constraints and their masks are supplied. BG-RFM predicts $\hat B$, samples one residual trajectory, and integrates the learned vector field for 50 Euler steps before composing $\hat V=\hat B+\hat R$. For the common comparison, stochastic BG-RFM predictions use base seed 2027; the per-batch seed is deterministically derived by hashing the ordered held-out record identities in that batch. The deterministic reference models require no sampling seed. No ensemble averaging over multiple stochastic trajectories is used.
 
-The authoritative matched-input comparison re-evaluates retained checkpoints on the same held-out membership, normalization, and evaluator. The comparison contains adapted InversionNet, adapted VelocityGAN, a supervised multimodal adaptation of UPFWI, adapted Latent U-Net, and \method. These are controlled estimator adaptations and are not presented as reproductions of the original source-native protocols.
+The corpus contains 336,000 aligned records. A deterministic global 0.7/0.2/0.1 split with seed 42 yields 33,600 test records, and the evaluator traverses this membership with \texttt{shuffle=False}. The test manifest was verified to equal the reconstructed test split with zero train/validation, train/test, or validation/test overlap.
 
-The primary metrics are MAE, RMSE, and SSIM \citep{wang2004ssim}. Parameter count is reported as a supporting measure of model compactness. Frequency-decomposed errors are retained only as secondary diagnostics; they are omitted from the main common-protocol table to keep the first-submission comparison focused and to avoid relying on the known unresolved historical InversionNet low-pass value.
+Velocity quantities in the common evaluator use the normalized OpenFWI target coordinate, corresponding to the physical interval 1500--4500~m/s mapped to $[-1,1]$. Normalized data loading clamps continuous inputs/targets to their declared profile range; horizon and well-mask channels remain discrete. The evaluator applies no additional post-hoc clipping to model predictions.
+
+Metrics are computed per sample and then averaged over the 33,600 records. If $e_i=\hat V_i-V_i$ and $d=HW$,
+\begin{equation}
+\mathrm{MAE}_i=\frac{\|e_i\|_1}{d},
+\qquad
+\mathrm{RMSE}_i=\sqrt{\frac{\|e_i\|_2^2}{d}}.
+\end{equation}
+The reported RMSE is therefore the mean of per-sample RMSE values rather than the square root of a pooled test-set MSE. SSIM is computed globally over each flattened $70\times70$ image using population variance/covariance, $C_{1,i}=(0.01L_i)^2$, $C_{2,i}=(0.03L_i)^2$, and
+$L_i=\max(\max V_i-\min V_i,1)$; the resulting samplewise SSIM values are then averaged.
+
+The matched-input references receive the same five observation channels: migrated image, RMS velocity, horizon, masked well value, and well mask. InversionNet, VelocityGAN, and the UPFWI-derived backbone use final checkpoints from fixed 100-epoch training schedules; Latent U-Net uses its minimum-validation-loss checkpoint; BG-RFM uses the final checkpoint of its fixed 100-epoch joint schedule. Test metrics are not used for checkpoint selection. Details of each adaptation and parameter-count convention are given in Supplementary Section~S5.

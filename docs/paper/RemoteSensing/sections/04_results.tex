@@ -2,37 +2,45 @@
 
 \subsection{Overall Reconstruction Performance}
 
-Table~\ref{tab:rs-main} reports the authoritative matched-input comparison on the same 33,600 held-out records, target normalization, and evaluator. The table is interpreted as a common-protocol reconstruction comparison rather than as an overall ranking across incompatible source-native methods.
+Table~\ref{tab:rs-main} reports the common-protocol comparison on the same 33,600 held-out records and with the same evaluator. It is a controlled comparison among multimodal estimators rather than a ranking of the original source-native methods.
 
 \input{tables/main_quantitative}
 
-BG-RFM obtains an RMSE of 0.02695 and an SSIM of 0.99165 with 10.6M trainable parameters. Relative to the InversionNet adaptation, BG-RFM has a lower RMSE (0.02695 versus 0.02730) and a slightly higher SSIM (0.99165 versus 0.99118), whereas InversionNet has the lower MAE (0.01194 versus 0.01503). A similar trade-off is observed against the supervised multimodal UPFWI adaptation: BG-RFM has lower RMSE and higher SSIM, while UPFWI has lower MAE. Compared with VelocityGAN, BG-RFM yields lower MAE and RMSE and higher SSIM. Latent U-Net is the strongest reconstruction model in this comparison, achieving the lowest MAE and RMSE and the highest SSIM.
+BG-RFM obtains an RMSE of 0.02695 and an SSIM of 0.99165 with 10.6M trainable parameters. Its RMSE is numerically lower than that of the InversionNet adaptation (0.02695 versus 0.02730), and the corresponding SSIM values are 0.99165 and 0.99118; InversionNet has the lower MAE (0.01194 versus 0.01503). The differences between these two methods are reported descriptively and are not treated as evidence of statistical superiority. A similar metric trade-off occurs relative to the UPFWI-derived supervised multimodal backbone: BG-RFM has lower RMSE and higher SSIM, while the UPFWI-derived model has lower MAE. BG-RFM improves all three metrics relative to VelocityGAN. Latent U-Net obtains the lowest MAE and RMSE and the highest SSIM in this comparison.
 
-Across the listed matched-input references, BG-RFM uses the fewest trainable parameters. The result therefore does not support an overall-accuracy dominance claim; rather, it shows that the prediction-consistent generative formulation reaches strong reconstruction quality with a substantially smaller parameter count than the compared adapted estimators.
+BG-RFM has the smallest reported parameter count among the listed models. This supports a parameter-compact formulation, not a claim of lower inference latency: its residual sampler requires repeated vector-field evaluations.
 
-\subsection{Structural and Geological Reconstruction Characteristics}
+\subsection{High-Margin Qualitative Examples}
 
-Aggregate errors do not fully describe whether faults, curved interfaces, and layer boundaries are positioned consistently. Figure~\ref{fig:qualitative} therefore reuses the fixed-rule held-out qualitative panel from the completed experimental package. The displayed cases are four representative held-out OpenFWI families selected by the retained fixed-rule protocol and use common display conventions, allowing visual comparison of structural continuity, interface position, and localized error.
+Aggregate errors do not show where structural differences occur. Figure~\ref{fig:qualitative} therefore provides two deliberately performance-selected examples from complex OpenFWI subsets. They are \emph{not} intended as typical or representative cases. The selection rule is fixed and uses no visual inspection: within each subset, records are ranked by the formal SSIM margin
+\begin{equation}
+\Delta_{\mathrm{SSIM}}
+=
+\mathrm{SSIM}_{\mathrm{BG\text{-}RFM}}
+-
+\max_{m\in\mathcal B}\mathrm{SSIM}_m ,
+\end{equation}
+where the selection pool $\mathcal B$ contains the adapted InversionNet, VelocityGAN, UPFWI-derived supervised backbone, Auto-Linear, and Latent U-Net models. The main figure displays only the five methods used in Table~\ref{tab:rs-main}; Auto-Linear participated in the original selection pool but is not shown in the main comparison.
 
 \input{figures/figure3_qualitative}
 
-The qualitative examples are consistent with the quantitative picture in Table~\ref{tab:rs-main}: BG-RFM reconstructs coherent large-scale velocity organization while retaining fine structural corrections, but it is not uniformly the closest prediction on every sample or subset. This is expected from the method's design claim. The deterministic branch supplies a stable background reference, whereas the Flow Matching branch is responsible for the remaining correction. Supplementary Section~S6 retains the broader representative, advantage, and failure-case panels so that the visual evidence is not restricted to favorable examples.
+The examples illustrate cases in which the background-guided formulation preserves coherent large-scale velocity organization together with structural corrections. Because the cases were selected by a performance margin, they cannot be used to estimate typical visual performance. Supplementary Section~S6 therefore also reports the broader per-subset high-margin panel and explicit failure cases.
 
-\subsection{Design Analysis}
+\subsection{Controlled Design Analysis}
 
-The historical controlled ablation study is used to examine whether the proposed reconstruction organization is supported by the completed experimental package. Table~\ref{tab:design-ablation} compares a single fused full-field Flow Matching model, a role-aware full-field formulation, uniform versus reliability-aware fusion, removal of prediction consistency, removal of background context, and the complete BG-RFM configuration. These values are not mixed into the new RS-E01-Lite baseline table; they answer a different design question under the original controlled ablation protocol.
+Table~\ref{tab:design-ablation} reports a controlled design study in which the observation contract, training budget, and held-out protocol are held fixed while reconstruction organization is changed. The table makes the prediction target, background/residual reference, conditioning, and composition explicit for each intervention.
 
 \input{tables/design_ablation}
 
-Within this ablation study, moving from Concat-FM to role-aware full-field Flow Matching improves all three reported reconstruction metrics, and introducing the background-guided residual formulation further improves them. Removing prediction consistency increases MAE from 0.0150 to 0.0190 and RMSE from 0.0270 to 0.0340, while removing the background context increases RMSE to 0.0410 and decreases SSIM to 0.9820. Uniform fusion also underperforms the complete configuration. The comparisons support the combined usefulness of role-aware routing, the prediction-relative residual reference, background-conditioned transport, and adaptive fusion. They are interpreted as architectural evidence rather than as complete causal isolation of every component.
+Within this study, the single-condition full-field Flow-Matching model has MAE/RMSE/SSIM of 0.0225/0.0340/0.9865, while the role-aware full-field variant reaches 0.0205/0.0320/0.9880. In the background-guided formulation, replacing reliability-aware fusion with uniform fusion yields 0.0163/0.0290/0.9898. More directly related to prediction consistency, changing residual supervision from $V-\hat B$ to $V-P_L(V)$ while retaining predicted-background context and composition increases MAE from 0.0150 to 0.0190 and RMSE from 0.0270 to 0.0340. Removing the predicted-background context while retaining prediction-relative supervision increases RMSE to 0.0410 and lowers SSIM to 0.9820. These interventions provide the empirical evidence for the usefulness of the shared predicted-background reference; the algebraic identity in Eq.~\eqref{eq:rs_composition_identity} alone does not establish a learnability advantage.
 
 \subsection{Diagnostic Analysis}
 
-The retained diagnostics provide two complementary views of why the formulation is reasonable. First, the background/structure decomposition exhibits a strong difference in participation-ratio effective rank across the eight training subsets. The median effective rank is 4.95 for the low-pass background and 54.03 for the structural complement, with the structural component higher in every subset. This is an empirical characterization of the decomposition, not evidence that the conditional entropy of the residual is universally lower.
+Two diagnostics further characterize the formulation. First, the low-pass background and its structural complement have different participation-ratio effective ranks across the eight training subsets. The median effective ranks are 4.95 for the background and 54.03 for the structural complement, with the structural component higher in every subset. This is a descriptive property of the chosen decomposition, not a proof that the conditional entropy of the residual is lower.
 
-Second, the learned condition interfaces and residual transport can be inspected after training. The historical condition analysis reports matched--deranged anchor-similarity margins of 0.46 for the background role and 0.35 for the structural role. For residual transport, every one of the 33,600 held-out records satisfies $q_T<1$ under the normalized straight-path diagnostic, with mean $q_T=0.772$ and bootstrap 95\% confidence interval $[0.771,0.773]$. This corresponds to a lower normalized straight-path target energy after subtracting the predicted background in that diagnostic coordinate system. It should be read as a post-hoc characterization of the routed target, not as a causal explanation of reconstruction accuracy.
+Second, the learned condition interfaces and residual transport can be inspected after training. The condition analysis gives matched--deranged anchor-similarity margins of 0.46 for the background role and 0.35 for the structural role. For the straight-path transport diagnostic, every one of the 33,600 held-out records satisfies $q_T<1$, with mean $q_T=0.772$ and bootstrap 95\% confidence interval $[0.771,0.773]$. In the stated normalized coordinate system this means that the background-centered path has lower samplewise straight-path target energy than the zero-centered full-field path. It is a diagnostic observation, not a causal explanation of reconstruction accuracy.
 
 \input{figures/figure2_data_characterization}
 \input{figures/figure4_diagnostics}
 
-Additional condition-routing details, the full effective-rank table, missing-modality stress tests, and extended qualitative panels are provided in the Supplementary Material.
+The Supplementary Material provides the full effective-rank table, extended condition diagnostics, observation-removal sensitivity results, adaptation details, and additional qualitative cases.

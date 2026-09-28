@@ -1,17 +1,73 @@
-\begin{table}[t]
+\begin{table*}[t]
 \centering
-\caption{Historical controlled design analysis retained from the AAAI experimental package. All variants used the same held-out protocol and training budget within that ablation study. The table is used as architectural evidence rather than as a new common-protocol baseline ranking.}
+\scriptsize
+\caption{Controlled design study under a fixed multimodal observation contract and training budget. The definitions state what is changed in each intervention; the metrics belong to this controlled study and are not the common-protocol baseline values in Table~\ref{tab:rs-main}.}
 \label{tab:design-ablation}
-\begin{tabular}{lrrr}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{p{2.5cm}p{2.7cm}p{2.3cm}p{2.5cm}p{3.4cm}p{2.7cm}p{4.5cm}rrr}
 \toprule
-Variant & MAE $\downarrow$ & RMSE $\downarrow$ & SSIM $\uparrow$ \\
+Variant &
+Prediction target &
+Background reference &
+Residual reference &
+Conditioning &
+Composition &
+Active/disabled component &
+MAE $\downarrow$ & RMSE $\downarrow$ & SSIM $\uparrow$ \\
 \midrule
-Concat-FM & 0.0225 & 0.0340 & 0.9865 \\
-Role-aware full-field FM & 0.0205 & 0.0320 & 0.9880 \\
-Uniform fusion & 0.0163 & 0.0290 & 0.9898 \\
-w/o prediction consistency & 0.0190 & 0.0340 & 0.9875 \\
-w/o background context & 0.0230 & 0.0410 & 0.9820 \\
-BG-RFM & 0.0150 & 0.0270 & 0.9913 \\
+Concat-FM &
+Full field $V$ by FM &
+None (zero background) &
+None; full-field transport &
+Single projected mixed feature $F_{\mathrm{base}}$ &
+Direct FM endpoint $\hat V$ &
+Single fused condition; no explicit background prediction or residual decomposition &
+0.0225 & 0.0340 & 0.9865 \\
+
+Role-aware full-field FM &
+Full field $V$ by FM &
+None (zero background) &
+None; full-field transport &
+Combined role conditions $C_{\mathrm{bg}}+C_{\mathrm{str}}$ &
+Direct FM endpoint $\hat V$ &
+Role-aware conditions active; explicit background prediction and residual decomposition disabled &
+0.0205 & 0.0320 & 0.9880 \\
+
+Uniform fusion &
+$P_L(V)$ for background; prediction-relative correction for residual branch &
+Predicted $\hat B$ &
+$V-\hat B$ &
+$C_{\mathrm{str}}$ plus predicted-background context &
+$\hat V=\hat B+\hat R$ &
+Reliability-aware fusion replaced by equal weighting over available modalities &
+0.0163 & 0.0290 & 0.9898 \\
+
+w/o prediction consistency &
+$P_L(V)$ for background; oracle-low-pass correction for residual supervision &
+Predicted $\hat B$ remains the inference background &
+$V-P_L(V)$ during residual supervision &
+$C_{\mathrm{str}}$ plus predicted-background context &
+$\hat V=\hat B+\hat R$ &
+Residual supervision no longer uses the same background reference as conditioning/composition &
+0.0190 & 0.0340 & 0.9875 \\
+
+w/o background context &
+$P_L(V)$ for background; prediction-relative correction for residual branch &
+Predicted $\hat B$ &
+$V-\hat B$ &
+$C_{\mathrm{str}}$ only; predicted-background context disabled &
+$\hat V=\hat B+\hat R$ &
+Background embedding removed from the residual vector field &
+0.0230 & 0.0410 & 0.9820 \\
+
+BG-RFM &
+$P_L(V)$ for background; prediction-relative correction for residual branch &
+Predicted $\hat B$ &
+$V-\hat B$ &
+$C_{\mathrm{str}}$ plus predicted-background context &
+$\hat V=\hat B+\hat R$ &
+Role-aware fusion, prediction-relative supervision, background context, and shared-reference composition active &
+0.0150 & 0.0270 & 0.9913 \\
 \bottomrule
-\end{tabular}
-\end{table}
+\end{tabular}}
+\end{table*}

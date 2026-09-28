@@ -4,19 +4,20 @@
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs}
 \usepackage{graphicx}
-\usepackage[numbers,sort&compress]{natbib}
 \usepackage{hyperref}
 
 \title{Supplementary Material: Background-Guided Residual Flow Matching for Multi-Constraint Seismic Velocity Model Building}
-\author{[Same author list as main manuscript]}
+\author{Anonymous Authors}
 \date{}
 
 \begin{document}
 \maketitle
 
-\section{S1. Extended Condition-Learning and Residual Objectives}
+\section{S1. Complete Objective and Gradient Routing}
 
-Let $a_{i,m}\in\{0,1\}$ denote modality availability, $q_{i,m}\in[0,1]$ externally supplied quality, and $r_{i,m}^{k}$ learned reliability for role $k\in\{\mathrm{bg},\mathrm{str}\}$. The role-specific fusion weights are
+\subsection{Role-Aware Condition Objective}
+
+For sample $i$, modality $m$, and role $k\in\{\mathrm{bg},\mathrm{str}\}$, let $a_{i,m}$ denote availability, $q_{i,m}$ externally supplied quality, and $r_{i,m}^k$ learned reliability. The normalized role weight is
 \begin{equation}
 \widetilde w_{i,m}^{k}=a_{i,m}q_{i,m}r_{i,m}^{k},
 \qquad
@@ -24,43 +25,62 @@ w_{i,m}^{k}=
 \frac{\widetilde w_{i,m}^{k}}
 {\max\left(\sum_{m'}\widetilde w_{i,m'}^{k},10^{-6}\right)}.
 \end{equation}
-Unavailable modalities therefore receive zero weight, while the weights over observed modalities remain normalized.
+The evaluated configuration uses background and structural subset-Symile terms with unit weight, training-only anchor calibration with weight 0.5, a reliability-prior term with weight 0.05, and two role/separation orthogonality terms with weight 0.05 each. One-level Haar anchors use edge boundary handling, nearest-neighbor resizing, and $\ell_2$ fusion of detail bands. Modality dropout is disabled. These target-derived anchors affect training only.
 
-Training-only Haar anchors calibrate the background and structural role spaces. Subset-aware multimodal alignment, symmetric anchor calibration, cross-role separation, and reliability regularization form the condition objective
+\subsection{Background and Residual Objectives}
+
+The shared filter is a $5\times5$ stride-one average pool with padding 2; the implementation uses the framework default that includes padded values in the averaging denominator. The high-pass complement is $P_H=I-P_L$.
+
+The direct background objective is
 \begin{equation}
-\mathcal L_C=
-\mathcal L_{\mathrm{subsym}}^{\mathrm{bg}}
-+\mathcal L_{\mathrm{subsym}}^{\mathrm{str}}
-+\lambda_A\mathcal L_A
-+\lambda_{\mathrm{bg,str}}\mathcal L_{\mathrm{bg,str}}^{\perp}
-+\lambda_{\mathrm{aux}}\mathcal L_{\mathrm{aux}}^{\perp}
-+\lambda_Q\mathcal L_{\mathrm{rel}}.
+\mathcal L_{\mathrm{bg}}
+=
+\|\hat B-P_L(V)\|_1
++0.5\,\|\hat B-P_L(V)\|_2^2.
 \end{equation}
-These target-derived anchors are used only during training and never cross the observed-only inference boundary.
+Background high-frequency, multiscale, low-residual, and quality-gate penalties have zero weight in the evaluated configuration.
 
-For the residual branch, the endpoint reconstruction objective supplements Flow Matching:
+For the residual branch, the forward value $\bar B=\operatorname{sg}[\hat B]$ is detached before it is used to construct the context and target. With identity codec,
 \begin{align}
-\widetilde R
-&=R_t+(1-t)v_\theta(R_t,t,c),\\
-\mathcal L_R
-&=\mathcal L_{\mathrm{FM}}
-+\lambda_{\mathrm{rec}}\|\bar B+\widetilde R-V\|_1
-+\lambda_L\|P_L(\widetilde R)-P_L(R_{\hat B})\|_1.
+R_{\bar B}&=V-\bar B,\\
+R_t&=(1-t)\xi+tR_{\bar B},\\
+\widetilde R&=R_t+(1-t)v_\theta(R_t,t,[C_{\mathrm{str}};\psi_{\mathrm{bg}}(\bar B)]).
 \end{align}
-The low-pass term matches the actual prediction-relative residual target rather than forcing the residual to be purely high frequency.
+The active residual objective is
+\begin{equation}
+\mathcal L_R
+=
+\mathcal L_{\mathrm{FM}}
++\|\bar B+\widetilde R-V\|_1
++0.2\,\|P_L(\widetilde R)-P_L(V-\bar B)\|_1 .
+\end{equation}
+The quality/rho term has zero weight. The complete joint objective is
+\begin{equation}
+\mathcal L
+=
+\mathcal L_R+\mathcal L_{\mathrm{bg}}+0.01\,\mathcal L_C .
+\end{equation}
+
+The detach operation is applied before the background is encoded for residual context, before the residual target is formed, and before the residual reconstruction terms are evaluated. Consequently, residual-loss gradients do not update the background branch through $\hat B$. The background branch receives its direct supervision through $\mathcal L_{\mathrm{bg}}$; shared condition-encoder parameters remain jointly optimized through their active objectives.
+
+\subsection{Architecture and Optimization}
+
+The condition encoder uses 16-channel role features and 128-dimensional contrastive projections. The structural adapter outputs 32 channels on the $70\times70$ target grid. The deterministic background U-Net has 192 hidden channels. The residual model uses an identity codec, one velocity channel on a $70\times70$ grid, and a FiLM-conditioned U-Net with 128 hidden channels. Its structural condition is concatenated with an embedding of the predicted background. The training-time Flow-Matching discretization parameter is 1000 timesteps; inference integrates 50 Euler steps.
+
+Joint optimization runs for 100 epochs with batch size 64 on four devices using DDP and bfloat16 mixed precision. AdamW is used with no scheduler and zero configured weight decay. Learning rates are $10^{-6}$ for encoder-backbone parameters, $3\times10^{-6}$ for encoder heads, contrastive parameters, and condition adapters, $10^{-4}$ for the background estimator, and $5\times10^{-5}$ for the residual vector field. The joint run is initialized from separately trained condition, background, and residual stage checkpoints and then optimized under the joint loss.
 
 \section{S2. Effective-Rank Characterization}
 
-For a decomposition $V=B+S$, with $B=P_L(V)$ and $S=V-B$, the participation-ratio effective rank is
+For the descriptive decomposition $V=B+S$, with $B=P_L(V)$ and $S=V-B$, participation-ratio effective rank is
 \begin{equation}
 r_{\mathrm{eff}}=
 \frac{\left(\sum_j\lambda_j\right)^2}{\sum_j\lambda_j^2},
 \end{equation}
-where $\{\lambda_j\}$ are nonzero covariance eigenvalues. The analysis uses 1,000 fixed training records per OpenFWI subset. No learned dimensionality reducer or checkpoint enters the calculation.
+where $\{\lambda_j\}$ are nonzero covariance eigenvalues. The analysis uses 1,000 fixed training records per OpenFWI subset and no learned dimensionality reducer.
 
 \begin{table}[t]
 \centering
-\caption{Participation-ratio effective rank of the background and structural complement.}
+\caption{Participation-ratio effective rank of the chosen low-pass background and structural complement.}
 \begin{tabular}{lrr}
 \toprule
 Subset & Background $B$ & Structure $S$ \\
@@ -79,15 +99,15 @@ Median & 4.95 & 54.03 \\
 \end{tabular}
 \end{table}
 
-The structural complement has higher effective rank in every subset. In the journal manuscript this is treated as a data-level characterization that motivates distinct reconstruction roles, not as a proof of lower conditional entropy or guaranteed learnability.
+The structural complement has higher effective rank in every subset. This is a data-level characterization of the selected decomposition; it does not establish lower conditional entropy, lower uncertainty, or guaranteed optimization difficulty.
 
-\section{S3. Missing-Modality Stress Tests}
+\section{S3. Sensitivity to Observation Removal}
 
-A fixed historical BG-RFM checkpoint was evaluated without retraining under several observation-removal settings. RMS velocity is part of the standard benchmark observation contract; RMS-missing rows are therefore stress tests rather than the intended operating scenario.
+A fixed trained BG-RFM model is evaluated without retraining after removing individual observations or observation groups. These tests measure dependence/sensitivity under distribution shift from the full-input training contract; they do not isolate the causal contribution of each modality.
 
 \begin{table}[t]
 \centering
-\caption{Historical missing-modality stress test without retraining or test-time adaptation.}
+\caption{Sensitivity to observation removal without retraining or test-time adaptation.}
 \begin{tabular}{lrrr}
 \toprule
 Observation subset & MAE & RMSE & SSIM \\
@@ -102,62 +122,105 @@ PoSTM only & 0.4706 & 0.5356 & 0.0154 \\
 \end{tabular}
 \end{table}
 
-The modest change after removing wells contrasts with the much larger degradation after removing horizon or RMS information. The result supports complementarity among the constraints but is not interpreted as a field-robustness guarantee.
+The model is much more sensitive to removal of RMS velocity or horizons than to removal of the sparse well channel. Because the synthetic RMS field is derived directly from the target velocity model, the strong RMS dependence is specific to this informative synthetic observation contract and should not be extrapolated to field-derived RMS products.
 
-\section{S4. Additional Design Controls and Diagnostics}
+\section{S4. Condition and Transport Diagnostics}
 
-The original experimental package contains controls that complement the main design table: direct residual regression, removal of the condition objective, uniform role fusion, and oracle-background diagnostics. These controls were used to inspect specific mechanisms but are not all required in the main article.
-
-For the residual transport diagnostic, with $d=HW$,
+For the background-centered straight-path diagnostic,
 \begin{equation}
 q_T=
 \frac{d^{-1}\|V-\hat B\|_2^2+1}
-{d^{-1}\|V\|_2^2+1}.
+{d^{-1}\|V\|_2^2+1},
+\qquad d=HW .
 \end{equation}
-All 33,600 held-out samples satisfy $q_T<1$ in the retained analysis; the mean is 0.772 with bootstrap 95\% confidence interval $[0.771,0.773]$. This quantifies the straight-path target-energy change in the stated normalized coordinates. It is reported as a diagnostic observation rather than a causal theorem.
+All 33,600 held-out samples satisfy $q_T<1$ in the evaluated analysis; the mean is 0.772 with bootstrap 95\% confidence interval $[0.771,0.773]$. This describes the change in straight-path target energy in the stated normalized coordinate system. It is not treated as a theorem that residual learning must be easier or more accurate.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.95\textwidth]{../AAAI2027/figures/figure3_condition_learning/appendix_full_condition_diagnostics.png}
-\caption{Extended condition-routing diagnostics retained from the completed experimental package.}
+\caption{Extended condition-routing diagnostics. Matched/deranged anchor agreement, role-specialization statistics, and learned routing weights are post-training characterizations rather than causal proofs of reconstruction quality.}
 \end{figure}
 
-\section{S5. Baseline Adaptation and Parameter Accounting}
+\section{S5. Matched-Input Baseline Adaptations}
 
-The journal's main comparison uses matched-input adaptations so that all evaluated estimators receive the same multimodal observations and held-out membership. The rows should therefore be interpreted as controlled estimator comparisons, not as source-native reproductions.
+All four comparison models receive the same five-channel observation layout:
+\begin{enumerate}
+    \item post-stack migrated image, bilinearly resized to $1000\times70$;
+    \item RMS velocity, bilinearly resized to $1000\times70$;
+    \item horizon map, resized by nearest-neighbor interpolation;
+    \item masked well-velocity values, bilinearly resized; and
+    \item the binary well mask, resized by nearest-neighbor interpolation.
+\end{enumerate}
+The comparison changes each source method only as needed to accept this common observation tensor and the supervised target used by the controlled reconstruction task. These rows should therefore be interpreted as architecture/backbone adaptations rather than reproductions of the original source-native protocols.
 
+\paragraph{InversionNet adaptation.}
+The OpenFWI InversionNet encoder--decoder constructor is retained and receives the common five-channel tensor instead of the source-native waveform layout. It is trained by direct $\ell_1$ velocity regression for 100 epochs with batch size 64, AdamW at learning rate $10^{-4}$ and weight decay $10^{-4}$, single-device 32-bit precision, and no learning-rate scheduler. The final checkpoint is used for evaluation. The reported 24.41M parameters count the complete adapted predictor.
+
+\paragraph{VelocityGAN adaptation.}
+The OpenFWI InversionNet generator and OpenFWI discriminator are retained. The generator receives the common five-channel tensor. Its objective is $100\,\mathcal L_1+\mathcal L_{\mathrm{adv}}$; the configured MSE term has zero weight. Wasserstein gradient penalty has weight 10, and the discriminator is updated with five critic steps per generator-update period. Generator and discriminator use AdamW at $10^{-4}$ with $(\beta_1,\beta_2)=(0,0.9)$ and weight decay $10^{-4}$. Training lasts 100 epochs with batch size 64, and the final checkpoint is evaluated. The reported 25.59M parameter count follows the training-model convention and includes both generator and discriminator; the discriminator is not required at inference.
+
+\paragraph{UPFWI-derived supervised multimodal backbone.}
+The OpenFWI UPFWI network backbone is retained, but the defining unsupervised wave-equation loop of the original UPFWI method is not used. The backbone receives the common five-channel tensor and is trained as a supervised direct velocity regressor with $\ell_1$ loss for 100 epochs, batch size 64, AdamW at $10^{-4}$, weight decay $10^{-4}$, single-device 32-bit precision, and no scheduler. The final checkpoint is used for evaluation. The approximately 19.00M parameters count the adapted predictor. This is why the main paper labels the row \emph{UPFWI-derived supervised multimodal backbone} rather than using the source-method name alone.
+
+\paragraph{Latent U-Net adaptation.}
+The latent U-Net topology is retained within a multimodal translation model consisting of a five-channel measurement encoder, a 128-channel $70\times70$ latent representation, a depth-2 latent U-Net with two repeated blocks per level and skip connections, and a velocity decoder. The complete adapted model is trained with direct $\ell_1$ velocity regression for 100 epochs, batch size 300, and four-device DDP. The minimum-validation-loss checkpoint is used for the reported comparison. The 35.12M parameter count covers the complete adapted measurement-encoder/latent-U-Net/velocity-decoder predictor.
+
+\section{S6. Qualitative Selection and Additional Cases}
+
+The qualitative case-selection rule is performance-dependent and uses no visual inspection. Within each OpenFWI subset, the selection score is the BG-RFM SSIM minus the largest SSIM among the adapted comparison pool consisting of InversionNet, VelocityGAN, the UPFWI-derived supervised multimodal backbone, Auto-Linear, and Latent U-Net. The per-subset panels therefore show maximum-SSIM-margin cases and must not be interpreted as typical or representative samples.
+
+Some composite images below were produced before the journal-facing labels were standardized. Their label mapping is:
 \begin{itemize}
-    \item \textbf{InversionNet adaptation:} the encoder--decoder capacity is adapted to the multimodal input and trained with supervised velocity reconstruction.
-    \item \textbf{VelocityGAN adaptation:} multimodal input is used while retaining adversarial plus reconstruction training.
-    \item \textbf{UPFWI adaptation:} the implementation is a supervised multimodal estimator and is explicitly labeled as such; it is not the original unsupervised/physics-coupled UPFWI protocol.
-    \item \textbf{Latent U-Net adaptation:} the latent U-Net architecture is adapted to the common multimodal translation task.
+    \item PD-BG-RFM $\rightarrow$ BG-RFM;
+    \item InversionNet $\rightarrow$ InversionNet adaptation;
+    \item VelocityGAN $\rightarrow$ VelocityGAN adaptation;
+    \item UPFWI $\rightarrow$ UPFWI-derived supervised multimodal backbone;
+    \item Latent U-Net (Large) $\rightarrow$ Latent U-Net adaptation;
+    \item Auto-Linear denotes an additional adapted baseline that is not included in the main comparison table.
 \end{itemize}
-
-The main-table parameter counts are 24.41M for InversionNet, 25.59M for VelocityGAN, approximately 19.00M for the supervised multimodal UPFWI adaptation, 35.12M for Latent U-Net, and 10.60M for BG-RFM. Parameter count is reported as model compactness and is not used as a substitute for runtime.
-
-\section{S6. Extended Qualitative Evidence}
-
-The completed AAAI-era package retained fixed-rule representative cases as well as explicit advantage and failure-case panels. These are useful for checking whether the visual interpretation is restricted to favorable examples.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.98\textwidth]{../AAAI2027/figures/table2_qualitative/table2_representative_cases_1.png}
-\caption{Extended representative held-out cases, part I.}
+\caption{Performance-selected per-subset maximum-SSIM-margin cases, part I. These are advantage-selected examples rather than representative cases.}
 \end{figure}
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.98\textwidth]{../AAAI2027/figures/table2_qualitative/table2_representative_cases_2.png}
-\caption{Extended representative held-out cases, part II.}
+\caption{Performance-selected per-subset maximum-SSIM-margin cases, part II.}
 \end{figure}
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.98\textwidth]{../AAAI2027/figures/table2_qualitative/table2_failure_cases.png}
-\caption{Retained failure-case panel from the historical matched-input qualitative analysis.}
+\caption{Failure cases selected by the most negative predefined low-frequency, high-frequency, and SSIM margins.}
 \end{figure}
 
-\bibliographystyle{unsrtnat}
-\bibliography{references}
+\section{S7. Evaluation Details}
+
+The held-out loader is deterministic and uses \texttt{shuffle=False}. The common test manifest contains 33,600 records and exactly matches the reconstructed global test split produced with split seed 42. Test well positions use seed 1234.
+
+For BG-RFM, one stochastic trajectory is evaluated per record. The base sampling seed is 2027. For each evaluation batch, the seed is generated by SHA-256 hashing the base seed together with the ordered (dataset name, source sample index) identities and reducing the hash modulo $2^{31}$. The RNG state is forked for the prediction call so corresponding records receive a deterministic stochastic realization. Deterministic baselines use their direct prediction without a sampling seed.
+
+The evaluator applies no post-hoc clipping. MAE and RMSE are computed on normalized velocity maps for each record and then averaged. In particular,
+\begin{equation}
+\mathrm{RMSE}
+=
+\frac{1}{N}\sum_{i=1}^N
+\sqrt{\frac{1}{HW}\|\hat V_i-V_i\|_2^2}.
+\end{equation}
+SSIM is a global per-image statistic rather than a sliding-window implementation:
+\begin{equation}
+\mathrm{SSIM}_i=
+\frac{(2\mu_x\mu_y+C_{1,i})(2\sigma_{xy}+C_{2,i})}
+{(\mu_x^2+\mu_y^2+C_{1,i})(\sigma_x^2+\sigma_y^2+C_{2,i})},
+\end{equation}
+where population variances/covariance are used,
+$L_i=\max(\max V_i-\min V_i,1)$,
+$C_{1,i}=(0.01L_i)^2$, and $C_{2,i}=(0.03L_i)^2$.
+The reported SSIM is the mean over test records.
+
+Checkpoint selection is separated from test evaluation. BG-RFM uses the final checkpoint of its fixed 100-epoch joint schedule. InversionNet, VelocityGAN, and the UPFWI-derived supervised multimodal backbone use their final 100-epoch checkpoints. Latent U-Net uses the checkpoint with minimum validation loss. The controlled design variants in Table~3 use validation-loss checkpoint selection. Test metrics are not used to select checkpoints.
 
 \end{document}

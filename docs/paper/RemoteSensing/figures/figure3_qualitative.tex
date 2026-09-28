@@ -1,6 +1,42 @@
-\begin{figure}[H]
+\begin{figure*}[t]
 \centering
-\includegraphics[width=0.98\textwidth,height=0.76\textheight,keepaspectratio]{../AAAI2027/figures/table2_qualitative/table2_representative_cases_2.png}
-\caption{Fixed-rule held-out qualitative cases from four representative OpenFWI families in the retained matched-input comparison. The panels use common display conventions for target velocity, predictions, and errors. Extended advantage and failure-case panels are retained in Supplementary Section~S6.}
+\scriptsize
+\setlength{\tabcolsep}{1.2pt}
+\newcommand{\qpanel}[1]{\includegraphics[width=0.145\textwidth]{#1}}
+\begin{tabular}{@{}cccccc@{}}
+Target &
+\shortstack{InversionNet\\adaptation} &
+\shortstack{VelocityGAN\\adaptation} &
+\shortstack{UPFWI-derived supervised\\multimodal backbone} &
+\shortstack{Latent U-Net\\adaptation} &
+BG-RFM \\
+\multicolumn{6}{l}{\textbf{CurveFault-A, source index 26193}}\\[-2pt]
+\qpanel{../AAAI2027/figures/table2_qualitative/standalone_velocity/curvefaulta_026193__ground_truth__ssim_1.0000.png} &
+\qpanel{../AAAI2027/figures/table2_qualitative/standalone_velocity/curvefaulta_026193__inversionnet__ssim_0.9984.png} &
+\qpanel{../AAAI2027/figures/table2_qualitative/standalone_velocity/curvefaulta_026193__velocitygan__ssim_0.9926.png} &
+\qpanel{../AAAI2027/figures/table2_qualitative/standalone_velocity/curvefaulta_026193__upfwi__ssim_0.9939.png} &
+\qpanel{../AAAI2027/figures/table2_qualitative/standalone_velocity/curvefaulta_026193__latent_u_net__large__ssim_0.9988.png} &
+\qpanel{../AAAI2027/figures/table2_qualitative/standalone_velocity/curvefaulta_026193__pd_bg_rfm__ssim_0.9991.png} \\
+\textit{Abs. error} &
+\qpanel{../AAAI2027/figures/table2_qualitative/standalone_error/curvefaulta_026193__inversionnet__error__mae_0.0175.png} &
+\qpanel{../AAAI2027/figures/table2_qualitative/standalone_error/curvefaulta_026193__velocitygan__error__mae_0.0427.png} &
+\qpanel{../AAAI2027/figures/table2_qualitative/standalone_error/curvefaulta_026193__upfwi__error__mae_0.0179.png} &
+\qpanel{../AAAI2027/figures/table2_qualitative/standalone_error/curvefaulta_026193__latent_u_net__large__error__mae_0.0174.png} &
+\qpanel{../AAAI2027/figures/table2_qualitative/standalone_error/curvefaulta_026193__pd_bg_rfm__error__mae_0.0108.png} \\[3pt]
+\multicolumn{6}{l}{\textbf{FlatFault-B, source index 21686}}\\[-2pt]
+\qpanel{../AAAI2027/figures/table2_qualitative/standalone_velocity/flatfaultb_021686__ground_truth__ssim_1.0000.png} &
+\qpanel{../AAAI2027/figures/table2_qualitative/standalone_velocity/flatfaultb_021686__inversionnet__ssim_0.9913.png} &
+\qpanel{../AAAI2027/figures/table2_qualitative/standalone_velocity/flatfaultb_021686__velocitygan__ssim_0.9825.png} &
+\qpanel{../AAAI2027/figures/table2_qualitative/standalone_velocity/flatfaultb_021686__upfwi__ssim_0.9873.png} &
+\qpanel{../AAAI2027/figures/table2_qualitative/standalone_velocity/flatfaultb_021686__latent_u_net__large__ssim_0.9984.png} &
+\qpanel{../AAAI2027/figures/table2_qualitative/standalone_velocity/flatfaultb_021686__pd_bg_rfm__ssim_0.9981.png} \\
+\textit{Abs. error} &
+\qpanel{../AAAI2027/figures/table2_qualitative/standalone_error/flatfaultb_021686__inversionnet__error__mae_0.0275.png} &
+\qpanel{../AAAI2027/figures/table2_qualitative/standalone_error/flatfaultb_021686__velocitygan__error__mae_0.0430.png} &
+\qpanel{../AAAI2027/figures/table2_qualitative/standalone_error/flatfaultb_021686__upfwi__error__mae_0.0319.png} &
+\qpanel{../AAAI2027/figures/table2_qualitative/standalone_error/flatfaultb_021686__latent_u_net__large__error__mae_0.0160.png} &
+\qpanel{../AAAI2027/figures/table2_qualitative/standalone_error/flatfaultb_021686__pd_bg_rfm__error__mae_0.0175.png}
+\end{tabular}
+\caption{Performance-selected high-margin examples; these cases are not intended to represent typical test performance. Selection is performed without visual inspection by maximizing, within each subset, the formal SSIM margin of BG-RFM relative to the best model in the adapted comparison pool (InversionNet, VelocityGAN, the UPFWI-derived supervised multimodal backbone, Auto-Linear, and Latent U-Net). The main panel displays only the methods in Table~\ref{tab:rs-main}. Velocity predictions use the common physical display range; absolute-error panels use the common error display convention.}
 \label{fig:qualitative}
-\end{figure}
+\end{figure*}

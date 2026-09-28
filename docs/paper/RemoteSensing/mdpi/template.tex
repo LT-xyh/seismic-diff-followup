@@ -1,5 +1,4 @@
-% MDPI / Remote Sensing submission wrapper.
-% Scientific content frozen at 96fddfcab601dc61562b73998a74572dde4a160f.
+% MDPI / Remote Sensing blind-review wrapper.
 \documentclass[remotesensing,article,submit,pdftex,moreauthors]{Definitions/mdpi}
 
 \firstpage{1}
@@ -23,12 +22,11 @@
 \address{Affiliations withheld for blind review.}
 \corres{Corresponding author information withheld for blind review.}
 
-\abstract{Initial velocity model building benefits from heterogeneous geophysical constraints that describe different aspects of the subsurface. RMS velocity and sparse wells provide strong information about large-scale velocity magnitude, whereas post-stack migrated images and interpreted horizons provide dense structural cues. Most learned approaches nevertheless fuse these observations and assign the complete velocity field to a single predictor or generator. We propose Background-Guided Residual Flow Matching (BG-RFM), which explicitly separates reconstruction responsibilities while retaining multimodal conditioning. A role-aware condition encoder provides background-oriented and structure-oriented interfaces. The background branch deterministically predicts a smooth velocity component, and the residual branch applies conditional Flow Matching to the correction relative to that prediction. Crucially, the same predicted background defines the residual target during training, conditions the residual vector field, and is reused in final velocity composition, yielding a prediction-consistent reconstruction path. We evaluate the method on eight OpenFWI subsets using RMS velocity, post-stack migrated images, horizons, and sparse wells under a common 33,600-record held-out protocol. On this unified benchmark, the proposed model achieves an RMSE of 0.0269 and an SSIM of 0.9916 with 10.6M trainable parameters. The results support a parameter-compact formulation that allocates deterministic estimation to background recovery and generative transport to the remaining correction.}
+\abstract{This work studies seismic velocity-model reconstruction when heterogeneous processed/interpreted constraints are already available. In the controlled synthetic benchmark, these constraints comprise RMS velocity, post-stack migrated imagery, interpreted horizons, and sparse wells. Most learned approaches fuse such observations and assign the complete velocity field to a single predictor or generator. We propose Background-Guided Residual Flow Matching (BG-RFM), which explicitly separates reconstruction responsibilities while retaining multimodal conditioning. A role-aware encoder provides background-oriented and structure-oriented interfaces. The background branch deterministically predicts a smooth velocity component, and the residual branch applies standard conditional Flow Matching to the correction relative to that prediction. Crucially, the same predicted background defines the residual target during training, conditions the residual vector field, and is reused in final composition, yielding a prediction-consistent reconstruction path. On eight OpenFWI-derived subsets with a common 33,600-record test protocol, BG-RFM achieves an RMSE of 0.0269 and an SSIM of 0.9916 with 10.6M trainable parameters. The results support a parameter-compact geophysical reconstruction organization that allocates deterministic estimation to background recovery and generative transport to the prediction-relative correction.}
 
 \keyword{initial velocity model building; seismic velocity reconstruction; Flow Matching; multimodal geophysical constraints; residual generative modeling; OpenFWI}
 
 \newcommand{\method}{BG-RFM}
-\newcommand{\historicalmethod}{PD-BG-RFM}
 
 \begin{document}
 
@@ -46,7 +44,7 @@
 \funding{Funding metadata is withheld from this blind-review package and will be inserted before journal submission.}
 \institutionalreview{Not applicable.}
 \informedconsent{Not applicable.}
-\dataavailability{The study uses the publicly available OpenFWI benchmark. The multimodal RMS-velocity, migrated-image, horizon, and sparse-well observations analyzed in this work are derived from the OpenFWI source data using the processing and sampling procedures described in the Materials and Methods section. Large processed arrays and checkpoints are not stored in the source repository. Source code, release configurations, data adapters, and evaluation utilities are available at \url{https://github.com/LT-xyh/seismic-diff-followup}. The exact submission revision will be archived or tagged before final submission.}
+\dataavailability{The study uses the publicly available OpenFWI benchmark. The RMS-velocity, migrated-image, horizon, and sparse-well observations analyzed here are derived from OpenFWI using the procedures described in the Materials and Methods section. The code repository and exact submission revision are withheld in this reviewer-facing package to preserve anonymity and will be provided with the journal submission.}
 \acknowledgments{Acknowledgments and any required generative-AI disclosure are withheld from this blind-review package and will be finalized before journal submission.}
 \conflictsofinterest{The conflict-of-interest statement will be confirmed by all authors before journal submission.}
 
