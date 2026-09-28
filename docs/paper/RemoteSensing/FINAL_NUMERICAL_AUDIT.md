@@ -24,14 +24,11 @@ Scientific-content baseline: `96fddfcab601dc61562b73998a74572dde4a160f`
 | Euler inference steps | 50 | frozen BG-RFM config | VERIFIED |
 | Concat-FM | 0.0225 / 0.0340 / 0.9865 | AAAI controlled ablation | VERIFIED |
 | role-aware full-field FM | 0.0205 / 0.0320 / 0.9880 | AAAI Decoupled-FM row | VERIFIED (terminology rewritten only) |
-| Uniform fusion | 0.0163 / 0.0290 / 0.9898 | AAAI controlled ablation | VERIFIED |
-| w/o prediction consistency | 0.0190 / 0.0340 / 0.9875 | AAAI controlled ablation | VERIFIED |
-| w/o background context | 0.0230 / 0.0410 / 0.9820 | AAAI controlled ablation | VERIFIED |
 | historical BG-RFM ablation | 0.0150 / 0.0270 / 0.9913 | AAAI controlled ablation | VERIFIED |
 | effective-rank medians | 4.95 / 54.03 | AAAI training-set analysis | VERIFIED |
 | condition margins | 0.46 / 0.35 | AAAI condition diagnostic | VERIFIED |
 | q_T mean and 95% CI | 0.772; [0.771, 0.773] | AAAI transport diagnostic | VERIFIED |
 
-Known suspicious historical `InversionNet MAE_L = 0.0180` remains excluded.
+Known suspicious historical `InversionNet MAE_L = 0.0180` remains excluded. The historical Uniform Fusion, w/o Prediction Consistency, and w/o Background Context rows are also excluded from reviewer-facing empirical evidence because their implementation provenance is not sufficiently recoverable.
 
 **Audit result: PASS.** No manuscript-visible number is SOURCE_MISMATCH or UNRESOLVED.

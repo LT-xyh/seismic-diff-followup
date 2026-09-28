@@ -22,7 +22,7 @@ Updated: 2026-09-28
 - Materials and Methods: complete first-submission draft.
 - Results 4.1: complete.
 - Results 4.2: complete with retained qualitative evidence.
-- Results 4.3: complete using historical controlled ablation evidence.
+- Results 4.3: complete as a three-formulation controlled comparison (Concat-FM, role-aware full-field FM, BG-RFM).
 - Results 4.4: complete using diagnostic evidence.
 - Discussion: complete.
 - Conclusions: complete.
@@ -46,7 +46,7 @@ Updated: 2026-09-28
 
 1. Table 1 — observation/task contract.
 2. Table 2 — RS-E01-Lite unified matched-input comparison.
-3. Table 3 — historical controlled design analysis.
+3. Table 3 — separate controlled comparison of three Flow-Matching formulations.
 4. Supplementary tables — effective rank and missing-modality stress tests.
 
 ## Remaining submission blockers
@@ -88,5 +88,4 @@ Completed:
 - observation-removal language changed from generic robustness/complementarity claims to sensitivity/dependence language;
 - internal project vocabulary removed from reviewer-facing prose.
 
-Pending factual gate:
-- final freeze of the detailed Table 3 intervention definitions for Uniform fusion, w/o prediction consistency, and w/o background context awaits the dedicated implementation fact audit. Do not infer missing details from variant names.
+Final Table 3 fact gate: CLOSED. Uniform Fusion, w/o Prediction Consistency, and w/o Background Context are excluded from reviewer-facing evidence because their implementation provenance could not be established sufficiently. No reconstruction, retraining, or artifact archaeology is required.

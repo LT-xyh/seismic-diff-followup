@@ -24,12 +24,9 @@ Rounded main-table values are intentionally limited to five decimal places.
 | --- | ---: | ---: | ---: |
 | Concat-FM | 0.0225 | 0.0340 | 0.9865 |
 | role-aware full-field FM (historical Decoupled-FM) | 0.0205 | 0.0320 | 0.9880 |
-| Uniform Fusion | 0.0163 | 0.0290 | 0.9898 |
-| w/o Prediction Consistency | 0.0190 | 0.0340 | 0.9875 |
-| w/o Background Context | 0.0230 | 0.0410 | 0.9820 |
 | BG-RFM / historical PD-BG-RFM | 0.0150 | 0.0270 | 0.9913 |
 
-These values belong to the historical controlled ablation protocol and must not be silently substituted for RS-E01-Lite values.
+These three retained values belong to the separate controlled formulation study and must not be silently substituted for the common matched-input values. Historical values for Uniform Fusion, w/o Prediction Consistency, and w/o Background Context remain in internal project history but are excluded from reviewer-facing evidence because their implementation provenance is not sufficiently recoverable.
 
 ## Historical diagnostics reused
 
