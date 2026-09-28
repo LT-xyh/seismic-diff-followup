@@ -14,7 +14,7 @@ The contributions of this study are threefold:
 \begin{itemize}
     \item We develop a role-aware multi-source conditioning framework for RMS velocity, post-stack migrated images, interpreted horizons, and sparse wells. Every available modality can contribute to both learned roles, while the downstream interfaces explicitly distinguish background prediction from structural/residual guidance.
     \item We introduce prediction-consistent residual Flow Matching for seismic velocity model building. The same predicted background is used to define the residual target, condition the residual vector field, and compose the final velocity estimate, directly coupling residual learning to the background that will be available at inference.
-    \item We establish a compact multimodal reconstruction framework and evaluate it under a unified held-out OpenFWI protocol against adapted deterministic and generative references. The final quantitative wording is based exclusively on the common RS-E01-Lite re-evaluation.
+    \item We develop a parameter-compact prediction-consistent generative formulation for structured velocity reconstruction and evaluate it under a unified held-out OpenFWI protocol against adapted deterministic and generative references. The contribution is the reconstruction organization and compact parameterization rather than overall benchmark dominance.
 \end{itemize}
 
 The resulting perspective is simple: \emph{predict the background; transport the prediction-relative correction}. This responsibility allocation, rather than a claim of universal frequency--uncertainty separation, is the central design principle evaluated in the remainder of the paper.

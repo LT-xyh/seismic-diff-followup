@@ -2,11 +2,11 @@
 
 \subsection{Unified Matched-Input Comparison}
 
-Table~\ref{tab:rs-main} is reserved for the unified RS-E01-Lite evaluation. All rows will use the same 33,600 held-out records, the same target normalization, and the same evaluator. Historical AAAI values are intentionally not copied into this table.
+Table~\ref{tab:rs-main} reports the unified matched-input comparison on the same 33,600 held-out records, target normalization, and evaluator. The table is intended as a common-protocol reconstruction comparison rather than an overall method ranking.
 
 \input{tables/main_quantitative}
 
-\resultplaceholder{Replace this paragraph after RS-E01-Lite. State the main MAE/RMSE/SSIM findings without claiming universal superiority. Explicitly report the compact 10.6M parameter count and compare it with the retained adapted references. If different methods lead different metrics, describe the trade-off rather than forcing an overall winner.}
+BG-RFM obtains an RMSE of 0.02695 and an SSIM of 0.99165 with 10.6M trainable parameters. Relative to the InversionNet adaptation, BG-RFM has a lower RMSE (0.02695 versus 0.02730) and a slightly higher SSIM (0.99165 versus 0.99118), whereas InversionNet has the lower MAE (0.01194 versus 0.01503). A similar trade-off is observed against the supervised multimodal UPFWI adaptation: BG-RFM has lower RMSE and higher SSIM, while UPFWI has lower MAE. Compared with VelocityGAN, BG-RFM yields lower MAE and RMSE and higher SSIM. Latent U-Net is the strongest reconstruction model in this comparison, achieving the lowest MAE and RMSE and the highest SSIM. Across the listed matched-input references, BG-RFM uses the fewest trainable parameters. These results therefore do not support an overall-accuracy dominance claim; instead, they establish that the proposed prediction-consistent generative formulation attains strong common-protocol reconstruction quality with a substantially smaller parameter count.
 
 \subsection{Qualitative Structural Reconstruction}
 

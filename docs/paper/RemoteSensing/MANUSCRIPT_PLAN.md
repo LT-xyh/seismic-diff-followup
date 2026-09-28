@@ -26,8 +26,8 @@ Initial velocity model building can exploit several processed and interpreted ge
    `hat V - V = hat R - (V - hat B)`
    makes the consistency objective explicit without requiring a universal complexity theorem.
 
-3. **Compact high-fidelity reconstruction under a common input contract.**  
-   The final wording will be filled from RS-E01-Lite. Parameter count is retained as a supporting efficiency measure; universal superiority is not claimed.
+3. **A parameter-compact prediction-consistent generative formulation for structured velocity reconstruction.**  
+   Under the unified matched-input protocol, BG-RFM provides strong reconstruction quality with 10.6M parameters, while the paper explicitly does not claim overall metric dominance or computational-speed superiority.
 
 ## Proposed section structure
 
@@ -81,14 +81,14 @@ Include:
 
 ### Table 2 — Main quantitative comparison
 
-Default rows:
+Rows:
 - adapted InversionNet;
 - adapted VelocityGAN;
+- supervised multimodal UPFWI adaptation;
 - adapted Latent U-Net;
 - BG-RFM.
 
-Optional:
-- adapted UPFWI if the PI decides that the scientific value outweighs the explanation cost.
+Auto-Linear remains omitted from the first main table.
 
 Default columns:
 - MAE;
@@ -192,12 +192,17 @@ The abstract should contain:
 
 No limitations paragraph and no historical-review language.
 
-## Result placeholders
+## RS-E01-Lite integration
 
-Until RS-E01-Lite is accepted:
-- do not paste old manuscript values into Table 2;
-- do not use best/second-best ranking language;
-- do not state exact percentage gains;
-- do not make frequency-metric claims.
+RS-E01-Lite is accepted as the authoritative common-protocol result package.
 
-The draft should remain publishable in structure with only the quantitative row values and their direct Results paragraph awaiting replacement.
+Authoritative rows:
+- BG-RFM: MAE 0.01502705, RMSE 0.02694626, SSIM 0.99164512, 10.60M parameters;
+- InversionNet adaptation: MAE 0.01193781, RMSE 0.02730467, SSIM 0.99118468, 24.41M parameters;
+- VelocityGAN adaptation: MAE 0.02170463, RMSE 0.04340946, SSIM 0.97267124, 25.59M parameters;
+- supervised multimodal UPFWI adaptation: MAE 0.01217775, RMSE 0.02986827, SSIM 0.99050921, approximately 19.00M parameters;
+- Latent U-Net adaptation: MAE 0.00705923, RMSE 0.01308783, SSIM 0.99403170, 35.12M parameters.
+
+The paper must not convert this table into an overall winner ranking. Latent U-Net is the strongest method on all three reconstruction metrics. BG-RFM's retained methodological story is structured responsibility allocation, prediction-consistent residual transport, and parameter compactness.
+
+Frequency metrics passed the sanity check but remain optional for the first submission.

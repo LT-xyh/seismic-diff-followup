@@ -1,19 +1,19 @@
 \begin{table}[t]
 \centering
-\caption{Unified matched-input evaluation on the fixed 33,600-record held-out set. Values will be populated only from the accepted RS-E01-Lite artifacts.}
+\caption{Unified matched-input reconstruction comparison on the fixed 33,600-record held-out set. All methods use the same evaluation membership, normalization, and evaluator. UPFWI denotes the supervised multimodal adaptation used in this controlled comparison, not the original source-native UPFWI protocol.}
 \label{tab:rs-main}
 \begin{tabular}{lrrrr}
 \toprule
 Method & MAE $\downarrow$ & RMSE $\downarrow$ & SSIM $\uparrow$ & Params \\
 \midrule
-InversionNet (adapted) & TBD & TBD & TBD & 24.41M \\
-VelocityGAN (adapted) & TBD & TBD & TBD & 25.59M \\
-Latent U-Net (adapted) & TBD & TBD & TBD & 35.12M \\
-\method{} & TBD & TBD & TBD & 10.60M \\
+InversionNet (adapted) & 0.01194 & 0.02730 & 0.99118 & 24.41M \\
+VelocityGAN (adapted) & 0.02170 & 0.04341 & 0.97267 & 25.59M \\
+UPFWI (supervised multimodal adaptation) & 0.01218 & 0.02987 & 0.99051 & $\approx$19.00M \\
+Latent U-Net (adapted) & 0.00706 & 0.01309 & 0.99403 & 35.12M \\
+\method{} & 0.01503 & 0.02695 & 0.99165 & 10.60M \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-% Optional UPFWI-adapted row is intentionally omitted until the PI reviews
-% RS-E01-Lite and decides whether its inclusion improves the journal comparison.
-% MAE_L and MAE_H are intentionally omitted from the default first-submission table.
+% Frequency metrics passed RS-E01-Lite sanity checks but remain omitted from the
+% default first-submission table to keep the primary quantitative story focused.
