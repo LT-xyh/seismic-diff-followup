@@ -1,0 +1,40 @@
+name: remote-sensing-paper-build
+
+on:
+  push:
+    branches:
+      - remote-sensing/submission-sprint
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile main manuscript
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: main.tex
+          working_directory: docs/paper/RemoteSensing
+          latexmk_use_xelatex: false
+
+      - name: Compile supplement
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: supplement.tex
+          working_directory: docs/paper/RemoteSensing
+          latexmk_use_xelatex: false
+
+      - name: Collect PDFs
+        run: |
+          mkdir -p build/remote-sensing
+          cp docs/paper/RemoteSensing/main.pdf build/remote-sensing/BG-RFM_RemoteSensing_blind.pdf
+          cp docs/paper/RemoteSensing/supplement.pdf build/remote-sensing/BG-RFM_RemoteSensing_supplement_blind.pdf
+
+      - name: Upload PDFs
+        uses: actions/upload-artifact@v4
+        with:
+          name: remote-sensing-blind-pdfs
+          path: build/remote-sensing/*.pdf
+          if-no-files-found: error
