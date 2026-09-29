@@ -2,17 +2,17 @@
 \centering
 \small
 \setlength{\tabcolsep}{4.5pt}
-\caption{Common-protocol reconstruction comparison on the fixed 33,600-record test set. All rows use the same test membership and evaluator. The UPFWI-derived row retains the UPFWI network backbone but replaces the original unsupervised wave-equation training mechanism with supervised multimodal velocity regression.}
+\caption{Common-protocol reconstruction comparison on the fixed 33,600-record test set. All rows use the same test membership and evaluator. Parameter counts refer to trainable parameters in the retained evaluated implementation; training-only modules may differ by method. The VelocityGAN count includes generator and discriminator although the discriminator is not used for inference. BG-RFM reports 10,630,216 trainable inference parameters. An exact evaluated recount is not available for the UPFWI-derived backbone, so no parameter value is reported for that row.}
 \label{tab:rs-main}
 \begin{tabular}{lrrrr}
 \toprule
-Method & MAE $\downarrow$ & RMSE $\downarrow$ & SSIM $\uparrow$ & Params \\
+Method & MAE $\downarrow$ & RMSE $\downarrow$ & SSIM $\uparrow$ & Trainable Params \\
 \midrule
 InversionNet adaptation & 0.01194 & 0.02730 & 0.99118 & 24.41M \\
 VelocityGAN adaptation & 0.02170 & 0.04341 & 0.97267 & 25.59M \\
-\shortstack[l]{UPFWI-derived supervised\\multimodal backbone} & 0.01218 & 0.02987 & 0.99051 & $\approx$19.00M \\
+\shortstack[l]{UPFWI-derived supervised\\multimodal backbone} & 0.01218 & 0.02987 & 0.99051 & --- \\
 Latent U-Net adaptation & 0.00706 & 0.01309 & 0.99403 & 35.12M \\
-BG-RFM & 0.01503 & 0.02695 & 0.99165 & 10.60M \\
+BG-RFM & 0.01503 & 0.02695 & 0.99165 & 10.63M \\
 \bottomrule
 \end{tabular}
 \end{table}
