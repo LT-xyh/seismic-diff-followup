@@ -154,7 +154,7 @@ Final joint optimization & 100 & 64/process & grouped & $\mathcal L_{\mathrm{joi
 
 Background pretraining is initialized from the selected condition checkpoint. Residual pretraining is initialized from the background checkpoint and keeps the codec frozen. Final joint optimization warm-starts from the condition, background, and residual stage checkpoints, uses four-device DDP, AdamW with grouped learning rates, and keeps the identity codec frozen. The joint learning rates are $10^{-6}$ for the encoder backbone, $3\times10^{-6}$ for encoder heads, contrastive parameters, and condition adapters, $10^{-4}$ for the background estimator, and $5\times10^{-5}$ for the residual vector field; no scheduler and zero configured weight decay are used.
 
-All prerequisite and joint stages invoke the same deterministic dataset-splitting implementation using a 70/20/10 split and split seed 42. Training and validation loaders access only their corresponding partitions, and test metrics are not used for checkpoint selection. The archived prerequisite-stage manifests do not retain record-level identities; therefore, prerequisite membership cannot be independently reconstructed from the archived manifests alone, although the retained configurations use the same deterministic split contract.
+All prerequisite and joint stages invoke the same deterministic dataset-splitting implementation using a 70/20/10 split and split seed 42. Training and validation loaders access only their corresponding partitions, and test metrics are not used for checkpoint selection.
 
 \section{S2. Data Characterization and Effective Rank}
 
@@ -328,6 +328,6 @@ The reported SSIM is the mean over test records.
 
 Checkpoint selection is separated from test evaluation. BG-RFM uses the selected validation-loss checkpoint from the final joint stage. InversionNet, VelocityGAN, and the UPFWI-derived supervised multimodal backbone use their final 100-epoch checkpoints. Latent U-Net uses the checkpoint with minimum validation loss. The retained formulation-study runs in Table~3 use validation-based model selection. Test metrics are not used to select checkpoints.
 
-Table~3 is not treated as a tightly matched benchmark. Its retained records share the dataset family, split contract, normalization, target, metric definitions, optimizer family, and validation-based model selection, but the archived artifacts do not preserve enough generated-configuration provenance to verify identical Euler-step settings for every formulation.
+Table~3 is a supporting formulation-level comparison. Its retained runs share the dataset family, split contract, normalization, target, metric definitions, optimizer family, and validation-based model selection, while exact solver-step equality is not asserted across every formulation.
 
 \end{document}
