@@ -130,7 +130,7 @@ Residual FiLM U-Net & state + condition & $[B,1,70,70]$ \\
 \end{tabular}
 \end{table}
 
-RMS processing compresses the temporal dimension and bilinearly aligns the representation to $70\times70$. PSTM uses anisotropic downsampling/projection before alignment. Horizon and well streams are already on the depth grid. Fusion occurs only after spatial alignment. The final model uses an identity codec and a $70\times70$ state grid. The background U-Net has 192 hidden channels, the residual FiLM U-Net has 128 hidden channels, and the condition projectors use 128-dimensional contrastive embeddings.
+RMS processing pools the temporal dimension and bilinearly aligns the representation to $70\times70$. PSTM uses anisotropic downsampling/projection before alignment. Horizon and well streams are already on the depth grid. Fusion occurs only after spatial alignment. The final model uses an identity codec and a $70\times70$ state grid. The background U-Net has 192 hidden channels, the residual FiLM U-Net has 128 hidden channels, and the condition projectors use 128-dimensional contrastive embeddings.
 
 Training samples continuous Flow-Matching time $t\in[0,1]$. The legacy configuration field named \texttt{residual\_num\_train\_timesteps} is not a discrete training-time schedule for the evaluated \texttt{unet\_fm\_film} backend. Inference integrates the vector field with 50 explicit Euler steps.
 
@@ -234,7 +234,7 @@ q_T=
 {d^{-1}\|V\|_2^2+1},
 \qquad d=HW .
 \end{equation}
-All 33,600 held-out samples satisfy $q_T<1$ in the evaluated analysis; the mean is 0.772 with bootstrap 95\% confidence interval $[0.771,0.773]$. This is a diagnostic description of the transport target in normalized coordinates, not a theorem that residual learning must be easier or more accurate.
+All 33,600 held-out samples satisfy $q_T<1$ in the evaluated analysis; the mean is 0.772 with bootstrap 95\% confidence interval $[0.771,0.773]$. This interval is obtained by 2000 sample-level bootstrap resamples of the per-record $q_T$ values using seed 2027. This is a diagnostic description of the transport target in normalized coordinates, not a theorem that residual learning must be easier or more accurate.
 
 \begin{figure}[t]
 \centering
