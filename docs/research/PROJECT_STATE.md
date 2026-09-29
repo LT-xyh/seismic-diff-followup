@@ -1,6 +1,6 @@
 # Project state
 
-Updated: 2026-09-27
+Updated: 2026-09-29
 
 ## Paper
 
@@ -65,14 +65,23 @@ For Remote Sensing, the final quantitative package must freeze one held-out mani
 
 ## Current blockers
 
-1. Inventory the exact retained external checkpoints/configs/manifests/record IDs needed for the Remote Sensing comparison package.
-2. Freeze one common held-out manifest/evaluator contract from the retained assets.
-3. Supersede or resolve the historical InversionNet `MAE_L` inconsistency.
+Scientific submission blockers: **none known**.
+
+Reviewer-2 M1/M2 documentation closure is complete at the manuscript-source level:
+- active condition objective and zero-weight exclusions documented;
+- four-stage training and checkpoint-selection protocol documented;
+- deterministic 70/20/10 split contract documented;
+- evaluated 0--3-well observation contract documented;
+- architecture/tensor interfaces documented;
+- continuous Flow-Matching time and 50-step Euler inference documented;
+- Table 3 reframed as supporting formulation-level evidence rather than a strict component ablation.
+
+Remaining work is packaging/administrative: final PDF compile/visual inspection, author/funding/conflict metadata, and journal-template packaging.
 
 ## Current execution order
 
-`RS-A0 -> PI asset gate -> RS-E01 -> RS-E02 -> RS-E03A -> RS-E04/RS-E05 -> evidence gate -> train only what remains necessary`
+`final compile -> visual/numerical scan -> targeted Reviewer-2 M1/M2 verification -> author metadata/template packaging -> submit`
 
-No new training starts during RS-A0.
+No new experiment is authorized before first submission unless a later reviewer explicitly requires it.
 
 See `docs/research/remote_sensing/EXPERIMENT_QUEUE.md`.
