@@ -138,14 +138,15 @@ Training samples continuous Flow-Matching time $t\in[0,1]$. The legacy configura
 
 \begin{table}[t]
 \centering
+\small
 \caption{Four-stage training schedule used to initialize and optimize the evaluated model.}
-\begin{tabular}{lllll}
+\begin{tabular}{p{0.19\textwidth}p{0.08\textwidth}p{0.10\textwidth}p{0.12\textwidth}p{0.36\textwidth}}
 \toprule
 Stage & Epochs & Batch & AdamW LR & Objective / selection \\
 \midrule
 Condition pretraining & 100 & 150 & $10^{-4}$ & $\mathcal L_C$; validation retrieval top-5 \\
 Background pretraining & 100 & 100 & $10^{-4}$ & $\mathcal L_{\mathrm{bg}}$; validation loss \\
-Residual pretraining & 100 & 64 & $5\times10^{-5}$ & FM + recon. + residual low-pass; validation loss \\
+Residual pretraining & 100 & 64 & $5\times10^{-5}$ & FM + reconstruction + residual low-pass; validation loss \\
 Final joint optimization & 100 & 64/process & grouped & $\mathcal L_{\mathrm{joint}}$; validation loss \\
 \bottomrule
 \end{tabular}
