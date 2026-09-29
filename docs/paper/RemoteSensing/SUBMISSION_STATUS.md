@@ -118,3 +118,19 @@ Scientific source closure: **PASS**.
 - Numerical/terminology ledger: synchronized on 2026-09-29.
 - New experiments: none.
 - Journal submission: not yet authorized; final PDF/template and author-metadata packaging remain separate steps.
+
+## Final PDF verification — 2026-09-29
+
+- Manuscript source commit verified by CI: `42a6c485082f8643476eba522a3de8009b86ab9e`.
+- Repository quality workflow: **PASS**.
+- Main PDF compile: **PASS**, 16 pages.
+- Supplement PDF compile: **PASS**, 11 pages.
+- Visual inspection: **PASS**; no clipping, overlap, broken glyphs, or failed figure rendering observed.
+- Blind-review packaging: **PASS**; author line uses `Anonymous Authors`, reviewer-facing administrative metadata are anonymized, and hyperlink borders are hidden.
+- Final blind PDFs:
+  - `BG-RFM_RemoteSensing_blind.pdf`
+  - `BG-RFM_RemoteSensing_supplement_blind.pdf`
+
+Scientific blockers remain: **none known**.
+
+Next scientific step: targeted Reviewer-2 M1/M2 verification only. Journal submission itself remains a separate PI/author action after non-anonymous metadata and template packaging are finalized.
