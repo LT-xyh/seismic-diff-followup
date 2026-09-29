@@ -10,7 +10,7 @@ We formulate the problem differently. Every available modality can contribute to
 
 This leads to Background-Guided Residual Flow Matching (\method). Given the multimodal observations, the method first predicts a background field $\hat B$. It then applies conditional Flow Matching to the prediction-relative residual $R_{\hat B}=V-\hat B$ and composes $\hat V=\hat B+\hat R$. The same inference-available $\hat B$ is reused in residual supervision, residual conditioning, and final composition; we refer to this shared-reference construction as \emph{prediction consistency}.
 
-BG-RFM does not introduce a new mathematical class of Flow Matching. It uses the standard linear Flow-Matching path after translating the target by the predicted background. In full-field coordinates this residual path is equivalently a transport from a background-centered stochastic base toward the target velocity model. The methodological contribution is therefore the combined geophysical reconstruction organization: role-aware heterogeneous conditioning, separately supervised deterministic background estimation, prediction-relative generative correction, background-conditioned residual transport, and consistent reuse of the same predicted background.
+BG-RFM retains the standard linear Flow-Matching path while changing the reconstruction variable and reference. In full-field coordinates, the residual path is equivalently a transport from a background-centered stochastic base toward the target velocity model. The methodological contribution is the combined geophysical reconstruction organization: role-aware heterogeneous conditioning, separately supervised deterministic background estimation, prediction-relative generative correction, background-conditioned residual transport, and consistent reuse of the same predicted background.
 
 The contributions of this study are threefold:
 \begin{itemize}
@@ -19,4 +19,4 @@ The contributions of this study are threefold:
     \item We enforce prediction consistency by reusing the same predicted background for residual supervision, residual conditioning, and final composition, and evaluate the resulting parameter-compact formulation under a common eight-subset OpenFWI-derived reconstruction protocol.
 \end{itemize}
 
-The resulting perspective is concise: \emph{predict the background; transport the prediction-relative correction}. The paper evaluates this responsibility allocation without claiming that residualization is intrinsically easier in all inverse problems or that BG-RFM defines a fundamentally new Flow-Matching principle.
+The resulting perspective is concise: \emph{predict the background; transport the prediction-relative correction}.
