@@ -46,7 +46,7 @@ Updated: 2026-09-28
 
 1. Table 1 — observation/task contract.
 2. Table 2 — RS-E01-Lite unified matched-input comparison.
-3. Table 3 — separate controlled comparison of three Flow-Matching formulations.
+3. Table 3 — supporting comparison of three Flow-Matching formulations; not treated as a tightly matched benchmark.
 4. Supplementary tables — effective rank and missing-modality stress tests.
 
 ## Remaining submission blockers
