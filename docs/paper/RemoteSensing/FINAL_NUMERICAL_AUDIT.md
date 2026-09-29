@@ -7,13 +7,13 @@ Scientific-content baseline: `96fddfcab601dc61562b73998a74572dde4a160f`
 | BG-RFM MAE | 0.01503 | RS-E01-Lite 0.01502705 | ROUNDING_ONLY |
 | BG-RFM RMSE | 0.02695 | RS-E01-Lite 0.02694626 | ROUNDING_ONLY |
 | BG-RFM SSIM | 0.99165 | RS-E01-Lite 0.99164512 | ROUNDING_ONLY |
-| BG-RFM parameters | 10.60M / 10.6M | RS-E01-Lite 10.60M | VERIFIED |
+| BG-RFM trainable inference parameters | 10.63M (10,630,216) | final implementation audit | VERIFIED |
 | InversionNet MAE/RMSE/SSIM | 0.01194 / 0.02730 / 0.99118 | RS-E01-Lite | ROUNDING_ONLY |
 | InversionNet parameters | 24.41M | RS-E01-Lite | VERIFIED |
 | VelocityGAN MAE/RMSE/SSIM | 0.02170 / 0.04341 / 0.97267 | RS-E01-Lite | ROUNDING_ONLY |
 | VelocityGAN parameters | 25.59M | RS-E01-Lite | VERIFIED |
 | supervised multimodal UPFWI MAE/RMSE/SSIM | 0.01218 / 0.02987 / 0.99051 | RS-E01-Lite | ROUNDING_ONLY |
-| supervised multimodal UPFWI parameters | approx. 19.00M | RS-E01-Lite | VERIFIED |
+| UPFWI-derived parameter count | not reported in reviewer-facing table | exact evaluated recount unavailable | VERIFIED omission |
 | Latent U-Net MAE/RMSE/SSIM | 0.00706 / 0.01309 / 0.99403 | RS-E01-Lite | ROUNDING_ONLY |
 | Latent U-Net parameters | 35.12M | RS-E01-Lite | VERIFIED |
 | total multimodal records | 336,000 | retained protocol/source manuscript | VERIFIED |
@@ -32,3 +32,8 @@ Scientific-content baseline: `96fddfcab601dc61562b73998a74572dde4a160f`
 Known suspicious historical `InversionNet MAE_L = 0.0180` remains excluded. The historical Uniform Fusion, w/o Prediction Consistency, and w/o Background Context rows are also excluded from reviewer-facing empirical evidence because their implementation provenance is not sufficiently recoverable.
 
 **Audit result: PASS.** No manuscript-visible number is SOURCE_MISMATCH or UNRESOLVED.
+
+
+## Table 3 evidence classification
+
+The three retained formulation rows are supporting formulation-level evidence, not a tightly matched benchmark. The archived records do not preserve enough generated-configuration provenance to verify identical Euler-step settings for every retained run. Reviewer-facing text must not call this comparison strictly controlled or use it to isolate component-level causal contributions.
