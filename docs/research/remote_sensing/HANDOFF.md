@@ -1,6 +1,6 @@
 # Remote Sensing Handoff
 
-Updated: 2026-09-27
+Updated: 2026-09-29
 
 ## Objective
 
@@ -218,3 +218,15 @@ The active manuscript is:
 The next milestone is a **complete draft suitable for blind review**.
 
 No new training, baseline expansion, multi-seed campaign, robustness study, 3D study, field-data study, downstream FWI study, or historical checkpoint reconstruction is authorized as a submission prerequisite.
+
+## Final scientific closure — 2026-09-29
+
+Reviewer-2 M1/M2 are closed at the manuscript-source level without new experiments.
+
+M1 closure now documents the evaluated method specification, active condition objective, staged training, deterministic split contract, current 0--3-well observation contract, architecture/tensor alignment, continuous Flow-Matching time with 50-step Euler inference, parameter accounting, evaluation policy, and diagnostic definitions.
+
+M2 closure positions the retained Concat-FM / role-aware full-field FM / BG-RFM study as supporting formulation-level evidence. It is not described as a strictly matched, tightly controlled, component-isolated, or causal ablation because exact Euler-step equality is not asserted across every retained formulation.
+
+The reviewer-facing narrative has been cleaned according to the publication principles: internal provenance history is kept in research records rather than foregrounded in the paper, while scientifically necessary qualifications remain concise. The accepted main comparison is the 33,600-record RS-E01-Lite evaluation; BG-RFM uses 10,630,216 trainable inference parameters (10.63M).
+
+No new experiment is authorized before first submission. Remaining work is final PDF/template and administrative metadata packaging plus targeted Reviewer-2 verification.
