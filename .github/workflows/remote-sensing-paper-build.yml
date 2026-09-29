@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - remote-sensing/submission-sprint
+  pull_request:
   workflow_dispatch:
 
 jobs:
