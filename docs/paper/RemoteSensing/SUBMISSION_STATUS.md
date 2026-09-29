@@ -1,6 +1,6 @@
 # Remote Sensing Submission Status
 
-Updated: 2026-09-28
+Updated: 2026-09-29
 
 ## Scientific status
 
@@ -60,7 +60,6 @@ Administrative/format:
 - confirm conflict-of-interest statement;
 - finalize acknowledgment and any journal-required generative-AI disclosure;
 - archive/tag the exact code revision used for submission;
-- run the dedicated final numerical consistency pass;
 - prepare the mandatory Remote Sensing cover letter after all authors confirm the required submission statements;
 - migrate the free-format LaTeX draft to the current MDPI Remote Sensing template at final packaging;
 - verify final template pagination against the journal's current Article guidance;
@@ -108,3 +107,14 @@ Verified implementation facts have been integrated:
 - removal of the duplicate supplementary full-input score.
 
 Table 3 is now supporting formulation-level evidence rather than a strictly controlled benchmark.
+
+## Final scientific closure
+
+Scientific source closure: **PASS**.
+
+- Reviewer-2 M1: resolved through method/objective/training/split/observation/architecture/evaluation documentation.
+- Reviewer-2 M2: resolved by positioning Table 3 as supporting formulation-level evidence and avoiding unsupported strict-control or component-isolation language.
+- Publication-principle cleanup: completed; repeated internal provenance/audit language and unnecessary self-weakening comparisons were reduced while retaining the qualifications needed for scientific interpretation.
+- Numerical/terminology ledger: synchronized on 2026-09-29.
+- New experiments: none.
+- Journal submission: not yet authorized; final PDF/template and author-metadata packaging remain separate steps.
