@@ -14,14 +14,14 @@ The task is therefore not raw-shot end-to-end inversion. RMS velocity and the mi
 
 \input{tables/task_definition}
 
-The benchmark is constructed from FlatVel-A/B, CurveVel-A/B, FlatFault-A/B, and CurveFault-A/B in OpenFWI \citep{deng2022openfwi}. The processed/interpreted constraints are generated offline from each synthetic reference model and its associated seismic data. This constitutes a \emph{controlled synthetic observation contract}. It differs from a field setting in which RMS velocity, horizons, migration images, and wells have heterogeneous and uncertain estimation errors.
+The benchmark is constructed from FlatVel-A/B, CurveVel-A/B, FlatFault-A/B, and CurveFault-A/B in OpenFWI \citep{deng2022openfwi}. RMS velocity, the post-stack migrated image, and the horizon map are precomputed offline benchmark products that are read by the model-training repository. Their documented scientific construction is summarized below; the exact upstream generation code is not part of the model-training repository, and the benchmark used here distributes these modalities in precomputed form. This constitutes a \emph{controlled synthetic observation contract}. It differs from a field setting in which RMS velocity, horizons, migration images, and wells have heterogeneous and uncertain estimation errors.
 
 \paragraph{RMS velocity.}
 For each lateral position, depth samples are mapped to two-way time through
 \begin{equation}
 t(z,x)=2\int_0^z \frac{1}{V(z',x)}\,\mathrm{d}z',
 \end{equation}
-and the RMS field is computed after interpolation to a uniform time grid:
+and the RMS field is computed after interpolation to a uniform 1-ms time grid:
 \begin{equation}
 V_{\mathrm{rms}}^2(t,x)=\frac{1}{t}\int_0^t v^2(\tau,x)\,\mathrm{d}\tau.
 \end{equation}
@@ -31,7 +31,7 @@ Because this quantity is derived directly from the known synthetic target, it ca
 OpenFWI shot records are processed by common-midpoint grouping, normal-moveout correction using the associated RMS field, stacking, and post-stack time migration. The resulting image provides a dense structural observation on the time--lateral grid.
 
 \paragraph{Horizons and wells.}
-The benchmark horizon map is generated from strong vertical velocity gradients using a fixed quantile rule. Sparse wells retain zero to three selected velocity columns together with a binary mask. Validation and test wells are deterministic under well seed 1234.
+The benchmark horizon map is generated from vertical velocity-gradient magnitude using a fixed quantile threshold; the exact threshold value is not required by the training repository because the horizon product is precomputed. Sparse wells retain zero to three selected lateral columns. For each selected column, the full depth trace is copied into the well-value tensor and the binary well mask is one along that column; values are zero outside selected columns. Validation and test wells are deterministic under well seed 1234.
 
 \subsection{Role-Aware Multi-Source Conditioning}
 
@@ -39,12 +39,12 @@ The modalities differ in sampling domain, density, and information content, but 
 \begin{equation}
 \mathcal E_m(x_m)=\left(Z_m^{\mathrm{bg}},Z_m^{\mathrm{str}},r_m\right),
 \end{equation}
-where $r_m$ contains learned role-specific reliability scores. Availability, externally supplied quality, and predicted reliability define normalized fusion weights. The two role interfaces are
+where $r_m$ contains learned role-specific reliability scores. In the evaluated loader, the quality state does not use target error: a present non-well modality has $q_{i,m}=1$, while well quality is binary according to whether sampled well columns exist. Availability is $a_{i,m}=\mathbf{1}[\mathrm{mask}_{i,m}q_{i,m}>0]$. Learned reliability is produced by adaptive average pooling, a linear layer, and a sigmoid. Role weights are proportional to learned reliability times availability and are normalized over available modalities with denominator clamped at $10^{-6}$; if no modality is available, fused weights remain zero. The two role interfaces are
 \begin{equation}
 C_k=\mathcal G_k\left(\sum_{m\in\Omega}w_m^k Z_m^k\right),
 \qquad k\in\{\mathrm{bg},\mathrm{str}\},
 \end{equation}
-with $\Omega$ the observed modality set. The final model uses 16-channel modality/role features and a 32-channel structural condition adapter. Training-only alignment, anchor-calibration, separation, and reliability terms are specified in Supplementary Section~S1; they are not inference inputs.
+with $\Omega$ the observed modality set. RMS and post-stack migrated inputs are compressed/aligned to $70\times70$ spatial feature maps with 32 channels, while horizon and well streams produce 16-channel aligned maps; fusion occurs only after alignment to the depth-grid representation. Both $C_{\mathrm{bg}}$ and $C_{\mathrm{str}}$ are 32-channel $70\times70$ conditions. Training-only subset-Symile, anchor-calibration, separation, and reliability terms are specified in Supplementary Section~S1; they are not inference inputs. Inference requires only the observations, masks, and loader-provided availability/quality state, not any ground-truth-derived reliability score.
 
 \input{figures/figure1_schematic}
 
@@ -98,7 +98,7 @@ and the vector-field term is
 \|v_\theta(R_t,t,c)-u_t\|_2^2
 \right].
 \end{equation}
-The evaluated residual network is a full-resolution FiLM-conditioned U-Net \citep{perez2018film} with 128 hidden channels and an identity codec on the $70\times70$ velocity grid.
+The evaluated residual network is a full-resolution FiLM-conditioned U-Net \citep{perez2018film} with 128 hidden channels and an identity codec on the $70\times70$ velocity/state grid. Training samples continuous time $t\in[0,1]$; inference integrates the learned vector field with 50 explicit Euler steps.
 
 The prediction-relative formulation also has a simple full-field interpretation. Because the stop-gradient operator changes only the backward path, $\bar B$ and $\hat B$ have the same forward value. Defining
 \begin{equation}
@@ -143,13 +143,13 @@ Joint optimization uses
 \end{equation}
 where $\mathcal L_C$ is the role-aware condition objective. In the final configuration the two subset-Symile role terms have unit weight, anchor calibration has weight 0.5, and the reliability and two orthogonality regularizers each have weight 0.05; modality dropout is disabled. Supplementary Section~S1 gives the complete definitions.
 
-The model is jointly optimized for 100 epochs with batch size 64 on four devices using DDP and bfloat16 mixed precision. AdamW is used without a learning-rate scheduler. Parameter-group learning rates are $10^{-6}$ for the encoder backbone, $3\times10^{-6}$ for encoder heads, the contrastive module, and condition adapters, $10^{-4}$ for the background branch, and $5\times10^{-5}$ for the residual branch. The joint run is initialized from previously trained condition, background, and residual stage checkpoints and then optimized under the joint objective. The complete evaluated model contains 10.6M trainable parameters.
+The model is jointly optimized for 100 epochs with batch size 64 on four devices using DDP and bfloat16 mixed precision. AdamW is used without a learning-rate scheduler. Parameter-group learning rates are $10^{-6}$ for the encoder backbone, $3\times10^{-6}$ for encoder heads, the contrastive module, and condition adapters, $10^{-4}$ for the background branch, and $5\times10^{-5}$ for the residual branch. The joint run is initialized from previously trained condition, background, and residual stage checkpoints and then optimized under the joint objective. The evaluated inference model contains 10,630,216 trainable parameters (10.63M); the enclosing training wrapper contains 10,648,427 parameters because it also includes training-only state/modules.
 
 \subsection{Inference and Evaluation Protocol}
 
-At inference, only the observed constraints and their masks are supplied. BG-RFM predicts $\hat B$, samples one residual trajectory, and integrates the learned vector field for 50 Euler steps before composing $\hat V=\hat B+\hat R$. For the common comparison, stochastic BG-RFM predictions use base seed 2027; the per-batch seed is deterministically derived by hashing the ordered held-out record identities in that batch. The deterministic reference models require no sampling seed. No ensemble averaging over multiple stochastic trajectories is used.
+At inference, only the observed constraints and their masks/availability state are supplied. BG-RFM predicts $\hat B$, samples one residual trajectory, and integrates the learned vector field for 50 Euler steps before composing $\hat V=\hat B+\hat R$. The evaluation batch size is 64 and the held-out loader uses \texttt{shuffle=False}. For the common comparison, stochastic BG-RFM predictions use base seed 2027; the per-batch seed is deterministically derived by hashing the ordered held-out record identities in that batch. This batch-keyed seed controls only the stochastic realization; dataset membership is fixed independently of batch grouping. The deterministic reference models require no sampling seed. No ensemble averaging over multiple stochastic trajectories is used.
 
-The corpus contains 336,000 aligned records. A deterministic global 0.7/0.2/0.1 split with seed 42 yields 33,600 test records, and the evaluator traverses this membership with \texttt{shuffle=False}. The test manifest was verified to equal the reconstructed test split with zero train/validation, train/test, or validation/test overlap.
+The corpus contains 336,000 aligned records. A deterministic global 0.7/0.2/0.1 split with seed 42 yields 33,600 test records. All prerequisite and joint training stages invoke the same deterministic dataset-splitting implementation using this split contract; training and validation loaders access only their corresponding partitions, and test metrics are not used for checkpoint selection. The common evaluation manifest was verified against the reconstructed test split with zero train/validation, train/test, or validation/test overlap. Archived prerequisite-stage manifests, however, do not retain record-level identities, so prerequisite membership cannot be independently reconstructed from those manifests alone even though their configurations use the same deterministic split contract.
 
 Velocity quantities in the common evaluator use the normalized OpenFWI target coordinate, corresponding to the physical interval 1500--4500~m/s mapped to $[-1,1]$. Normalized data loading clamps continuous inputs/targets to their declared profile range; horizon and well-mask channels remain discrete. The evaluator applies no additional post-hoc clipping to model predictions.
 
