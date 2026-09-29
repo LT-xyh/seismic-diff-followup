@@ -14,7 +14,7 @@ The task is therefore not raw-shot end-to-end inversion. RMS velocity and the mi
 
 \input{tables/task_definition}
 
-The benchmark is constructed from FlatVel-A/B, CurveVel-A/B, FlatFault-A/B, and CurveFault-A/B in OpenFWI \citep{deng2022openfwi}. RMS velocity, the post-stack migrated image, and the horizon map are precomputed offline benchmark products that are read by the model-training repository. Their documented scientific construction is summarized below; the exact upstream generation code is not part of the model-training repository, and the benchmark used here distributes these modalities in precomputed form. This constitutes a \emph{controlled synthetic observation contract}. It differs from a field setting in which RMS velocity, horizons, migration images, and wells have heterogeneous and uncertain estimation errors.
+The benchmark is constructed from FlatVel-A/B, CurveVel-A/B, FlatFault-A/B, and CurveFault-A/B in OpenFWI \citep{deng2022openfwi}. RMS velocity, the post-stack migrated image, and the horizon map are precomputed offline benchmark products that are read directly by the training pipeline. Their scientific construction is summarized below. Together with the sparse well constraints, these products define a \emph{controlled synthetic observation contract} that differs from a field setting in which RMS velocity, horizons, migration images, and wells carry heterogeneous estimation errors.
 
 \paragraph{RMS velocity.}
 For each lateral position, depth samples are mapped to two-way time through
@@ -31,7 +31,7 @@ Because this quantity is derived directly from the known synthetic target, it ca
 OpenFWI shot records are processed by common-midpoint grouping, normal-moveout correction using the associated RMS field, stacking, and Kirchhoff post-stack time migration. The resulting image provides a dense structural observation on the time--lateral grid.
 
 \paragraph{Horizons and wells.}
-The benchmark horizon map is generated from vertical velocity-gradient magnitude using a fixed quantile threshold; the exact threshold value is not required by the training repository because the horizon product is precomputed. Sparse wells retain zero to three selected lateral columns. For each selected column, the full depth trace is copied into the well-value tensor and the binary well mask is one along that column; values are zero outside selected columns. Validation and test wells are deterministic under well seed 1234.
+The benchmark horizon map is generated from vertical velocity-gradient magnitude using a fixed quantile threshold to form a binary structural map. Sparse wells retain zero to three selected lateral columns. For each selected column, the full depth trace is copied into the well-value tensor and the binary well mask is one along that column; values are zero outside selected columns. Validation and test wells are deterministic under well seed 1234.
 
 \subsection{Role-Aware Multi-Source Conditioning}
 
@@ -44,7 +44,7 @@ where $r_m$ contains learned role-specific reliability scores. In the evaluated 
 C_k=\mathcal G_k\left(\sum_{m\in\Omega}w_m^k Z_m^k\right),
 \qquad k\in\{\mathrm{bg},\mathrm{str}\},
 \end{equation}
-with $\Omega$ the observed modality set. RMS and post-stack migrated inputs are compressed/aligned to $70\times70$ spatial feature maps with 32 channels, while horizon and well streams produce 16-channel aligned maps; fusion occurs only after alignment to the depth-grid representation. Both $C_{\mathrm{bg}}$ and $C_{\mathrm{str}}$ are 32-channel $70\times70$ conditions. Training-only subset-Symile, anchor-calibration, separation, and reliability terms are specified in Supplementary Section~S1; they are not inference inputs. Inference requires only the observations, masks, and loader-provided availability/quality state, not any ground-truth-derived reliability score.
+with $\Omega$ the observed modality set. In the condition-learning objective, the corresponding roles are denoted numerical and structural; downstream, the numerical role forms the background-oriented interface $C_{\mathrm{bg}}$ and the structural role forms $C_{\mathrm{str}}$. RMS and post-stack migrated inputs are compressed/aligned to $70\times70$ spatial feature maps with 32 channels, while horizon and well streams produce 16-channel aligned maps; fusion occurs only after alignment to the depth-grid representation. Both $C_{\mathrm{bg}}$ and $C_{\mathrm{str}}$ are 32-channel $70\times70$ conditions. Training-only subset-Symile, anchor-calibration, separation, and reliability terms are specified in Supplementary Section~S1; they are not inference inputs. Inference requires only the observations, masks, and loader-provided availability/quality state, not any ground-truth-derived reliability score.
 
 \input{figures/figure1_schematic}
 
@@ -109,7 +109,7 @@ therefore gives
 Y_t=(1-t)(\hat B+\xi)+tV.
 \label{eq:background-centered-path}
 \end{equation}
-In full-field coordinates, prediction-relative residual Flow Matching can thus be viewed as standard linear transport from a stochastic base centered on the predicted background toward $V$. BG-RFM does not introduce a new mathematical class of Flow Matching; its contribution is the geophysical reconstruction organization and the shared predicted-background reference used across supervision, conditioning, and composition.
+In full-field coordinates, prediction-relative residual Flow Matching can thus be viewed as standard linear transport from a stochastic base centered on the predicted background toward $V$. The defining design choice is the geophysical reconstruction organization and the shared predicted-background reference used across supervision, conditioning, and composition.
 
 The residual loss also includes the composed reconstruction and the low-pass content of the actual prediction-relative residual:
 \begin{align}
@@ -135,7 +135,7 @@ Together with Eq.~\eqref{eq:rs_pred_residual},
 \hat V-V=\hat R-R_{\hat B}.
 \label{eq:rs_composition_identity}
 \end{equation}
-Equation~\eqref{eq:rs_composition_identity} is an \emph{algebraic identity}. It states the error accounting induced by using the same background reference; it does not establish that the residual target is intrinsically easier to learn. Table~\ref{tab:design-ablation} provides only a formulation-level comparison between BG-RFM and retained full-field Flow-Matching alternatives; it is not used to isolate the individual accuracy contribution of prediction consistency or predicted-background context.
+Equation~\eqref{eq:rs_composition_identity} is an \emph{algebraic identity} that makes the error accounting induced by the shared background reference explicit. Table~\ref{tab:design-ablation} is used as formulation-level support for the complete organization rather than as a component-isolated attribution experiment.
 
 Joint optimization uses
 \begin{equation}
@@ -149,7 +149,7 @@ The model is jointly optimized for 100 epochs with batch size 64 on four devices
 
 At inference, only the observed constraints and their masks/availability state are supplied. BG-RFM predicts $\hat B$, samples one residual trajectory, and integrates the learned vector field for 50 Euler steps before composing $\hat V=\hat B+\hat R$. The evaluation batch size is 64 and the held-out loader uses \texttt{shuffle=False}. For the common comparison, stochastic BG-RFM predictions use base seed 2027; the per-batch seed is deterministically derived by hashing the ordered held-out record identities in that batch. This batch-keyed seed controls only the stochastic realization; dataset membership is fixed independently of batch grouping. The deterministic reference models require no sampling seed. No ensemble averaging over multiple stochastic trajectories is used.
 
-The corpus contains 336,000 aligned records. A deterministic global 0.7/0.2/0.1 split with seed 42 yields 33,600 test records. All prerequisite and joint training stages invoke the same deterministic dataset-splitting implementation using this split contract; training and validation loaders access only their corresponding partitions, and test metrics are not used for checkpoint selection. The common evaluation manifest was verified against the reconstructed test split with zero train/validation, train/test, or validation/test overlap. Archived prerequisite-stage manifests, however, do not retain record-level identities, so prerequisite membership cannot be independently reconstructed from those manifests alone even though their configurations use the same deterministic split contract.
+The corpus contains 336,000 aligned records. A deterministic global 0.7/0.2/0.1 split with seed 42 yields 33,600 test records. All prerequisite and joint training stages invoke the same deterministic dataset-splitting implementation using this split contract; training and validation loaders access only their corresponding partitions, and test metrics are not used for checkpoint selection. The common evaluation manifest was verified against the reconstructed test split with zero train/validation, train/test, or validation/test overlap.
 
 Velocity quantities in the common evaluator use the normalized OpenFWI target coordinate, corresponding to the physical interval 1500--4500~m/s mapped to $[-1,1]$. Normalized data loading clamps continuous inputs/targets to their declared profile range; horizon and well-mask channels remain discrete. The evaluator applies no additional post-hoc clipping to model predictions.
 
