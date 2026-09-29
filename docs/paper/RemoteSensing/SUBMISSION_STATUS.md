@@ -22,7 +22,7 @@ Updated: 2026-09-28
 - Materials and Methods: complete first-submission draft.
 - Results 4.1: complete.
 - Results 4.2: complete with retained qualitative evidence.
-- Results 4.3: complete as a three-formulation controlled comparison (Concat-FM, role-aware full-field FM, BG-RFM).
+- Results 4.3: complete as a supporting three-formulation comparison (Concat-FM, role-aware full-field FM, BG-RFM), explicitly not treated as tightly matched because identical Euler-step settings cannot be verified for every archived run.
 - Results 4.4: complete using diagnostic evidence.
 - Discussion: complete.
 - Conclusions: complete.
@@ -89,3 +89,22 @@ Completed:
 - internal project vocabulary removed from reviewer-facing prose.
 
 Final Table 3 fact gate: CLOSED. Uniform Fusion, w/o Prediction Consistency, and w/o Background Context are excluded from reviewer-facing evidence because their implementation provenance could not be established sufficiently. No reconstruction, retraining, or artifact archaeology is required.
+
+
+## Reviewer M1/M2 documentation closure
+
+Verified implementation facts have been integrated:
+- complete active condition objective and zero-weight exclusions;
+- loader quality/availability and learned reliability definitions;
+- four-stage training schedule and validation-based selection;
+- split-provenance wording with prerequisite-manifest limitation;
+- offline observation-product contract and current 0--3-column well implementation;
+- tensor/interface shape table;
+- continuous Flow-Matching time wording and 50-step Euler inference;
+- parameter-count conventions, including exact BG-RFM inference count and omission of an unverified UPFWI-derived count;
+- evaluation batch size, stochastic trajectory policy, and batch-keyed seed explanation;
+- observation-removal tensor/mask implementation;
+- operational definitions for CKA, retrieval, anchor similarity, role specialization, and bootstrap intervals;
+- removal of the duplicate supplementary full-input score.
+
+Table 3 is now supporting formulation-level evidence rather than a strictly controlled benchmark.
