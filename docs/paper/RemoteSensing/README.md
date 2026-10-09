@@ -30,7 +30,7 @@ No additional experiment is a submission prerequisite.
 
 ## Formatting strategy
 
-Remote Sensing currently permits free-format initial submission, provided the required scientific and back-matter sections are present. The current manuscript therefore prioritizes a stable scientific draft. At final packaging, migrate the text into the current MDPI Remote Sensing LaTeX template without changing scientific claims or numerical values.
+Remote Sensing currently permits free-format initial submission, provided the required scientific and back-matter sections are present. The current manuscript therefore prioritizes a stable scientific draft. For first submission the journal accepts free-format manuscripts. The official LaTeX template is recommended but not mandatory at this stage. This branch preserves the verified free-format manuscript and its frozen scientific content.
 
 ## Evidence rule
 
@@ -41,3 +41,15 @@ Remote Sensing currently permits free-format initial submission, provided the re
 ## Unified manuscript (2026-10-09)
 
 The manuscript contains one continuous main-plus-appendices PDF. Appendix A covers mathematical and implementation detail, Appendix B baseline adaptations and experimental/evaluation protocols, and Appendix C additional results, diagnostics and qualitative cases. The standalone supplementary PDF is discontinued. Compile from `main.tex` in this directory with `latexmk -pdf main.tex`. The workflow `.github/workflows/remote-sensing-paper-build.yml` collects the sole PDF and a self-contained LaTeX source ZIP including all referenced images.
+
+## Non-anonymous submission preparation (2026-10-09)
+
+Source of truth for the submission-preparation stage is submission/SUBMISSION_READINESS.md.
+
+- main.tex now uses the structured Highlights required by Remote Sensing.
+- Hyperlink anchors are made unique internally with hypertexnames=false; printed figure/table/equation numbering is unchanged.
+- All author-sensitive front/back matter and GenAI language are held in submission/author_metadata.tex, submission/admin_statements.tex and submission/ai_methods_disclosure.tex.
+- These files currently contain clearly marked author-confirmation placeholders; the preview is NOT authorized for SUSY upload.
+- submission/package_submission.py builds a minimal source ZIP with recursively referenced LaTeX source, bibliography and figures only. Historical manuscript and supplement files are preserved in Git but excluded from this ZIP.
+- Cover letter is a draft until originality, author-approval and related-manuscript declarations are signed by authors.
+- DO NOT create the final submission tag until all author data and mandatory declarations are confirmed.
