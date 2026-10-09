@@ -66,8 +66,6 @@ with the framework's default inclusion of padded values in the average. The comp
 +0.5\,\|\hat B-P_L(V)\|_2^2.
 \label{eq:bg-loss-final}
 \end{equation}
-No background high-frequency penalty, multiscale term, or learned quality gate is active in the evaluated configuration.
-
 \subsection{Prediction-Relative Flow Matching}
 
 The residual target is defined relative to the background that is actually available at inference:
@@ -109,7 +107,7 @@ therefore gives
 Y_t=(1-t)(\hat B+\xi)+tV.
 \label{eq:background-centered-path}
 \end{equation}
-In full-field coordinates, prediction-relative residual Flow Matching can thus be viewed as standard linear transport from a stochastic base centered on the predicted background toward $V$. The defining design choice is the geophysical reconstruction organization and the shared predicted-background reference used across supervision, conditioning, and composition.
+In full-field coordinates, prediction-relative residual Flow Matching is therefore standard linear transport from a stochastic base centered on the predicted background toward $V$; the methodological distinction is the learned, observation-dependent reconstruction reference.
 
 The residual loss also includes the composed reconstruction and the low-pass content of the actual prediction-relative residual:
 \begin{align}
@@ -135,13 +133,13 @@ Together with Eq.~\eqref{eq:rs_pred_residual},
 \hat V-V=\hat R-R_{\hat B}.
 \label{eq:rs_composition_identity}
 \end{equation}
-Equation~\eqref{eq:rs_composition_identity} is an \emph{algebraic identity} that makes the error accounting induced by the shared background reference explicit. Table~\ref{tab:design-ablation} is used as formulation-level support for the complete organization rather than as a component-isolated attribution experiment.
+Equation~\eqref{eq:rs_composition_identity} is an \emph{algebraic identity} that makes the error accounting induced by the shared background reference explicit.
 
 Joint optimization uses
 \begin{equation}
 \mathcal L=\mathcal L_R+\mathcal L_{\mathrm{bg}}+0.01\,\mathcal L_C ,
 \end{equation}
-where $\mathcal L_C$ is the role-aware condition objective. In the final configuration the two subset-Symile role terms have unit weight, anchor calibration has weight 0.5, and the reliability and two orthogonality regularizers each have weight 0.05; modality dropout is disabled. The active condition objective is
+where $\mathcal L_C$ is the role-aware condition objective:
 \begin{equation}
 \begin{split}
 \mathcal L_C={}&
