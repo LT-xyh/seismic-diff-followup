@@ -43,6 +43,7 @@ jobs:
                   continue
               text=p.read_text(encoding="utf-8")
               refs.update(re.findall(r"\\includegraphics(?:\[[^]]*\])?\{([^}]+)\}",text))
+              refs.update(re.findall(r"\\qpanel\{([^}]+)\}",text))
           for name in sorted(refs):
               if name.startswith("#"):
                   continue
