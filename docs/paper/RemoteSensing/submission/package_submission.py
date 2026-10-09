@@ -78,6 +78,20 @@ def main() -> int:
         if "archive" in item.parts or item.name == "supplement.tex":
             raise RuntimeError(f"Historical source in active dependency graph: {item}")
     paths = papers | images
+    # Preserve editable/provenance sources of the restored vector figure,
+    # alongside the PDF assets needed by pdflatex. These are not historical
+    # unrelated submission files.
+    extras = [
+        root / "figures/figure1_bg_rfm_restored.svg",
+        root / "figures/render_restored_artwork.py",
+        root.parent / "AAAI2027/figures/method_overview.svg",
+        root.parent / "AAAI2027/figures/figure3_condition_learning/figure3_condition_learning.svg",
+        root.parent / "AAAI2027/figures/figure4_residual_transport/figure4_residual_transport.svg",
+    ]
+    for asset in extras:
+        if not asset.exists():
+            raise RuntimeError(f"Required editable figure source missing: {asset}")
+        paths.add(asset.resolve())
     if destination.exists():
         shutil.rmtree(destination)
     destination.mkdir(parents=True)
@@ -92,6 +106,7 @@ def main() -> int:
         "BG-RFM Remote Sensing single-manuscript LaTeX source.\n"
         "Compile: cd RemoteSensing && latexmk -pdf main.tex\n"
         "Includes all active Appendices A-C in main.tex; no standalone supplement.\n"
+        "Restored figures include embedded vector PDFs and editable AAAI-derived SVGs.\n"
         "PREVIEW ONLY: author metadata, funding, COI, GenAI and related-manuscript "
         "declarations require confirmation before submission.\n",
         encoding="utf-8",
@@ -112,8 +127,11 @@ def main() -> int:
 
     with zipfile.ZipFile(zip_path) as archive:
         names = archive.namelist()
-        banned = (".log", ".aux", ".bbl", ".blg", ".fls", ".fdb_latexmk", ".pdf")
+        banned = (".log", ".aux", ".bbl", ".blg", ".fls", ".fdb_latexmk")
         assert not any(name.endswith(banned) for name in names)
+        assert not any(name.endswith("/main.pdf") or name.endswith("/supplement.pdf") for name in names)
+        assert "RemoteSensing/figures/figure1_bg_rfm_restored.pdf" in names
+        assert "RemoteSensing/figures/figure1_bg_rfm_restored.svg" in names
         assert not any("/archive/" in name or name.endswith("supplement.tex")
                        for name in names)
         assert "RemoteSensing/main.tex" in names
