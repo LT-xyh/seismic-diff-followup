@@ -104,7 +104,7 @@ def overview(source, dest):
     for x,name in zip([738,818,898],["ξ","R_t","R_target"]):txt(x,439,name,16,B)
     box(700,451,255,69,BB,B)
     txt(827,476,"Residual FiLM U-Net",19,B,"bold")
-    txt(827,501,"Flow Matching · 50 Euler steps",15,B)
+    txt(827,501,"50 Euler inference steps",15,B)
     arrow([(955,483),(977,483)],B)
     box(979,451,75,69,BB,B);txt(1016,491,"R̂",26,B,"bold")
     arrow([(538,358),(538,348),(1110,348),(1110,442)],G,width=2)
