@@ -4,6 +4,8 @@ Dear Editors of *Remote Sensing*,
 
 Please consider our manuscript, **“Background-Guided Residual Flow Matching for Multi-Constraint Seismic Velocity Model Building,”** for consideration as an Article in *Remote Sensing*.
 
+**Confirmed submission authors (in order):** Chunlei Wu; Yinghao Xu; Jing Lu (corresponding author).
+
 Seismic initial velocity model building brings together observations with different geophysical meanings: RMS velocity encodes kinematic trends, post-stack time-migrated images and interpreted horizons provide structural information, and sparse well logs offer local velocity control. Learning from these heterogeneous sources requires a reconstruction formulation that uses their complementary information coherently.
 
 We propose Background-Guided Residual Flow Matching (BG-RFM), a role-aware approach that predicts a deterministic velocity background and learns a generative correction relative to that same prediction. The background estimate is used consistently to construct the residual training target, condition residual transport, and compose the final velocity field. The methodological contribution is this explicit coupling of deterministic background recovery and prediction-referenced generative correction, rather than a modification to the basic mathematics of Flow Matching.
@@ -15,7 +17,8 @@ We believe the paper will be of interest to *Remote Sensing* readers concerned w
 **MANDATORY AUTHOR-CONFIRMATION GATE — the following declarations have not yet been approved and must not be submitted as unchecked assertions:**
 
 - [ ] "We confirm that neither the manuscript nor any parts of its content are currently under consideration for publication with or published in another journal."
-- [ ] "All authors have approved the manuscript and agree with its submission to Remote Sensing."
+- [ ] Final manuscript and authorship approval from **Chunlei Wu, Yinghao Xu, and Jing Lu** is documented; the confirmed order and corresponding-author designation alone do not constitute all-author approval.
+- [ ] Authorship-change consent has been appropriately documented for the removal of **Zhenbo Guo, Yitong Yin, and Xianzhao Song**, including consent or notifications required by journal and institutional policies.
 - [ ] Related SeisMIC-Diff/EAAI manuscript: current journal/manuscript ID/status, common dataset and figure/text details, and appropriate disclosure to the editor are confirmed. Add the editor-facing factual paragraph or supporting related-manuscript attachment after confirmation.
 - [ ] Any prior submission to an MDPI journal of the same manuscript is disclosed, including manuscript ID where applicable.
 
@@ -23,11 +26,13 @@ Thank you for your consideration.
 
 Sincerely,
 
-**[Confirmed corresponding author — REQUIRED]**
+**Jing Lu**
 
-[Confirmed corresponding-author affiliation]
+Corresponding Author (confirmed role)
 
-[Confirmed corresponding-author email]
+[Official affiliation pending confirmation]
+
+[Corresponding email pending confirmation]
 
 ---
 
