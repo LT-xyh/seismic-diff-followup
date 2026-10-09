@@ -14,7 +14,7 @@ The task is therefore not raw-shot end-to-end inversion. RMS velocity and the mi
 
 \input{tables/task_definition}
 
-The benchmark is constructed from FlatVel-A/B, CurveVel-A/B, FlatFault-A/B, and CurveFault-A/B in OpenFWI \citep{deng2022openfwi}. RMS velocity, the post-stack migrated image, and the horizon map are precomputed offline benchmark products that are read directly by the training pipeline. Their scientific construction is summarized below. Together with the sparse well constraints, these products define a \emph{controlled synthetic observation contract} that differs from a field setting in which RMS velocity, horizons, migration images, and wells carry heterogeneous estimation errors.
+The benchmark is constructed from FlatVel-A/B, CurveVel-A/B, FlatFault-A/B, and CurveFault-A/B in OpenFWI \citep{deng2022openfwi}. RMS velocity, the post-stack migrated image, and the horizon map are precomputed offline benchmark products that are read directly by the training pipeline. Their scientific construction is summarized below. Together with the sparse well constraints, these products define the controlled synthetic observation contract evaluated here.
 
 \paragraph{RMS velocity.}
 For each lateral position, depth samples are mapped to two-way time through
@@ -44,7 +44,7 @@ where $r_m$ contains learned role-specific reliability scores. In the evaluated 
 C_k=\mathcal G_k\left(\sum_{m\in\Omega}w_m^k Z_m^k\right),
 \qquad k\in\{\mathrm{bg},\mathrm{str}\},
 \end{equation}
-with $\Omega$ the observed modality set. In the condition-learning objective, the corresponding roles are denoted numerical and structural; downstream, the numerical role forms the background-oriented interface $C_{\mathrm{bg}}$ and the structural role forms $C_{\mathrm{str}}$. RMS and post-stack migrated inputs are compressed/aligned to $70\times70$ spatial feature maps with 32 channels, while horizon and well streams produce 16-channel aligned maps; fusion occurs only after alignment to the depth-grid representation. RMS uses temporal pooling and bilinear alignment, while PSTM uses anisotropic downsampling and projection. Both $C_{\mathrm{bg}}$ and $C_{\mathrm{str}}$ are 32-channel $70\times70$ conditions. Training-only subset-Symile, anchor-calibration, separation, and reliability terms are defined below; their anchor tensors are not inference inputs. Inference requires only the observations, masks, and loader-provided availability/quality state, not any ground-truth-derived reliability score.
+with $\Omega$ the observed modality set. In the condition-learning objective, the corresponding roles are denoted numerical and structural; downstream, the numerical role forms the background-oriented interface $C_{\mathrm{bg}}$ and the structural role forms $C_{\mathrm{str}}$. RMS and post-stack migrated inputs are compressed/aligned to $70\times70$ spatial feature maps with 32 channels, while horizon and well streams produce 16-channel aligned maps; fusion occurs only after alignment to the depth-grid representation. RMS uses temporal pooling and bilinear alignment, while PSTM uses anisotropic downsampling and projection. Both $C_{\mathrm{bg}}$ and $C_{\mathrm{str}}$ are 32-channel $70\times70$ conditions. Training-only subset-Symile, anchor-calibration, separation, and reliability terms are defined below. Their target-derived anchor tensors are excluded from inference, which uses only observations, masks, and the supplied availability/quality state.
 
 \input{figures/figure1_schematic}
 
@@ -66,7 +66,7 @@ with the framework's default inclusion of padded values in the average. The comp
 +0.5\,\|\hat B-P_L(V)\|_2^2.
 \label{eq:bg-loss-final}
 \end{equation}
-\subsection{Prediction-Relative Flow Matching}
+\subsection{Prediction-Relative Flow Matching}\label{sec:methods-residual}
 
 The residual target is defined relative to the background that is actually available at inference:
 \begin{equation}
