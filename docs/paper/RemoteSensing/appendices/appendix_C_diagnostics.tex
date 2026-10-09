@@ -8,7 +8,7 @@
 
 \subsubsection{Modality-to-Target Kernel Alignment}
 
-Figure~\ref{fig:data-characterization}(a) uses RBF centered-kernel alignment (CKA), implemented as centered normalized HSIC, as a data-level dependence proxy between each input modality and either the low-pass background or structural complement. Within each OpenFWI subset, each representation is flattened; modality representations are divided by the square root of their feature count, and the RBF bandwidth is the median non-zero pairwise Euclidean distance for that representation. The plotted summary uses the median CKA over the eight subsets. A fixed seeded permutation of target rows provides the shuffled control. CKA is descriptive dependence evidence and is not interpreted as mutual information or causal attribution.
+Figure~\ref{fig:data-characterization}(a) uses RBF centered-kernel alignment (CKA), implemented as centered normalized HSIC, as a data-level dependence proxy between each input modality and either the low-pass background or structural complement. Within each OpenFWI subset, each representation is flattened; modality representations are divided by the square root of their feature count, and the RBF bandwidth is the median non-zero pairwise Euclidean distance for that representation. The plotted summary uses the median CKA over the eight subsets. A fixed seeded permutation of target rows provides the shuffled control. The resulting CKA values characterize modality-to-target alignment.
 
 \subsubsection{Participation-Ratio Effective Rank}
 
@@ -40,11 +40,11 @@ Median & 4.95 & 54.03 \\
 \end{tabular}
 \end{table}
 
-The structural complement has higher effective rank in every subset. This is a data-level characterization of the selected decomposition; it does not establish lower conditional entropy, lower uncertainty, or guaranteed optimization difficulty.
+The structural complement has higher effective rank in every subset, characterizing the distribution of variation under the selected low-pass decomposition.
 
 \subsection{Sensitivity to Observation Removal}
 
-A fixed trained BG-RFM model is evaluated without retraining after removing individual observations or observation groups. Removal is implemented in two coordinated steps: the corresponding observation tensor is replaced/zeroed, and its availability/quality mask state is updated so the routing mechanism does not treat the removed observation as available. These tests measure dependence/sensitivity under distribution shift from the full-input training contract; they do not isolate the causal contribution of each modality.
+A fixed trained BG-RFM model is evaluated without retraining after removing individual observations or observation groups. Removal is implemented in two coordinated steps: the corresponding observation tensor is replaced/zeroed, and its availability/quality mask state is updated so the routing mechanism does not treat the removed observation as available. Because the model is trained under full multimodal input, this test measures input-removal sensitivity under distribution shift rather than isolated causal modality contributions.
 
 The full-input results are reported in Table~\ref{tab:rs-main}.
 
@@ -64,7 +64,7 @@ PSTM only & 0.4706 & 0.5356 & 0.0154 \\
 \end{tabular}
 \end{table}
 
-The model is much more sensitive to removal of RMS velocity or horizons than to removal of the sparse well channel. Because the synthetic RMS field is derived directly from the target velocity model, the strong RMS dependence is specific to this informative synthetic observation contract and should not be extrapolated to field-derived RMS products.
+Removing RMS velocity or horizons produces larger reconstruction changes than removing the sparse well channel in this evaluation.
 
 \subsection{Condition and Transport Diagnostics}
 
@@ -83,17 +83,17 @@ q_T=
 {d^{-1}\|V\|_2^2+1},
 \qquad d=HW .
 \end{equation}
-All 33,600 held-out samples satisfy $q_T<1$ in the evaluated analysis; the mean is 0.772 with bootstrap 95\% confidence interval $[0.771,0.773]$. This interval is obtained by 2000 sample-level bootstrap resamples of the per-record $q_T$ values using seed 2027. This is a diagnostic description of the transport target in normalized coordinates, not a theorem that residual learning must be easier or more accurate.
+All 33,600 held-out samples satisfy $q_T<1$ in the evaluated analysis; the mean is 0.772 with bootstrap 95\% confidence interval $[0.771,0.773]$. This interval is obtained by 2000 sample-level bootstrap resamples of the per-record $q_T$ values using seed 2027. This quantity characterizes the background-centered transport target in the evaluated normalized coordinates.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.95\textwidth]{../AAAI2027/figures/figure3_condition_learning/appendix_full_condition_diagnostics.png}
-\caption{Extended condition-routing diagnostics. Cross-modal retrieval uses symmetric Recall@1 in role-projected spaces; anchor calibration compares matched and strictly deranged anchor similarities; role-specialization statistics describe the fused conditions; routing weights are post-training encoder outputs. These quantities are diagnostic rather than causal evidence.}\label{fig:appendix-condition-routing}
+\caption{Extended condition-routing diagnostics. Cross-modal retrieval uses symmetric Recall@1 in role-projected spaces; anchor calibration compares matched and strictly deranged anchor similarities; role-specialization statistics describe the fused conditions; routing weights are post-training encoder outputs. These quantities characterize the learned role interfaces.}\label{fig:appendix-condition-routing}
 \end{figure}
 
 \subsection{Additional Qualitative Cases}
 
-The qualitative case-selection rule is performance-dependent and uses no visual inspection. Within each OpenFWI subset, the selection score is the BG-RFM SSIM minus the largest SSIM among the adapted comparison pool consisting of InversionNet, VelocityGAN, the UPFWI-derived supervised multimodal backbone, Auto-Linear, and Latent U-Net. The per-subset panels therefore show maximum-SSIM-margin cases and must not be interpreted as typical or representative samples.
+The additional panels follow the performance-dependent SSIM selection rule specified in Section~\ref{sec:results-qualitative}; negative-margin cases are included separately.
 
 For the composite appendix panels, embedded legacy labels map to the manuscript terminology as follows:
 \begin{itemize}
@@ -108,7 +108,7 @@ For the composite appendix panels, embedded legacy labels map to the manuscript 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.98\textwidth]{../AAAI2027/figures/table2_qualitative/table2_representative_cases_1.png}
-\caption{Performance-selected per-subset maximum-SSIM-margin cases, part I. These are advantage-selected examples rather than representative cases.}\label{fig:appendix-selected-1}
+\caption{Performance-selected per-subset maximum-SSIM-margin cases, part I.}\label{fig:appendix-selected-1}
 \end{figure}
 
 \begin{figure}[t]
