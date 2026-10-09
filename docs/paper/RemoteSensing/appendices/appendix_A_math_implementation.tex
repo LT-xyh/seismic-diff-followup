@@ -40,6 +40,6 @@ Well & 0.25 & 0.95 \\
 
 \subsection{Gradient Paths and Active Objective Boundaries}
 
-The gradient detachment described in Section~\ref{sec:methods-background} preserves the predicted background value used for residual-target construction and background-context encoding. Residual losses do not update the background branch through $\hat B$; shared condition-encoder parameters can still receive gradients from the active joint objective in Eq.~\eqref{eq:condition-objective}.
+The gradient detachment described in Section~\ref{sec:methods-residual} preserves the predicted background value used for residual-target construction and background-context encoding. Residual losses do not update the background branch through $\hat B$; shared condition-encoder parameters can still receive gradients from the active joint objective in Eq.~\eqref{eq:condition-objective}.
 
 Pairwise structural/numerical penalties, frequency penalties, a residual quality/rho penalty, and background high-frequency/multiscale/quality-gate penalties have zero active weight in the evaluated configuration. No additional within-role auxiliary separation term is active; modality dropout is disabled.
