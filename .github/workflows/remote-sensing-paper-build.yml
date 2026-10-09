@@ -44,6 +44,8 @@ jobs:
               text=p.read_text(encoding="utf-8")
               refs.update(re.findall(r"\\includegraphics(?:\[[^]]*\])?\{([^}]+)\}",text))
           for name in sorted(refs):
+              if name.startswith("#"):
+                  continue
               source=(root/name).resolve()
               if not source.exists():
                   raise SystemExit("Missing figure: "+str(source))
