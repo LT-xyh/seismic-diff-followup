@@ -16,7 +16,7 @@ All four comparison models receive the same five-channel observation layout:
 The comparison changes each source method only as needed to accept this common observation tensor and the supervised target used by the reconstruction task. These rows should therefore be interpreted as architecture/backbone adaptations rather than reproductions of the original source-native protocols.
 
 \paragraph{Parameter-count convention.}
-The main table reports trainable parameters from the retained evaluated implementation. Training-only modules can differ by method. BG-RFM has 10,630,216 trainable inference parameters; its enclosing training wrapper contains 10,648,427 parameters. VelocityGAN's reported 25.59M training count includes generator and discriminator, although the discriminator is not used for inference. An exact recount tied to the evaluated UPFWI-derived checkpoint is not available, so the main table leaves that parameter entry blank rather than presenting an approximate value as equally authoritative.
+Parameter accounting follows the trainable modules of the evaluated implementations in Table~\ref{tab:rs-main}. BG-RFM has 10,630,216 trainable inference parameters; its enclosing training wrapper contains 10,648,427 parameters including training-only modules.
 
 \paragraph{InversionNet adaptation.}
 The OpenFWI InversionNet encoder--decoder constructor is retained and receives the common five-channel tensor instead of the source-native waveform layout. It is trained by direct $\ell_1$ velocity regression for 100 epochs with batch size 64, AdamW at learning rate $10^{-4}$ and weight decay $10^{-4}$, single-device 32-bit precision, and no learning-rate scheduler. The final checkpoint is used for evaluation. The reported 24.41M parameters count the complete adapted predictor.
@@ -32,8 +32,6 @@ The latent U-Net topology is retained within a multimodal translation model cons
 
 \subsection{Stochastic Evaluation and Formulation-Study Scope}
 
-For the 33,600-record common evaluation, test traversal is deterministic and unshuffled. The base BG-RFM sampling seed is 2027. For each batch, SHA-256 is applied to the base seed together with the ordered record identities, and the resulting hash is reduced modulo $2^{31}$ to obtain the batch seed. This rule determines the stochastic draw but does not affect held-out membership. BG-RFM uses a single trajectory for each record and no ensemble averaging. Deterministic reference methods use direct prediction, without a sampling seed.
+To make the per-batch stochastic draw reproducible, SHA-256 hashes base seed 2027 with the ordered held-out record identities and reduces the result modulo $2^{31}$. This affects the sampled trajectory but does not change dataset membership; the common evaluator and checkpoint-selection rules are defined in Section~\ref{sec:methods-evaluation}.
 
-The exact per-record MAE, RMSE, and global SSIM definitions are specified in Section~\ref{sec:methods-evaluation}. The evaluator applies no post-hoc prediction clipping. BG-RFM is selected by final-joint-stage validation loss; InversionNet, VelocityGAN, and the UPFWI-derived supervised backbone use their final 100-epoch checkpoints; the Latent U-Net adaptation uses its minimum-validation-loss checkpoint. Test metrics are not used in checkpoint selection.
-
-The formulation comparison in Table~\ref{tab:design-ablation} shares the same dataset family, split contract, normalization, target, metric definitions, optimizer family, and validation-based model selection. It serves as supporting formulation-level evidence; identical Euler-step settings are not assumed for every retained run.
+The retained formulation-study runs in Table~\ref{tab:design-ablation} share the dataset family, 70/20/10 split contract with seed 42, target, normalization, metric definitions, AdamW optimizer family, nominal 100-epoch training, and validation-based checkpoint selection.
