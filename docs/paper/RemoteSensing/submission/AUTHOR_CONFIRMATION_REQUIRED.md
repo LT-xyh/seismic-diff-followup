@@ -1,18 +1,34 @@
 # BG-RFM Remote Sensing: author-confirmation checklist
 
-PREVIEW ONLY - NOT READY FOR SUSY.
+**PREVIEW ONLY — NOT READY FOR SUSY.**
 
-No author metadata, CRediT roles, funding numbers or declarations from the SeisMIC-Diff/EAAI or SEG papers are treated as confirmed for BG-RFM.
+## Confirmed authorship for this BG-RFM manuscript (2026-10-09)
 
-1. Confirm all authors' full English names, ordering, affiliation numbers and official English institutional names (including city and country), corresponding author and email, and available ORCIDs.
-2. Confirm each author's individual standard CRediT roles; approve the final author list and manuscript.
-3. Confirm all BG-RFM-specific funders, official spelling, grant IDs, and any article-processing charge funding, or expressly confirm no external funding.
-4. Confirm conflict-of-interest declarations from all authors, including sponsor roles where relevant.
-5. Confirm non-author acknowledgments and computing/technical support.
-6. Confirm the complete list of GenAI systems/products and versions, actual drafting/revision/analysis uses, and author review and responsibility. ChatGPT-assisted manuscript writing/LaTeX work is documented, but may not be the full history.
-7. Provide persistent location, coverage and access terms for the eight-subset, 336,000-record processed input corpus and evaluated checkpoints; otherwise confirm a precise justified restriction.
-8. Approve code repository scope, final submission tag/archive, and any DOI when available.
-9. Confirm title, journal, manuscript ID and current status of the related SeisMIC-Diff / EAAI submission; disclose shared data/figures/text and whether related publications (including a SEG abstract) should be cited or submitted to the editor.
-10. Confirm the cover-letter claims: originality, no concurrent publication/submission of identical content, all-author approval, and accurate related-work disclosure.
+| Order | Author | Role | Confirmation |
+|---|---|---|---|
+| 1 | Chunlei Wu | First author | CONFIRMED |
+| 2 | Yinghao Xu | Second author | CONFIRMED |
+| 3 | Jing Lu | Third author; corresponding author | CONFIRMED |
 
-Final publication tag must NOT be created until all mandatory items and compilation checks pass.
+Zhenbo Guo, Yitong Yin, and Xianzhao Song have been excluded from the BG-RFM submission author list **as instructed by the author**. This instruction does **not** establish those individuals' consent to the authorship change, nor final approval of the resulting paper.
+
+No affiliations, correspondence email, ORCIDs, CRediT roles, funding numbers, or acknowledgments from SeisMIC-Diff/EAAI, SEG, or other manuscripts are inherited for BG-RFM.
+
+## Outstanding confirmations
+
+- [x] Confirm the three author names, their order, and Jing Lu as corresponding author.
+- [x] Apply the requested removal of Zhenbo Guo, Yitong Yin, and Xianzhao Song from this submission author list.
+- [ ] **Final all-author approval:** obtain explicit approval of the final BG-RFM manuscript and authorship from Chunlei Wu, Yinghao Xu, and Jing Lu.
+- [ ] **Authorship-change consent:** document the appropriate consent/acknowledgments for removing Zhenbo Guo, Yitong Yin, and Xianzhao Song, including confirmation from affected persons where required by the journal and institutional authorship policies.
+- [ ] Confirm each retained author's official English affiliation and numbering, corresponding-author contact email, and available ORCIDs. These are currently **unknown**, not inherited.
+- [ ] Confirm each of the three retained authors' standard CRediT contribution roles.
+- [ ] Confirm BG-RFM-specific official funder names and grant numbers, APC support, or an explicit no-external-funding declaration.
+- [ ] Collect all three retained authors' conflicts-of-interest declarations and clarify any sponsor role.
+- [ ] Confirm non-author acknowledgments, computing resources, and technical assistance.
+- [ ] Confirm the complete GenAI tool/version/use inventory, responsible author review, and final GenAI disclosure.
+- [ ] Provide persistent location and access terms for the eight-subset, 336,000-record processed dataset and evaluated checkpoints, or a precise justified restriction.
+- [ ] Approve the public code scope and final submission tag/archive or DOI, if assigned.
+- [ ] Confirm current title/journal/ID/status of the related SeisMIC-Diff/EAAI paper; determine any shared data, figures, or text and the appropriate editor disclosure.
+- [ ] Confirm cover-letter declarations of originality, non-simultaneous submission/publication of the same content, final manuscript approval, and accurate related-work disclosure.
+
+**No final submission tag or automatic journal submission is permitted before the required confirmations and validation.**
