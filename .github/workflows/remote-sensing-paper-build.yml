@@ -13,61 +13,49 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Compile main manuscript
+      - name: Compile unified manuscript
         uses: xu-cheng/latex-action@v4
         with:
           root_file: main.tex
           working_directory: docs/paper/RemoteSensing
           latexmk_use_xelatex: false
 
-      - name: Collect PDFs
+      - name: Assemble minimal self-contained source ZIP
         run: |
-          mkdir -p build/remote-sensing
-          cp docs/paper/RemoteSensing/main.pdf build/remote-sensing/BG-RFM_RemoteSensing_unified.pdf
+          python docs/paper/RemoteSensing/submission/package_submission.py
 
-      - name: Assemble self-contained LaTeX source ZIP
+      - name: Verify isolated source build
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: main.tex
+          working_directory: build/remote-sensing/isolated-source/RemoteSensing
+          latexmk_use_xelatex: false
+
+      - name: Check PDF compilation and hyperlink destinations
         shell: bash
         run: |
           set -euo pipefail
-          staging=build/remote-sensing/source
-          mkdir -p "$staging"
-          cp -a docs/paper/RemoteSensing "$staging/RemoteSensing"
-          mkdir -p "$staging/AAAI2027/figures"
-          python - <<'PY'
-          import pathlib, re, shutil
-          root=pathlib.Path("docs/paper/RemoteSensing")
-          dest=pathlib.Path("build/remote-sensing/source")
-          refs=set()
-          for p in root.rglob("*.tex"):
-              if "/archive/" in str(p) or p.name=="supplement.tex":
-                  continue
-              text=p.read_text(encoding="utf-8")
-              refs.update(re.findall(r"\\includegraphics(?:\[[^]]*\])?\{([^}]+)\}",text))
-              refs.update(re.findall(r"\\qpanel\{([^}]+)\}",text))
-          for name in sorted(refs):
-              if name.startswith("#"):
-                  continue
-              source=(root/name).resolve()
-              if not source.exists():
-                  raise SystemExit("Missing figure: "+str(source))
-              relative=source.relative_to(pathlib.Path("docs/paper").resolve())
-              target=dest/relative
-              target.parent.mkdir(parents=True,exist_ok=True)
-              shutil.copy2(source,target)
-          print("Resolved figure assets:",len(refs))
-          PY
-          (cd build/remote-sensing/source && zip -qr ../BG-RFM_RemoteSensing_unified_source.zip RemoteSensing AAAI2027)
+          source_dir=build/remote-sensing/isolated-source/RemoteSensing
+          test -s docs/paper/RemoteSensing/main.pdf
+          test -s "$source_dir/main.pdf"
+          test -s build/remote-sensing/BG-RFM_RemoteSensing_PREVIEW_source.zip
+          if grep -Eiq "destination with the same identifier|There were undefined references|There were undefined citations" "$source_dir/main.log"; then
+            echo "Failed: duplicate PDF anchor or unresolved reference/citation"
+            exit 1
+          fi
+          mkdir -p build/remote-sensing/delivery
+          cp "$source_dir/main.pdf" build/remote-sensing/delivery/BG-RFM_RemoteSensing_PREVIEW.pdf
 
-      - name: Upload source ZIP
+      - name: Upload manuscript PDF preview
         uses: actions/upload-artifact@v4
         with:
-          name: remote-sensing-unified-source
-          path: build/remote-sensing/BG-RFM_RemoteSensing_unified_source.zip
+          name: remote-sensing-manuscript-PREVIEW
+          path: build/remote-sensing/delivery/BG-RFM_RemoteSensing_PREVIEW.pdf
           if-no-files-found: error
 
-      - name: Upload PDFs
+      - name: Upload minimal source ZIP preview
         uses: actions/upload-artifact@v4
         with:
-          name: remote-sensing-unified-pdf
-          path: build/remote-sensing/*.pdf
+          name: remote-sensing-source-PREVIEW
+          path: build/remote-sensing/BG-RFM_RemoteSensing_PREVIEW_source.zip
           if-no-files-found: error
