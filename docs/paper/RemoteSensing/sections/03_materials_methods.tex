@@ -44,11 +44,11 @@ where $r_m$ contains learned role-specific reliability scores. In the evaluated 
 C_k=\mathcal G_k\left(\sum_{m\in\Omega}w_m^k Z_m^k\right),
 \qquad k\in\{\mathrm{bg},\mathrm{str}\},
 \end{equation}
-with $\Omega$ the observed modality set. In the condition-learning objective, the corresponding roles are denoted numerical and structural; downstream, the numerical role forms the background-oriented interface $C_{\mathrm{bg}}$ and the structural role forms $C_{\mathrm{str}}$. RMS and post-stack migrated inputs are compressed/aligned to $70\times70$ spatial feature maps with 32 channels, while horizon and well streams produce 16-channel aligned maps; fusion occurs only after alignment to the depth-grid representation. Both $C_{\mathrm{bg}}$ and $C_{\mathrm{str}}$ are 32-channel $70\times70$ conditions. Training-only subset-Symile, anchor-calibration, separation, and reliability terms are specified in Supplementary Section~S1; they are not inference inputs. Inference requires only the observations, masks, and loader-provided availability/quality state, not any ground-truth-derived reliability score.
+with $\Omega$ the observed modality set. In the condition-learning objective, the corresponding roles are denoted numerical and structural; downstream, the numerical role forms the background-oriented interface $C_{\mathrm{bg}}$ and the structural role forms $C_{\mathrm{str}}$. RMS and post-stack migrated inputs are compressed/aligned to $70\times70$ spatial feature maps with 32 channels, while horizon and well streams produce 16-channel aligned maps; fusion occurs only after alignment to the depth-grid representation. RMS uses temporal pooling and bilinear alignment, while PSTM uses anisotropic downsampling and projection. Both $C_{\mathrm{bg}}$ and $C_{\mathrm{str}}$ are 32-channel $70\times70$ conditions. Training-only subset-Symile, anchor-calibration, separation, and reliability terms are defined below; their anchor tensors are not inference inputs. Inference requires only the observations, masks, and loader-provided availability/quality state, not any ground-truth-derived reliability score.
 
 \input{figures/figure1_schematic}
 
-\subsection{Deterministic Background Prediction}
+\subsection{Deterministic Background Prediction}\label{sec:methods-background}
 
 The background branch is a full-resolution U-Net \citep{ronneberger2015unet} with 192 hidden channels:
 \begin{equation}
@@ -141,11 +141,24 @@ Joint optimization uses
 \begin{equation}
 \mathcal L=\mathcal L_R+\mathcal L_{\mathrm{bg}}+0.01\,\mathcal L_C ,
 \end{equation}
-where $\mathcal L_C$ is the role-aware condition objective. In the final configuration the two subset-Symile role terms have unit weight, anchor calibration has weight 0.5, and the reliability and two orthogonality regularizers each have weight 0.05; modality dropout is disabled. Supplementary Section~S1 gives the complete definitions.
+where $\mathcal L_C$ is the role-aware condition objective. In the final configuration the two subset-Symile role terms have unit weight, anchor calibration has weight 0.5, and the reliability and two orthogonality regularizers each have weight 0.05; modality dropout is disabled. The active condition objective is
+\begin{equation}
+\begin{split}
+\mathcal L_C={}&
+\mathcal L_{\mathrm{subsym}}^{\mathrm{str}}
++\mathcal L_{\mathrm{subsym}}^{\mathrm{num}}
++0.5\,\mathcal L_{\mathrm{anchor}}\\
+&+0.05\,\mathcal L_{\mathrm{rel}}
++0.05\,\mathcal L_{\mathrm{str,num}}^{\perp}
++0.05\,\mathcal L_{\mathrm{unique,role}}^{\perp}.
+\end{split}
+\label{eq:condition-objective}
+\end{equation}
+Here, one-level Haar decomposition of the target forms detached numerical (resized LL) and structural (L2 fusion of resized LH/HL/HH) training anchors, with replicate boundaries and nearest-neighbor resizing. Subset-Symile groups records by identical modality availability; same-record projected modality representations and their anchor form positive tuples, while within-group batch derangements provide up to batch-size-minus-one negatives. Groups smaller than two are skipped. Anchor calibration compares normalized modality projections and anchor projections using symmetric InfoNCE, with cosine-distance fallback for singleton groups. The reliability penalty measures squared deviation of learned role reliability from fixed modality-role priors. The two separation penalties are absolute cosine similarities between pooled structural/numerical maps and between pooled unique/role representations, respectively. Appendix~\ref{app:math} provides the reliability-prior values and gradient-path details.
 
-The model is jointly optimized for 100 epochs with batch size 64 on four devices using DDP and bfloat16 mixed precision. AdamW is used without a learning-rate scheduler. Parameter-group learning rates are $10^{-6}$ for the encoder backbone, $3\times10^{-6}$ for encoder heads, the contrastive module, and condition adapters, $10^{-4}$ for the background branch, and $5\times10^{-5}$ for the residual branch. The joint run is initialized from previously trained condition, background, and residual stage checkpoints and then optimized under the joint objective. The evaluated inference model contains 10,630,216 trainable parameters (10.63M); the enclosing training wrapper contains 10,648,427 parameters because it also includes training-only state/modules.
+Training proceeds in four stages: condition pretraining (100 epochs, batch 150, AdamW $10^{-4}$, validation retrieval top-5 selection), background pretraining (100 epochs, batch 100, AdamW $10^{-4}$, minimum validation loss), residual pretraining (100 epochs, batch 64, AdamW $5\times10^{-5}$, minimum validation loss, frozen codec), and joint optimization (100 epochs, batch 64 per process, grouped AdamW rates, minimum validation loss, frozen codec). Background pretraining initializes from the condition checkpoint; residual pretraining initializes from the background checkpoint; joint training warm-starts from all three. The model is jointly optimized for 100 epochs with batch size 64 on four devices using DDP and bfloat16 mixed precision. AdamW is used without a learning-rate scheduler. Parameter-group learning rates are $10^{-6}$ for the encoder backbone, $3\times10^{-6}$ for encoder heads, the contrastive module, and condition adapters, $10^{-4}$ for the background branch, and $5\times10^{-5}$ for the residual branch. The joint run is initialized from previously trained condition, background, and residual stage checkpoints and then optimized under the joint objective. The evaluated inference model contains 10,630,216 trainable parameters (10.63M); the enclosing training wrapper contains 10,648,427 parameters because it also includes training-only state/modules.
 
-\subsection{Inference and Evaluation Protocol}
+\subsection{Inference and Evaluation Protocol}\label{sec:methods-evaluation}
 
 At inference, only the observed constraints and their masks/availability state are supplied. BG-RFM predicts $\hat B$, samples one residual trajectory, and integrates the learned vector field for 50 Euler steps before composing $\hat V=\hat B+\hat R$. The evaluation batch size is 64 and the held-out loader uses \texttt{shuffle=False}. For the common comparison, stochastic BG-RFM predictions use base seed 2027; the per-batch seed is deterministically derived by hashing the ordered held-out record identities in that batch. This batch-keyed seed controls only the stochastic realization; dataset membership is fixed independently of batch grouping. The deterministic reference models require no sampling seed. No ensemble averaging over multiple stochastic trajectories is used.
 
@@ -159,7 +172,20 @@ Metrics are computed per sample and then averaged over the 33,600 records. If $e
 \qquad
 \mathrm{RMSE}_i=\sqrt{\frac{\|e_i\|_2^2}{d}}.
 \end{equation}
-The reported RMSE is therefore the mean of per-sample RMSE values rather than the square root of a pooled test-set MSE. SSIM is computed globally over each flattened $70\times70$ image using population variance/covariance, $C_{1,i}=(0.01L_i)^2$, $C_{2,i}=(0.03L_i)^2$, and
+The reported RMSE is the mean of per-sample RMSE values:
+\begin{equation}
+\mathrm{RMSE}=\frac{1}{N}\sum_{i=1}^{N}
+\sqrt{\frac{1}{HW}\|\hat V_i-V_i\|_2^2}.
+\label{eq:eval-rmse}
+\end{equation}
+SSIM is computed globally for each sample as
+\begin{equation}
+\mathrm{SSIM}_i=
+\frac{(2\mu_x\mu_y+C_{1,i})(2\sigma_{xy}+C_{2,i})}
+{(\mu_x^2+\mu_y^2+C_{1,i})(\sigma_x^2+\sigma_y^2+C_{2,i})}.
+\label{eq:eval-ssim}
+\end{equation}
+SSIM is computed globally over each flattened $70\times70$ image using population variance/covariance, $C_{1,i}=(0.01L_i)^2$, $C_{2,i}=(0.03L_i)^2$, and
 $L_i=\max(\max V_i-\min V_i,1)$; the resulting samplewise SSIM values are then averaged.
 
-The matched-input references receive the same five observation channels: migrated image, RMS velocity, horizon, masked well value, and well mask. InversionNet, VelocityGAN, and the UPFWI-derived backbone use final checkpoints from fixed 100-epoch training schedules; Latent U-Net uses its minimum-validation-loss checkpoint; BG-RFM uses the validation-loss-selected checkpoint from the final joint stage. Test metrics are not used for checkpoint selection. Details of each adaptation and parameter-count convention are given in Supplementary Section~S5.
+The matched-input references receive the same five observation channels: migrated image, RMS velocity, horizon, masked well value, and well mask. InversionNet, VelocityGAN, and the UPFWI-derived backbone use final checkpoints from fixed 100-epoch training schedules; Latent U-Net uses its minimum-validation-loss checkpoint; BG-RFM uses the validation-loss-selected checkpoint from the final joint stage. Test metrics are not used for checkpoint selection. Details of each adaptation and parameter-count convention are given in Appendix~\ref{app:protocol}.
