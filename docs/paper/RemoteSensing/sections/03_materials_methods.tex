@@ -187,3 +187,5 @@ SSIM is computed globally over each flattened $70\times70$ image using populatio
 $L_i=\max(\max V_i-\min V_i,1)$; the resulting samplewise SSIM values are then averaged.
 
 The matched-input references receive the same five observation channels: migrated image, RMS velocity, horizon, masked well value, and well mask. InversionNet, VelocityGAN, and the UPFWI-derived backbone use final checkpoints from fixed 100-epoch training schedules; Latent U-Net uses its minimum-validation-loss checkpoint; BG-RFM uses the validation-loss-selected checkpoint from the final joint stage. Test metrics are not used for checkpoint selection. Details of each adaptation and parameter-count convention are given in Appendix~\ref{app:protocol}.
+
+\input{submission/ai_methods_disclosure}
