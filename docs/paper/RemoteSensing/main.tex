@@ -5,7 +5,7 @@
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage[numbers,sort&compress]{natbib}
-\usepackage{hyperref}
+\usepackage[hypertexnames=false]{hyperref}
 \hypersetup{hidelinks}
 \usepackage{array}
 \usepackage{placeins}
@@ -14,7 +14,7 @@
 \newcommand{\method}{BG-RFM}
 
 \title{Background-Guided Residual Flow Matching for Multi-Constraint Seismic Velocity Model Building}
-\author{Anonymous Authors}
+\input{submission/author_metadata}
 \date{}
 
 \begin{document}
@@ -27,10 +27,15 @@ This work studies seismic velocity-model reconstruction when heterogeneous proce
 \noindent\textbf{Keywords:} initial velocity model building; seismic velocity reconstruction; Flow Matching; multimodal geophysical constraints; residual generative modeling; OpenFWI
 
 \section*{Highlights}
+\noindent\textbf{What are the main findings?}
 \begin{itemize}
-    \item A role-aware multimodal formulation separates background and residual reconstruction responsibilities.
-    \item The same predicted background is reused for residual supervision, residual conditioning, and final composition.
-    \item A 10.63M-parameter BG-RFM model is evaluated on 33,600 common held-out OpenFWI-derived records.
+    \item BG-RFM combines deterministic background estimation with Flow Matching of the prediction-relative velocity correction.
+    \item The model obtains RMSE 0.02695 and SSIM 0.99165 on 33,600 common held-out records with 10.63M trainable inference parameters.
+\end{itemize}
+\noindent\textbf{What are the implications of the main findings?}
+\begin{itemize}
+    \item Reusing the same predicted background links residual supervision, conditional transport, and final velocity composition.
+    \item Role-aware reconstruction offers a compact generative formulation for integrating processed seismic and geological constraints.
 \end{itemize}
 
 \input{sections/01_introduction}
