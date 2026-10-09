@@ -25,6 +25,43 @@ jobs:
           mkdir -p build/remote-sensing
           cp docs/paper/RemoteSensing/main.pdf build/remote-sensing/BG-RFM_RemoteSensing_unified.pdf
 
+      - name: Assemble self-contained LaTeX source ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          staging=build/remote-sensing/source
+          mkdir -p "$staging"
+          cp -a docs/paper/RemoteSensing "$staging/RemoteSensing"
+          mkdir -p "$staging/AAAI2027/figures"
+          python - <<'PY'
+          import pathlib, re, shutil
+          root=pathlib.Path("docs/paper/RemoteSensing")
+          dest=pathlib.Path("build/remote-sensing/source")
+          refs=set()
+          for p in root.rglob("*.tex"):
+              if "/archive/" in str(p) or p.name=="supplement.tex":
+                  continue
+              text=p.read_text(encoding="utf-8")
+              refs.update(re.findall(r"\\includegraphics(?:\[[^]]*\])?\{([^}]+)\}",text))
+          for name in sorted(refs):
+              source=(root/name).resolve()
+              if not source.exists():
+                  raise SystemExit("Missing figure: "+str(source))
+              relative=source.relative_to(pathlib.Path("docs/paper").resolve())
+              target=dest/relative
+              target.parent.mkdir(parents=True,exist_ok=True)
+              shutil.copy2(source,target)
+          print("Resolved figure assets:",len(refs))
+          PY
+          (cd build/remote-sensing/source && zip -qr ../BG-RFM_RemoteSensing_unified_source.zip RemoteSensing AAAI2027)
+
+      - name: Upload source ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: remote-sensing-unified-source
+          path: build/remote-sensing/BG-RFM_RemoteSensing_unified_source.zip
+          if-no-files-found: error
+
       - name: Upload PDFs
         uses: actions/upload-artifact@v4
         with:
