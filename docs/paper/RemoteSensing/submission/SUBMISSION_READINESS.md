@@ -12,7 +12,7 @@ Highlights requirement announcement: https://www.mdpi.com/about/announcements/13
 |---|---|---|
 | Journal scope, title, Abstract, keywords, methods, results, captions, references | Mandatory | Scientifically frozen and present |
 | Highlights: main findings / implications, max two bullets each | Mandatory for new Articles | Updated |
-| Author names/order, affiliation, correspondence, author approval | Mandatory | **PENDING AUTHOR CONFIRMATION** |
+| Author names/order, affiliation, correspondence, author approval | Mandatory | **CONFIRMED:** Chunlei Wu (1), Yinghao Xu (2), Jing Lu (3, corresponding). **PENDING:** affiliations, email, ORCIDs, final all-author manuscript approval and authorship-change consent |
 | CRediT roles for multi-author work | Mandatory | **PENDING** |
 | Funding, COI and required ethics statements | Mandatory | **PENDING for author-dependent declarations** |
 | Data Availability Statement | Mandatory | OpenFWI source verified; exact eight-subset processed data access **PENDING** |
@@ -24,6 +24,15 @@ Highlights requirement announcement: https://www.mdpi.com/about/announcements/13
 | Article biographies / SciProfiles | Optional | Not included |
 | Related SeisMIC-Diff/EAAI publication / same-manuscript prior MDPI submission disclosures | Required where applicable | Evidence comparison drafted; current status and overlap **PENDING** |
 
+## Confirmed BG-RFM author-list update — 2026-10-09
+
+- Author 1: **Chunlei Wu** (first author).
+- Author 2: **Yinghao Xu** (second author).
+- Author 3: **Jing Lu** (third author and corresponding author).
+- **Excluded from the submission author list as requested:** Zhenbo Guo, Yitong Yin, Xianzhao Song.
+- This authorship instruction is **not** proof of final manuscript approval by the three retained authors or consent to the change from the three affected individuals.
+- Official affiliations and numbering, corresponding email, ORCID identifiers, CRediT, funding and acknowledgments remain explicitly unconfirmed. None are inherited from SeisMIC-Diff or other historical manuscripts.
+
 ## Frozen scientific content
 
 Baseline: b6bdebb94f4bf2676ffbcadddd60668cfa514b50.
@@ -34,4 +43,4 @@ Duplicate PDF hyperlink destination warnings were eliminated by the hypertexname
 
 ## Finalization gate
 
-Complete AUTHOR_CONFIRMATION_REQUIRED.md, replace preview placeholders in the three LaTeX submission modules, approve the related-manuscript/editor declaration and cover letter, then rebuild and check. Only after these confirmations should the final submission commit/tag be created. DO NOT submit automatically.
+Complete the outstanding confirmations in AUTHOR_CONFIRMATION_REQUIRED.md, including final all-author approval and appropriate authorship-change consent; populate the remaining metadata in the LaTeX submission modules, approve the related-manuscript/editor declaration and cover letter, then rebuild and check. Only after these confirmations should the final submission commit/tag be created. DO NOT submit automatically.
