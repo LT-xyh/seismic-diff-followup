@@ -1,0 +1,39 @@
+\section{Experimental and Evaluation Protocols}
+\label{app:protocol}
+\setcounter{equation}{0}
+\setcounter{table}{0}
+\setcounter{figure}{0}
+
+\subsection{Matched-Input Baseline Adaptations}
+All four comparison models receive the same five-channel observation layout:
+\begin{enumerate}
+    \item post-stack migrated image, bilinearly resized to $1000\times70$;
+    \item RMS velocity, bilinearly resized to $1000\times70$;
+    \item horizon map, resized by nearest-neighbor interpolation;
+    \item masked well-velocity values, bilinearly resized; and
+    \item the binary well mask, resized by nearest-neighbor interpolation.
+\end{enumerate}
+The comparison changes each source method only as needed to accept this common observation tensor and the supervised target used by the reconstruction task. These rows should therefore be interpreted as architecture/backbone adaptations rather than reproductions of the original source-native protocols.
+
+\paragraph{Parameter-count convention.}
+The main table reports trainable parameters from the retained evaluated implementation. Training-only modules can differ by method. BG-RFM has 10,630,216 trainable inference parameters; its enclosing training wrapper contains 10,648,427 parameters. VelocityGAN's reported 25.59M training count includes generator and discriminator, although the discriminator is not used for inference. An exact recount tied to the evaluated UPFWI-derived checkpoint is not available, so the main table leaves that parameter entry blank rather than presenting an approximate value as equally authoritative.
+
+\paragraph{InversionNet adaptation.}
+The OpenFWI InversionNet encoder--decoder constructor is retained and receives the common five-channel tensor instead of the source-native waveform layout. It is trained by direct $\ell_1$ velocity regression for 100 epochs with batch size 64, AdamW at learning rate $10^{-4}$ and weight decay $10^{-4}$, single-device 32-bit precision, and no learning-rate scheduler. The final checkpoint is used for evaluation. The reported 24.41M parameters count the complete adapted predictor.
+
+\paragraph{VelocityGAN adaptation.}
+The OpenFWI InversionNet generator and OpenFWI discriminator are retained. The generator receives the common five-channel tensor. Its objective is $100\,\mathcal L_1+\mathcal L_{\mathrm{adv}}$; the configured MSE term has zero weight. Wasserstein gradient penalty has weight 10, and the discriminator is updated with five critic steps per generator-update period. Generator and discriminator use AdamW at $10^{-4}$ with $(\beta_1,\beta_2)=(0,0.9)$ and weight decay $10^{-4}$. Training lasts 100 epochs with batch size 64, and the final checkpoint is evaluated.
+
+\paragraph{UPFWI-derived supervised multimodal backbone.}
+The OpenFWI UPFWI network backbone is retained, but the defining unsupervised wave-equation loop of the original UPFWI method is not used. The backbone receives the common five-channel tensor and is trained as a supervised direct velocity regressor with $\ell_1$ loss for 100 epochs, batch size 64, AdamW at $10^{-4}$, weight decay $10^{-4}$, single-device 32-bit precision, and no scheduler. The final checkpoint is used for evaluation. This is why the main paper labels the row \emph{UPFWI-derived supervised multimodal backbone} rather than using the source-method name alone.
+
+\paragraph{Latent U-Net adaptation.}
+The latent U-Net topology is retained within a multimodal translation model consisting of a five-channel measurement encoder, a 128-channel $70\times70$ latent representation, a depth-2 latent U-Net with two repeated blocks per level and skip connections, and a velocity decoder. The complete adapted model is trained with direct $\ell_1$ velocity regression for 100 epochs, batch size 300, and four-device DDP. The minimum-validation-loss checkpoint is used for the reported comparison. The 35.12M parameter count covers the complete adapted measurement-encoder/latent-U-Net/velocity-decoder predictor.
+
+\subsection{Stochastic Evaluation and Formulation-Study Scope}
+
+For the 33,600-record common evaluation, test traversal is deterministic and unshuffled. The base BG-RFM sampling seed is 2027. For each batch, SHA-256 is applied to the base seed together with the ordered record identities, and the resulting hash is reduced modulo $2^{31}$ to obtain the batch seed. This rule determines the stochastic draw but does not affect held-out membership. BG-RFM uses a single trajectory for each record and no ensemble averaging. Deterministic reference methods use direct prediction, without a sampling seed.
+
+The exact per-record MAE, RMSE, and global SSIM definitions are specified in Section~\ref{sec:methods-evaluation}. The evaluator applies no post-hoc prediction clipping. BG-RFM is selected by final-joint-stage validation loss; InversionNet, VelocityGAN, and the UPFWI-derived supervised backbone use their final 100-epoch checkpoints; the Latent U-Net adaptation uses its minimum-validation-loss checkpoint. Test metrics are not used in checkpoint selection.
+
+The formulation comparison in Table~\ref{tab:design-ablation} shares the same dataset family, split contract, normalization, target, metric definitions, optimizer family, and validation-based model selection. It serves as supporting formulation-level evidence; identical Euler-step settings are not assumed for every retained run.
