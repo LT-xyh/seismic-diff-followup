@@ -1,21 +1,34 @@
-Dear Editors of Remote Sensing,
+# Remote Sensing cover letter — DRAFT / AUTHOR CONFIRMATION REQUIRED
 
-Please consider our manuscript, “Background-Guided Residual Flow Matching for Multi-Constraint Seismic Velocity Model Building,” for publication as an Article in Remote Sensing.
+Dear Editors of *Remote Sensing*,
 
-Reliable initial velocity model building remains important for seismic imaging and inversion, particularly when several processed and interpreted geophysical constraints are available. The submitted work studies a multi-constraint setting that combines RMS velocity, post-stack migrated seismic information, interpreted horizons, and sparse well constraints. Rather than assigning the complete velocity field to a single predictor or generative model, the proposed Background-Guided Residual Flow Matching (BG-RFM) formulation separates reconstruction responsibilities: it first estimates a deterministic background velocity and then applies conditional Flow Matching to the correction defined relative to that prediction.
+Please consider our manuscript, **“Background-Guided Residual Flow Matching for Multi-Constraint Seismic Velocity Model Building,”** for consideration as an Article in *Remote Sensing*.
 
-BG-RFM uses standard conditional Flow Matching; its methodological novelty lies in the reconstruction organization. The central feature is prediction consistency. The same predicted background is used to define the residual target during training, to condition residual transport, and to compose the final reconstructed velocity model. This connects deterministic background estimation and generative residual modeling without requiring a hard one-modality/one-role partition.
+Seismic initial velocity model building brings together observations with different geophysical meanings: RMS velocity encodes kinematic trends, post-stack time-migrated images and interpreted horizons provide structural information, and sparse well logs offer local velocity control. Learning from these heterogeneous sources requires a reconstruction formulation that uses their complementary information coherently.
 
-The manuscript evaluates the formulation across eight OpenFWI-derived subsets under a unified 33,600-record held-out protocol. The main comparison uses the same multimodal observations, normalization, and evaluator for adapted InversionNet, VelocityGAN, a UPFWI-derived supervised multimodal backbone, Latent U-Net, and BG-RFM. Additional controlled design analyses, qualitative examples, and diagnostics are used to interpret the proposed reconstruction organization. The contribution is not presented as universal benchmark dominance; instead, the study emphasizes structured use of heterogeneous geophysical constraints, prediction-consistent residual transport, and a compact model parameterization.
+We propose Background-Guided Residual Flow Matching (BG-RFM), a role-aware approach that predicts a deterministic velocity background and learns a generative correction relative to that same prediction. The background estimate is used consistently to construct the residual training target, condition residual transport, and compose the final velocity field. The methodological contribution is this explicit coupling of deterministic background recovery and prediction-referenced generative correction, rather than a modification to the basic mathematics of Flow Matching.
 
-We believe the manuscript is relevant to Remote Sensing readers interested in seismic and subsurface imaging, geophysical data integration, inverse problems, and machine-learning methods for Earth observation and interpretation.
+The manuscript presents evidence across eight OpenFWI-derived structural subsets under a unified 33,600-record held-out reconstruction protocol. The proposed 10.63-million-parameter inference model achieves RMSE 0.02695 and SSIM 0.99165. The study also reports matched-input baseline comparisons, a supporting formulation-level comparison, and diagnostics of the background/structural decomposition. These results support the stated contribution within a controlled synthetic processed-constraint setting, without relying on claims of universal benchmark superiority or field validation.
 
-[ADMINISTRATIVE PLACEHOLDER: confirm that all authors have approved the manuscript, that the work is not under consideration elsewhere, and disclose any closely related manuscripts if applicable.]
+We believe the paper will be of interest to *Remote Sensing* readers concerned with geophysical imaging, subsurface-model reconstruction, integration of heterogeneous Earth-observation evidence, and domain-informed generative learning.
+
+**MANDATORY AUTHOR-CONFIRMATION GATE — the following declarations have not yet been approved and must not be submitted as unchecked assertions:**
+
+- [ ] "We confirm that neither the manuscript nor any parts of its content are currently under consideration for publication with or published in another journal."
+- [ ] "All authors have approved the manuscript and agree with its submission to Remote Sensing."
+- [ ] Related SeisMIC-Diff/EAAI manuscript: current journal/manuscript ID/status, common dataset and figure/text details, and appropriate disclosure to the editor are confirmed. Add the editor-facing factual paragraph or supporting related-manuscript attachment after confirmation.
+- [ ] Any prior submission to an MDPI journal of the same manuscript is disclosed, including manuscript ID where applicable.
 
 Thank you for your consideration.
 
 Sincerely,
 
-[CORRESPONDING AUTHOR NAME]
-[AFFILIATION]
-[EMAIL]
+**[Confirmed corresponding author — REQUIRED]**
+
+[Confirmed corresponding-author affiliation]
+
+[Confirmed corresponding-author email]
+
+---
+
+*This is an administrative draft. Do not upload until the author signatures/declarations and related-work status are confirmed.*
