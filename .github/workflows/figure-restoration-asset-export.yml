@@ -1,0 +1,34 @@
+name: figure-restoration-asset-export
+
+on:
+  push:
+    branches:
+      - remote-sensing/aaai-figure-restoration-20261009
+  workflow_dispatch:
+
+jobs:
+  export-aaai-artwork:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect and archive AAAI original artwork
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p build/figure-restoration
+          find docs/paper/AAAI2027/figures -type f -printf '%p\t%s bytes\n' | sort > build/figure-restoration/aaai_asset_inventory.tsv
+          printf '\n--- Target source assets ---\n'
+          grep -Ei 'method_overview|motivation|qualitative|condition_learning|residual_transport|effective' build/figure-restoration/aaai_asset_inventory.tsv | head -150 || true
+          tar -czf build/figure-restoration/AAAI2027_original_visual_assets.tar.gz             docs/paper/AAAI2027/figures             docs/paper/AAAI2027/pd-bg-rfm.tex             docs/paper/RemoteSensing/figures
+      - name: Upload archived source artwork
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-aaai-artwork
+          path: build/figure-restoration/AAAI2027_original_visual_assets.tar.gz
+          if-no-files-found: error
+      - name: Upload inventory
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-aaai-figure-inventory
+          path: build/figure-restoration/aaai_asset_inventory.tsv
+          if-no-files-found: error
