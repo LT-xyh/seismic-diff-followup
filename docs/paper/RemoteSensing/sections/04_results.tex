@@ -1,16 +1,19 @@
 \section{Results}
 
-\subsection{Overall Reconstruction Performance}
+\subsection{Reconstruction under a Common Multimodal Input Contract}
 
-Table~\ref{tab:rs-main} compares multimodal estimators on the same 33,600 held-out records using the same evaluator. All methods are evaluated under the common processed-constraint task.
+The main comparison evaluates the proposed formulation alongside established estimator architectures adapted to the same processed geophysical observations. Every model is assessed on the common 33,600-record held-out set with the same target normalization and evaluator, so differences in Table~\ref{tab:rs-main} concern the behavior of the adapted estimators under the declared input contract. They should not be interpreted as a ranking of the original methods in their source-native waveform or physics-based training settings.
 
 \input{tables/main_quantitative}
 
-The Latent U-Net adaptation achieves the strongest aggregate reconstruction accuracy, with MAE 0.00706, RMSE 0.01309, and SSIM 0.99403. BG-RFM attains MAE 0.01503, RMSE 0.02695, and SSIM 0.99165 with 10.63M trainable inference parameters, compared with 35.12M for the Latent U-Net adaptation. These results distinguish the contributions: Latent U-Net provides the lowest aggregate reconstruction error, while BG-RFM demonstrates prediction-referenced generative correction with explicitly allocated deterministic-background and residual-transport roles in a smaller parameter footprint. BG-RFM also obtains lower RMSE and higher SSIM than the InversionNet and UPFWI-derived adaptations, with higher MAE, and improves all three reported metrics relative to VelocityGAN. Because BG-RFM integrates its residual vector field over 50 Euler steps, parameter count alone does not establish a latency advantage.
+The Latent U-Net adaptation achieves the strongest aggregate reconstruction accuracy, with MAE 0.00706, RMSE 0.01309, and SSIM 0.99403. It is therefore the most accurate estimator among those listed in Table~\ref{tab:rs-main}. BG-RFM gives MAE 0.01503, RMSE 0.02695, and SSIM 0.99165 with 10.63M trainable inference parameters, compared with 35.12M for the adapted Latent U-Net. The two methods represent different reconstruction choices: the latter maps the measurements to velocity through a deterministic latent predictor, whereas BG-RFM explicitly estimates a background and transports a prediction-relative correction. The smaller parameter footprint of BG-RFM is a property of its trainable inference architecture, not evidence that it has lower runtime cost; residual generation still requires 50 Euler evaluations of the learned vector field.
 
-\subsection{High-Margin Qualitative Examples}\label{sec:results-qualitative}
+Other matched-input results help place this distinction in context. Relative to InversionNet, BG-RFM has lower RMSE (0.02695 versus 0.02730) and higher SSIM (0.99165 versus 0.99118), although InversionNet retains the lower MAE (0.01194 versus 0.01503). The UPFWI-derived supervised backbone exhibits a similar trade-off, with lower MAE but higher RMSE and lower SSIM than BG-RFM. All three reported reconstruction metrics improve relative to the VelocityGAN adaptation. The metric dependence of these comparisons is relevant: the method does not uniformly dominate direct regression, but it provides a distinct generative reconstruction organization that can be evaluated alongside stronger point-estimation architectures without equating architectural compactness with numerical superiority.
 
-Figure~\ref{fig:qualitative} illustrates structural reconstructions in two complex OpenFWI cases selected by a predefined, performance-dependent criterion rather than visual inspection. Within each subset, the selection maximizes the BG-RFM SSIM margin over the strongest competing result:
+\subsection{Qualitative Reconstruction of Complex Structural Cases}
+\label{sec:results-qualitative}
+
+Aggregate image metrics offer limited information about the geometry of reconstructed horizons, faults, and layer boundaries. Figure~\ref{fig:qualitative} therefore examines two cases from structurally complex OpenFWI subsets where the proposed model produces comparatively favorable SSIM outcomes. The examples were selected by a predetermined numerical rule rather than visual preference. For each subset, the BG-RFM score is compared with the best SSIM among the adapted InversionNet, VelocityGAN, UPFWI-derived supervised backbone, Auto-Linear, and Latent U-Net models:
 \begin{equation}
 \Delta_{\mathrm{SSIM}}
 =
@@ -18,27 +21,27 @@ Figure~\ref{fig:qualitative} illustrates structural reconstructions in two compl
 -
 \max_{m\in\mathcal B}\mathrm{SSIM}_m ,
 \end{equation}
-where $\mathcal B$ includes the adapted InversionNet, VelocityGAN, UPFWI-derived supervised backbone, Auto-Linear, and Latent U-Net models. These are intentionally favorable high-margin examples, not estimates of typical visual performance. The figure displays the five methods in Table~\ref{tab:rs-main}; Auto-Linear belongs to the selection pool but is not shown.
+Here $\mathcal B$ denotes that full adapted comparison pool. The main panel displays the five methods in Table~\ref{tab:rs-main}; Auto-Linear was included in the selection pool but is not shown. Because the criterion deliberately favors high-margin cases, these images illustrate particular reconstructions rather than the typical behavior of the test set.
 
 \input{figures/figure3_qualitative}
 
-The examples show coherent background structure with localized residual corrections in selected cases. Appendix~\ref{app:additional} gives additional high-margin panels and predefined negative-margin cases.
+In these selected examples, the composed background and correction reproduce broad velocity organization while retaining several fault- and interface-related variations. The corresponding error maps show where the remaining local discrepancies occur, complementing the aggregate measures with a spatial perspective. They do not replace the full held-out comparison in Table~\ref{tab:rs-main}. Additional cases selected by the same rule, together with predefined negative-margin examples, are included in Appendix~\ref{app:additional} so that the illustrative role of the main panel is explicit.
 
-\subsection{Supporting Comparison with Alternative Flow-Matching Formulations}
+\subsection{Comparison of Full-Field and Background-Referenced Flow-Matching Formulations}
 
-Table~\ref{tab:design-ablation} compares three complete reconstruction formulations. Concat-FM directly transports the full velocity field from concatenated heterogeneous conditions; role-aware full-field FM uses the learned background- and structure-oriented interfaces but still transports the complete velocity field. BG-RFM instead predicts a deterministic background and transports the correction relative to that same prediction, which also provides residual context and enters final composition.
+To examine the reconstruction variable rather than only the choice of network family, Table~\ref{tab:design-ablation} reports a separate study of three Flow-Matching formulations. Concat-FM combines the heterogeneous conditions and transports the full velocity field. Role-aware full-field FM retains distinct learned condition roles but continues to generate the entire field. BG-RFM assigns the background to a deterministic predictor and uses Flow Matching for the correction relative to that prediction, with the predicted background also serving as residual context. The variants therefore differ in their complete reconstruction organization rather than in a single isolated component.
 
 \input{tables/design_ablation}
 
-In the retained study, BG-RFM gives MAE/RMSE/SSIM of 0.0150/0.0270/0.9913, compared with 0.0225/0.0340/0.9865 for Concat-FM and 0.0205/0.0320/0.9880 for role-aware full-field FM. These descriptive results support the complete background-referenced reconstruction formulation without assigning the observed differences to any isolated component.
+Within this supporting study, the BG-RFM formulation gives MAE/RMSE/SSIM of 0.0150/0.0270/0.9913, compared with 0.0225/0.0340/0.9865 for Concat-FM and 0.0205/0.0320/0.9880 for role-aware full-field FM. This pattern is consistent with a useful role for a learned background reference in the evaluated formulation family. The comparison remains descriptive: it does not separately identify the effects of prediction consistency, learned background context, and other changes introduced together by the formulation. Its documented solver-step qualification is stated in the table caption.
 
-\subsection{Diagnostic Analysis}
+\subsection{Data, Condition, and Transport Diagnostics}
 
-The decomposition and learned conditions offer complementary ways to characterize the model. Across eight training subsets, the median participation-ratio effective ranks are 4.95 for the chosen low-pass background and 54.03 for its structural complement, with higher structural effective rank in every subset. The matched--deranged anchor-similarity margins are 0.46 for the background role and 0.35 for the structural role.
+The reconstruction design also admits measurements of the data decomposition and learned condition space. With the defined low-pass operator, the median participation-ratio effective rank across the eight training subsets is 4.95 for the background component and 54.03 for the structural complement. The complement has higher effective rank in every subset, indicating that the selected decomposition concentrates different kinds of variation in the two components. This is a property of the analyzed velocity data and chosen filter; it does not imply a measured ordering of conditional entropy or guarantee that one prediction task is easier to optimize.
 
-The Gaussian-base-averaged straight-path target-energy ratio is below one for all 33,600 held-out records, with mean $q_T=0.772$ and bootstrap 95\% confidence interval $[0.771,0.773]$. In the evaluated normalized coordinates, this characterizes a lower straight-path target energy for the background-centered reference than for the zero-centered full-field reference. These diagnostics describe the selected decomposition, condition alignment, and transport target; they are not estimates of isolated causal effects.
+The learned condition diagnostics further describe whether representations retain distinct associations with the training-time anchors. The matched-minus-deranged anchor-similarity margin is 0.46 for the background role and 0.35 for the structural role. A separate transport diagnostic evaluates the Gaussian-base-averaged straight-path target-energy ratio for a background-centered reference relative to the zero-centered full-field reference. All 33,600 held-out records satisfy $q_T<1$, with mean $0.772$ and bootstrap 95\% confidence interval $[0.771,0.773]$. In the normalized coordinate system of the evaluator, this indicates lower straight-path target energy for the background-centered reference on the observed samples; it is not a measurement of the accuracy attributable to any isolated training mechanism.
 
 \input{figures/figure2_data_characterization}
 \input{figures/figure4_diagnostics}
 
-Appendix~\ref{app:additional} provides extended diagnostic results and additional qualitative cases; Appendix~\ref{app:protocol} specifies the matched-input baseline adaptations.
+Together, these analyses give complementary views of the approach: the common benchmark quantifies reconstructed velocity, the formulation comparison describes alternative generative organizations, and the diagnostics characterize the observations and transport reference. Detailed effective-rank values, condition statistics, observation-removal sensitivity, and additional qualitative cases appear in Appendix~\ref{app:additional}; the adapted baseline protocols are given in Appendix~\ref{app:protocol}.
