@@ -70,7 +70,7 @@ def main():
         exact_copy(ART / name, DST / "original_artwork" / name)
     content = (DST / "pd-bg-rfm.tex").read_text(encoding="utf-8")
     required = sorted(set(re.findall(
-        r"\includegraphics(?:\[[^\]]*\])?\{([^}]+)\}", content)))
+        r"\\includegraphics(?:\[[^\]]*\])?\{([^}]+)\}", content)))
     if required != sorted(FIGURES):
         raise RuntimeError("Unexpected figure references: " + str(required))
     records = []
