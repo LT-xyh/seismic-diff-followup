@@ -1,5 +1,5 @@
 {
-  "classification": "RECONSTRUCTED FROM ARCHIVED SOURCE",
+  "classification": "RECONSTRUCTED FROM ARCHIVED SOURCE USING USER-SUPPLIED HISTORICAL PDF FIGURES",
   "verified_original_submission_pdf": false,
   "original_pdf_candidates": [],
   "source_tex_sha256": {
@@ -17,59 +17,179 @@
     },
     {
       "latex_reference": "figures/aaai/condition_learning.pdf",
-      "archived_artwork": "docs/paper/AAAI2027/figures/figure3_condition_learning/figure3_condition_learning.svg",
-      "source_sha256": "2ce7114771cba080186b1c649e67108f5744d326d69ff0065750478c665faa7b",
-      "restored_sha256": "d866fabbe6f2b1e64bb5c550ee409eb9d8d74073cd82af7a881ffd1458824e51",
-      "status": "NEW_SVG_TO_PDF_EXPORT_NOT_VERIFIED_SUBMITTED"
+      "archived_artwork": "docs/paper/aaaii/figures/aaai/condition_learning.pdf",
+      "source_sha256": "9630e839f35b1a64bbbfe5fe4712f77367aa7eb53afe7b4844b85cb507614e02",
+      "restored_sha256": "9630e839f35b1a64bbbfe5fe4712f77367aa7eb53afe7b4844b85cb507614e02",
+      "status": "USER_SUPPLIED_PDF_EXPORT_COPIED_BYTE_EXACTLY; ORIGINAL_SUBMISSION_EQUIVALENCE_UNVERIFIED",
+      "previous_provisional_export": {
+        "source": "docs/paper/AAAI2027/figures/figure3_condition_learning/figure3_condition_learning.svg",
+        "source_sha256": "2ce7114771cba080186b1c649e67108f5744d326d69ff0065750478c665faa7b",
+        "rendered_sha256": "d866fabbe6f2b1e64bb5c550ee409eb9d8d74073cd82af7a881ffd1458824e51",
+        "status": "NEW_SVG_TO_PDF_EXPORT_NOT_VERIFIED_SUBMITTED"
+      },
+      "git_blob_sha": "589056ce25a036661fae0f90dcca892643f84bb1",
+      "bytes": 114561,
+      "pages": 1,
+      "three_copies": [
+        "docs/paper/aaaii/figures/aaai/condition_learning.pdf",
+        "docs/paper/AAAI2027/figures/aaai/condition_learning.pdf",
+        "docs/paper/RemoteSensing_AAAI_Rebuild/figures/aaai/condition_learning.pdf"
+      ]
     },
     {
       "latex_reference": "figures/aaai/method_overview.pdf",
-      "archived_artwork": "docs/paper/AAAI2027/figures/method_overview.svg",
-      "source_sha256": "947511e3f3c9cd3edb5e5dcfc8495352f1f130d5e4578a3a9ae14d3506990010",
-      "restored_sha256": "acc33049615e45d2992e8b39219cdd81fed8f3bc421fae324c9ff5f38aba5185",
-      "status": "NEW_SVG_TO_PDF_EXPORT_NOT_VERIFIED_SUBMITTED"
+      "archived_artwork": "docs/paper/aaaii/figures/aaai/method_overview.pdf",
+      "source_sha256": "0823a48a8bad6419e5c67bd5ab97e6a5765117d90cb8fb0c294a8ae7884f580e",
+      "restored_sha256": "0823a48a8bad6419e5c67bd5ab97e6a5765117d90cb8fb0c294a8ae7884f580e",
+      "status": "USER_SUPPLIED_PDF_EXPORT_COPIED_BYTE_EXACTLY; ORIGINAL_SUBMISSION_EQUIVALENCE_UNVERIFIED",
+      "previous_provisional_export": {
+        "source": "docs/paper/AAAI2027/figures/method_overview.svg",
+        "source_sha256": "947511e3f3c9cd3edb5e5dcfc8495352f1f130d5e4578a3a9ae14d3506990010",
+        "rendered_sha256": "acc33049615e45d2992e8b39219cdd81fed8f3bc421fae324c9ff5f38aba5185",
+        "status": "NEW_SVG_TO_PDF_EXPORT_NOT_VERIFIED_SUBMITTED"
+      },
+      "git_blob_sha": "d2f3ee10c3bfa72fbf605209abb30809b36ef170",
+      "bytes": 282471,
+      "pages": 1,
+      "three_copies": [
+        "docs/paper/aaaii/figures/aaai/method_overview.pdf",
+        "docs/paper/AAAI2027/figures/aaai/method_overview.pdf",
+        "docs/paper/RemoteSensing_AAAI_Rebuild/figures/aaai/method_overview.pdf"
+      ]
     },
     {
       "latex_reference": "figures/aaai/motivation.pdf",
-      "archived_artwork": "docs/paper/AAAI2027/figures/figure1_motivation/motivation_statistics_combined_v2.png",
-      "source_sha256": "a480d14c85a20ca4c0dd5acd9c9d3a8e4943720502653a5d7e24ba508ad0d361",
-      "restored_sha256": "35ad818310ff6bae3bcd5b51c82190f305b9dc8e38c29b033da0fa91e6266df9",
-      "status": "NEW_PNG_TO_PDF_EXPORT_NOT_VERIFIED_SUBMITTED"
+      "archived_artwork": "docs/paper/aaaii/figures/aaai/motivation.pdf",
+      "source_sha256": "704dd5c51b9ab57a1d5ee943c9140bec740dafb1f1ce9f57b05be4d674768db9",
+      "restored_sha256": "704dd5c51b9ab57a1d5ee943c9140bec740dafb1f1ce9f57b05be4d674768db9",
+      "status": "USER_SUPPLIED_PDF_EXPORT_COPIED_BYTE_EXACTLY; ORIGINAL_SUBMISSION_EQUIVALENCE_UNVERIFIED",
+      "previous_provisional_export": {
+        "source": "docs/paper/AAAI2027/figures/figure1_motivation/motivation_statistics_combined_v2.png",
+        "source_sha256": "a480d14c85a20ca4c0dd5acd9c9d3a8e4943720502653a5d7e24ba508ad0d361",
+        "rendered_sha256": "35ad818310ff6bae3bcd5b51c82190f305b9dc8e38c29b033da0fa91e6266df9",
+        "status": "NEW_PNG_TO_PDF_EXPORT_NOT_VERIFIED_SUBMITTED"
+      },
+      "git_blob_sha": "e979407337000c9b44f73fb2f4d2cf6b2894ea30",
+      "bytes": 70207,
+      "pages": 1,
+      "three_copies": [
+        "docs/paper/aaaii/figures/aaai/motivation.pdf",
+        "docs/paper/AAAI2027/figures/aaai/motivation.pdf",
+        "docs/paper/RemoteSensing_AAAI_Rebuild/figures/aaai/motivation.pdf"
+      ]
     },
     {
       "latex_reference": "figures/aaai/qualitative.pdf",
-      "archived_artwork": "docs/paper/AAAI2027/figures/table2_qualitative/table2_representative_cases.png",
-      "source_sha256": "683bf6f9d394cc394860db3f41f9b682b16316dfce8ced35a1ec7457f4c78458",
-      "restored_sha256": "3829f3746526bf78058e6ac281b9c3449eb9e4ad6de7bdb0114640cd1d5f84bf",
-      "status": "NEW_PNG_TO_PDF_EXPORT_NOT_VERIFIED_SUBMITTED"
+      "archived_artwork": "docs/paper/aaaii/figures/aaai/qualitative.pdf",
+      "source_sha256": "e4b63a810b2e3a6e7960c7b1fe3400962181cdd84616d985d2fc8a8b08c68ff6",
+      "restored_sha256": "e4b63a810b2e3a6e7960c7b1fe3400962181cdd84616d985d2fc8a8b08c68ff6",
+      "status": "USER_SUPPLIED_PDF_EXPORT_COPIED_BYTE_EXACTLY; ORIGINAL_SUBMISSION_EQUIVALENCE_UNVERIFIED",
+      "previous_provisional_export": {
+        "source": "docs/paper/AAAI2027/figures/table2_qualitative/table2_representative_cases.png",
+        "source_sha256": "683bf6f9d394cc394860db3f41f9b682b16316dfce8ced35a1ec7457f4c78458",
+        "rendered_sha256": "3829f3746526bf78058e6ac281b9c3449eb9e4ad6de7bdb0114640cd1d5f84bf",
+        "status": "NEW_PNG_TO_PDF_EXPORT_NOT_VERIFIED_SUBMITTED"
+      },
+      "git_blob_sha": "44998d35bd675f6306cc1491b10639069071cc55",
+      "bytes": 122608,
+      "pages": 1,
+      "three_copies": [
+        "docs/paper/aaaii/figures/aaai/qualitative.pdf",
+        "docs/paper/AAAI2027/figures/aaai/qualitative.pdf",
+        "docs/paper/RemoteSensing_AAAI_Rebuild/figures/aaai/qualitative.pdf"
+      ]
     },
     {
       "latex_reference": "figures/aaai/residual_transport.pdf",
-      "archived_artwork": "docs/paper/AAAI2027/figures/figure4_residual_transport/figure4_residual_transport.svg",
-      "source_sha256": "d28758bc52196361dda6d292a5dc90aa830a453a2f59b21fadcc435a69b7d780",
-      "restored_sha256": "391221f815ea5d83df1a459c2c8d228a16a74823c4b9af4990139016320e028d",
-      "status": "NEW_SVG_TO_PDF_EXPORT_NOT_VERIFIED_SUBMITTED"
+      "archived_artwork": "docs/paper/aaaii/figures/aaai/residual_transport.pdf",
+      "source_sha256": "d5571b9c6602d72095974554efccb9fd84b7e4eebc03d212c01e0dadf10f94eb",
+      "restored_sha256": "d5571b9c6602d72095974554efccb9fd84b7e4eebc03d212c01e0dadf10f94eb",
+      "status": "USER_SUPPLIED_PDF_EXPORT_COPIED_BYTE_EXACTLY; ORIGINAL_SUBMISSION_EQUIVALENCE_UNVERIFIED",
+      "previous_provisional_export": {
+        "source": "docs/paper/AAAI2027/figures/figure4_residual_transport/figure4_residual_transport.svg",
+        "source_sha256": "d28758bc52196361dda6d292a5dc90aa830a453a2f59b21fadcc435a69b7d780",
+        "rendered_sha256": "391221f815ea5d83df1a459c2c8d228a16a74823c4b9af4990139016320e028d",
+        "status": "NEW_SVG_TO_PDF_EXPORT_NOT_VERIFIED_SUBMITTED"
+      },
+      "git_blob_sha": "31ad8cd7badd4cae005401433193486370c4b6f7",
+      "bytes": 102120,
+      "pages": 1,
+      "three_copies": [
+        "docs/paper/aaaii/figures/aaai/residual_transport.pdf",
+        "docs/paper/AAAI2027/figures/aaai/residual_transport.pdf",
+        "docs/paper/RemoteSensing_AAAI_Rebuild/figures/aaai/residual_transport.pdf"
+      ]
     },
     {
       "latex_reference": "figures/aaai/table2_failure_cases.pdf",
-      "archived_artwork": "docs/paper/AAAI2027/figures/table2_qualitative/table2_failure_cases.png",
-      "source_sha256": "1d91fcd5fac758d7172bd74493f454a0d5e59a18c8c089b6caaf0a1e3483b567",
-      "restored_sha256": "26d4d35565faee37e0684ff00a9e8ecd86e513cf7f882c5562fbdf19499b7ec7",
-      "status": "NEW_PNG_TO_PDF_EXPORT_NOT_VERIFIED_SUBMITTED"
+      "archived_artwork": "docs/paper/aaaii/figures/aaai/table2_failure_cases.pdf",
+      "source_sha256": "70c2bf9991a093ce0051219d93e2a0d930484ec5b02032203a6f323e932152a8",
+      "restored_sha256": "70c2bf9991a093ce0051219d93e2a0d930484ec5b02032203a6f323e932152a8",
+      "status": "USER_SUPPLIED_PDF_EXPORT_COPIED_BYTE_EXACTLY; ORIGINAL_SUBMISSION_EQUIVALENCE_UNVERIFIED",
+      "previous_provisional_export": {
+        "source": "docs/paper/AAAI2027/figures/table2_qualitative/table2_failure_cases.png",
+        "source_sha256": "1d91fcd5fac758d7172bd74493f454a0d5e59a18c8c089b6caaf0a1e3483b567",
+        "rendered_sha256": "26d4d35565faee37e0684ff00a9e8ecd86e513cf7f882c5562fbdf19499b7ec7",
+        "status": "NEW_PNG_TO_PDF_EXPORT_NOT_VERIFIED_SUBMITTED"
+      },
+      "git_blob_sha": "33fd940c63c3fda49425380a4d787032274ffe24",
+      "bytes": 414838,
+      "pages": 1,
+      "three_copies": [
+        "docs/paper/aaaii/figures/aaai/table2_failure_cases.pdf",
+        "docs/paper/AAAI2027/figures/aaai/table2_failure_cases.pdf",
+        "docs/paper/RemoteSensing_AAAI_Rebuild/figures/aaai/table2_failure_cases.pdf"
+      ]
     },
     {
       "latex_reference": "figures/aaai/table2_representative_cases_1.pdf",
-      "archived_artwork": "docs/paper/AAAI2027/figures/table2_qualitative/table2_representative_cases_1.png",
-      "source_sha256": "918d045603cb4e9b11d3dcfcefcbd8d8f4cd6999bf3e1b8e316e1d4c48f7e3ed",
-      "restored_sha256": "7203afaa842dfc0413b3dd9e413836c12219ad138b1597a6142e37d6c1d7cfd5",
-      "status": "NEW_PNG_TO_PDF_EXPORT_NOT_VERIFIED_SUBMITTED"
+      "archived_artwork": "docs/paper/aaaii/figures/aaai/table2_representative_cases_1.pdf",
+      "source_sha256": "bb19990c0c5dd560a74d7f3ce770c8a3cea095ff8e54e7d7924e6ac25ea10d92",
+      "restored_sha256": "bb19990c0c5dd560a74d7f3ce770c8a3cea095ff8e54e7d7924e6ac25ea10d92",
+      "status": "USER_SUPPLIED_PDF_EXPORT_COPIED_BYTE_EXACTLY; ORIGINAL_SUBMISSION_EQUIVALENCE_UNVERIFIED",
+      "previous_provisional_export": {
+        "source": "docs/paper/AAAI2027/figures/table2_qualitative/table2_representative_cases_1.png",
+        "source_sha256": "918d045603cb4e9b11d3dcfcefcbd8d8f4cd6999bf3e1b8e316e1d4c48f7e3ed",
+        "rendered_sha256": "7203afaa842dfc0413b3dd9e413836c12219ad138b1597a6142e37d6c1d7cfd5",
+        "status": "NEW_PNG_TO_PDF_EXPORT_NOT_VERIFIED_SUBMITTED"
+      },
+      "git_blob_sha": "801b4416a6b2241d49445a9334f3e002cf7a86c1",
+      "bytes": 477836,
+      "pages": 1,
+      "three_copies": [
+        "docs/paper/aaaii/figures/aaai/table2_representative_cases_1.pdf",
+        "docs/paper/AAAI2027/figures/aaai/table2_representative_cases_1.pdf",
+        "docs/paper/RemoteSensing_AAAI_Rebuild/figures/aaai/table2_representative_cases_1.pdf"
+      ]
     },
     {
       "latex_reference": "figures/aaai/table2_representative_cases_2.pdf",
-      "archived_artwork": "docs/paper/AAAI2027/figures/table2_qualitative/table2_representative_cases_2.png",
-      "source_sha256": "5ca426582e5a7905a1358caaa1003982feb49323a963b1cd7c1c34bfff4939ea",
-      "restored_sha256": "1d51ae7e73da38ddb3bc20421e794718607262058f312ad329b3c6ffc4208ce1",
-      "status": "NEW_PNG_TO_PDF_EXPORT_NOT_VERIFIED_SUBMITTED"
+      "archived_artwork": "docs/paper/aaaii/figures/aaai/table2_representative_cases_2.pdf",
+      "source_sha256": "9254f082f62009ce110a969b41d8f6afddd5b68aabbffe817aee4457e6d01e0f",
+      "restored_sha256": "9254f082f62009ce110a969b41d8f6afddd5b68aabbffe817aee4457e6d01e0f",
+      "status": "USER_SUPPLIED_PDF_EXPORT_COPIED_BYTE_EXACTLY; ORIGINAL_SUBMISSION_EQUIVALENCE_UNVERIFIED",
+      "previous_provisional_export": {
+        "source": "docs/paper/AAAI2027/figures/table2_qualitative/table2_representative_cases_2.png",
+        "source_sha256": "5ca426582e5a7905a1358caaa1003982feb49323a963b1cd7c1c34bfff4939ea",
+        "rendered_sha256": "1d51ae7e73da38ddb3bc20421e794718607262058f312ad329b3c6ffc4208ce1",
+        "status": "NEW_PNG_TO_PDF_EXPORT_NOT_VERIFIED_SUBMITTED"
+      },
+      "git_blob_sha": "2cc25e65b07d94a4b1cde1df0f00eeeca93bc9c2",
+      "bytes": 466225,
+      "pages": 1,
+      "three_copies": [
+        "docs/paper/aaaii/figures/aaai/table2_representative_cases_2.pdf",
+        "docs/paper/AAAI2027/figures/aaai/table2_representative_cases_2.pdf",
+        "docs/paper/RemoteSensing_AAAI_Rebuild/figures/aaai/table2_representative_cases_2.pdf"
+      ]
     }
-  ]
+  ],
+  "original_submitted_manuscript_pdf": "NOT FOUND OR VERIFIED; PDFs of figures do not prove manuscript PDF equivalence",
+  "figure_pdf_uploaded_from": {
+    "branch": "xyh/upload-aaai-pdf-figures",
+    "commit": "dc1e70dab42ad01f043961a01711ae8f4e950a48",
+    "total_uploaded_files": 16,
+    "exact_copies_on_restoration_branch": 24,
+    "verified_three_way_binary_identity": true
+  }
 }
