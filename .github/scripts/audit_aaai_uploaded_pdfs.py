@@ -3,7 +3,7 @@
 import hashlib
 import json
 from pathlib import Path
-import subprocess
+from pypdf import PdfReader
 
 ROOT = Path(__file__).resolve().parents[2]
 WORK = ROOT / "docs/paper/RemoteSensing_AAAI_Rebuild"
@@ -52,12 +52,11 @@ def main():
         digest = blob_sha(blobs[0])
         assert digest == expected, "Uploaded Git blob not as verified: " + name
         assert blobs[0].startswith(b"%PDF-"), "Invalid PDF header: " + name
-        info = subprocess.run(["pdfinfo", str(locs[2])], capture_output=True, text=True)
-        if info.returncode:
-            raise RuntimeError(f"PDF unreadable: {name}\n{info.stderr[-1000:]}")
-        pages_line = next((x for x in info.stdout.splitlines() if x.startswith("Pages:")), "")
-        pages = int(pages_line.split(":",1)[1])
-        assert pages > 0
+        reader = PdfReader(str(locs[2]), strict=True)
+        pages = len(reader.pages)
+        assert pages > 0, "PDF has no pages: " + name
+        for page in reader.pages:
+            _ = page.mediabox
         records.append({
             "filename": name,
             "git_blob_sha": digest,
