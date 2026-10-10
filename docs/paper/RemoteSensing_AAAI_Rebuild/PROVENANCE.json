@@ -1,0 +1,75 @@
+{
+  "classification": "RECONSTRUCTED FROM ARCHIVED SOURCE",
+  "verified_original_submission_pdf": false,
+  "original_pdf_candidates": [],
+  "source_tex_sha256": {
+    "pd-bg-rfm.tex": "51d57b5954516e0040114aee9a3863a4ea5869b78500cde7d4112d6edf4d7e83",
+    "paper0726.tex": "5c933cb974ba83b47b3394e11a3b518818832aa8f2315e2210a70d9f721710e1"
+  },
+  "copied_sources_byte_identical": true,
+  "figure_exports": [
+    {
+      "latex_reference": "figures/aaai/appendix_full_condition_diagnostics.png",
+      "archived_artwork": "docs/paper/AAAI2027/figures/aaai/appendix_full_condition_diagnostics.png",
+      "source_sha256": "03c60ef77943a887e783ec2f6b1418c9f878c45c02a5c49553f3ad1c6613ded4",
+      "restored_sha256": "03c60ef77943a887e783ec2f6b1418c9f878c45c02a5c49553f3ad1c6613ded4",
+      "status": "ORIGINAL_PNG_COPY_AT_RESTORED_PATH"
+    },
+    {
+      "latex_reference": "figures/aaai/condition_learning.pdf",
+      "archived_artwork": "docs/paper/AAAI2027/figures/figure3_condition_learning/figure3_condition_learning.svg",
+      "source_sha256": "2ce7114771cba080186b1c649e67108f5744d326d69ff0065750478c665faa7b",
+      "restored_sha256": "d866fabbe6f2b1e64bb5c550ee409eb9d8d74073cd82af7a881ffd1458824e51",
+      "status": "NEW_SVG_TO_PDF_EXPORT_NOT_VERIFIED_SUBMITTED"
+    },
+    {
+      "latex_reference": "figures/aaai/method_overview.pdf",
+      "archived_artwork": "docs/paper/AAAI2027/figures/method_overview.svg",
+      "source_sha256": "947511e3f3c9cd3edb5e5dcfc8495352f1f130d5e4578a3a9ae14d3506990010",
+      "restored_sha256": "acc33049615e45d2992e8b39219cdd81fed8f3bc421fae324c9ff5f38aba5185",
+      "status": "NEW_SVG_TO_PDF_EXPORT_NOT_VERIFIED_SUBMITTED"
+    },
+    {
+      "latex_reference": "figures/aaai/motivation.pdf",
+      "archived_artwork": "docs/paper/AAAI2027/figures/figure1_motivation/motivation_statistics_combined_v2.png",
+      "source_sha256": "a480d14c85a20ca4c0dd5acd9c9d3a8e4943720502653a5d7e24ba508ad0d361",
+      "restored_sha256": "35ad818310ff6bae3bcd5b51c82190f305b9dc8e38c29b033da0fa91e6266df9",
+      "status": "NEW_PNG_TO_PDF_EXPORT_NOT_VERIFIED_SUBMITTED"
+    },
+    {
+      "latex_reference": "figures/aaai/qualitative.pdf",
+      "archived_artwork": "docs/paper/AAAI2027/figures/table2_qualitative/table2_representative_cases.png",
+      "source_sha256": "683bf6f9d394cc394860db3f41f9b682b16316dfce8ced35a1ec7457f4c78458",
+      "restored_sha256": "3829f3746526bf78058e6ac281b9c3449eb9e4ad6de7bdb0114640cd1d5f84bf",
+      "status": "NEW_PNG_TO_PDF_EXPORT_NOT_VERIFIED_SUBMITTED"
+    },
+    {
+      "latex_reference": "figures/aaai/residual_transport.pdf",
+      "archived_artwork": "docs/paper/AAAI2027/figures/figure4_residual_transport/figure4_residual_transport.svg",
+      "source_sha256": "d28758bc52196361dda6d292a5dc90aa830a453a2f59b21fadcc435a69b7d780",
+      "restored_sha256": "391221f815ea5d83df1a459c2c8d228a16a74823c4b9af4990139016320e028d",
+      "status": "NEW_SVG_TO_PDF_EXPORT_NOT_VERIFIED_SUBMITTED"
+    },
+    {
+      "latex_reference": "figures/aaai/table2_failure_cases.pdf",
+      "archived_artwork": "docs/paper/AAAI2027/figures/table2_qualitative/table2_failure_cases.png",
+      "source_sha256": "1d91fcd5fac758d7172bd74493f454a0d5e59a18c8c089b6caaf0a1e3483b567",
+      "restored_sha256": "26d4d35565faee37e0684ff00a9e8ecd86e513cf7f882c5562fbdf19499b7ec7",
+      "status": "NEW_PNG_TO_PDF_EXPORT_NOT_VERIFIED_SUBMITTED"
+    },
+    {
+      "latex_reference": "figures/aaai/table2_representative_cases_1.pdf",
+      "archived_artwork": "docs/paper/AAAI2027/figures/table2_qualitative/table2_representative_cases_1.png",
+      "source_sha256": "918d045603cb4e9b11d3dcfcefcbd8d8f4cd6999bf3e1b8e316e1d4c48f7e3ed",
+      "restored_sha256": "7203afaa842dfc0413b3dd9e413836c12219ad138b1597a6142e37d6c1d7cfd5",
+      "status": "NEW_PNG_TO_PDF_EXPORT_NOT_VERIFIED_SUBMITTED"
+    },
+    {
+      "latex_reference": "figures/aaai/table2_representative_cases_2.pdf",
+      "archived_artwork": "docs/paper/AAAI2027/figures/table2_qualitative/table2_representative_cases_2.png",
+      "source_sha256": "5ca426582e5a7905a1358caaa1003982feb49323a963b1cd7c1c34bfff4939ea",
+      "restored_sha256": "1d51ae7e73da38ddb3bc20421e794718607262058f312ad329b3c6ffc4208ce1",
+      "status": "NEW_PNG_TO_PDF_EXPORT_NOT_VERIFIED_SUBMITTED"
+    }
+  ]
+}
