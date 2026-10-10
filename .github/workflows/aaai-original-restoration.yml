@@ -1,0 +1,60 @@
+name: aaai-step0-original-restoration
+on:
+  push:
+    branches:
+      - remote-sensing/aaai-stepwise-rebuild
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Audit historical AAAI source and figure dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p build/aaai-original-restoration
+          python - <<'PY'
+          import pathlib, re, json, hashlib
+          from collections import Counter
+          a=pathlib.Path('docs/paper/aaaii')
+          h=pathlib.Path('docs/paper/AAAI2027')
+          src=a/'pd-bg-rfm.tex'
+          early=a/'paper0726.tex'
+          refs=re.findall(r'\\includegraphics(?:\[[^\]]*\])?\{([^}]+)\}',src.read_text())
+          names=sorted(set(refs))
+          listed={}
+          for b in (a,h):
+              listed[str(b)]=sorted(x.as_posix() for x in b.rglob('*') if x.is_file())
+          allpdf=sorted(x.as_posix() for x in pathlib.Path('docs/paper').rglob('*.pdf') if x.is_file())
+          inventory={'primary':{'path':str(src),'sha256':hashlib.sha256(src.read_bytes()).hexdigest(),
+                                 'bytes':src.stat().st_size,'lines':src.read_text().count('\n')},
+                     'earlier':{'path':str(early),'sha256':hashlib.sha256(early.read_bytes()).hexdigest(),
+                                'bytes':early.stat().st_size},
+                     'images_needed':names,
+                     'exact_graphic_paths_present':{n:(a/n).is_file() for n in names},
+                     'all_paper_PDF_paths':allpdf,'archive_files':listed[str(a)],
+                     'AAAI2027_source_files':[x for x in listed[str(h)] if x.endswith(('.tex','.pdf','.bib','.sty','.bst','.cls'))],
+                     'source_image_candidates':{}}
+          for n in names:
+              stem=pathlib.Path(n).stem
+              terms=['motivation','method_overview','qualitative','condition_learning','residual_transport',
+                     'table2_representative_cases_1','table2_representative_cases_2','table2_failure_cases',
+                     'appendix_full_condition_diagnostics']
+              key=next((k for k in terms if k==stem),stem)
+              inventory['source_image_candidates'][n]=[
+                  x for x in listed[str(h)] if key in x and x.endswith(('.svg','.png','.pptx','.jpg','.pdf'))][:30]
+          out=pathlib.Path('build/aaai-original-restoration/inventory.json')
+          out.write_text(json.dumps(inventory,indent=2,ensure_ascii=False))
+          print('source sha256',inventory['primary']['sha256'])
+          print('original pdf candidates',allpdf)
+          print('archive file count',len(listed[str(a)]))
+          print('exact references',inventory['exact_graphic_paths_present'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aaai-original-restoration-inventory
+          path: build/aaai-original-restoration/inventory.json
+          if-no-files-found: error
