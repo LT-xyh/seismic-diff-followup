@@ -1,60 +1,96 @@
 name: aaai-step0-original-restoration
 on:
-  push:
-    branches:
-      - remote-sensing/aaai-stepwise-rebuild
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
-  inventory:
+  restore-and-compile:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Audit historical AAAI source and figure dependencies
+        with:
+          ref: remote-sensing/aaai-stepwise-rebuild
+          fetch-depth: 1
+          persist-credentials: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install figure format exporters
+        run: python -m pip install --disable-pip-version-check 'CairoSVG==2.8.2' 'img2pdf==0.6.3'
+
+      - name: Restore original manuscript without editing source content
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p build/aaai-original-restoration
-          python - <<'PY'
-          import pathlib, re, json, hashlib
-          from collections import Counter
-          a=pathlib.Path('docs/paper/aaaii')
-          h=pathlib.Path('docs/paper/AAAI2027')
-          src=a/'pd-bg-rfm.tex'
-          early=a/'paper0726.tex'
-          refs=re.findall(r'\\includegraphics(?:\[[^\]]*\])?\{([^}]+)\}',src.read_text())
-          names=sorted(set(refs))
-          listed={}
-          for b in (a,h):
-              listed[str(b)]=sorted(x.as_posix() for x in b.rglob('*') if x.is_file())
-          allpdf=sorted(x.as_posix() for x in pathlib.Path('docs/paper').rglob('*.pdf') if x.is_file())
-          inventory={'primary':{'path':str(src),'sha256':hashlib.sha256(src.read_bytes()).hexdigest(),
-                                 'bytes':src.stat().st_size,'lines':src.read_text().count('\n')},
-                     'earlier':{'path':str(early),'sha256':hashlib.sha256(early.read_bytes()).hexdigest(),
-                                'bytes':early.stat().st_size},
-                     'images_needed':names,
-                     'exact_graphic_paths_present':{n:(a/n).is_file() for n in names},
-                     'all_paper_PDF_paths':allpdf,'archive_files':listed[str(a)],
-                     'AAAI2027_source_files':[x for x in listed[str(h)] if x.endswith(('.tex','.pdf','.bib','.sty','.bst','.cls'))],
-                     'source_image_candidates':{}}
-          for n in names:
-              stem=pathlib.Path(n).stem
-              terms=['motivation','method_overview','qualitative','condition_learning','residual_transport',
-                     'table2_representative_cases_1','table2_representative_cases_2','table2_failure_cases',
-                     'appendix_full_condition_diagnostics']
-              key=next((k for k in terms if k==stem),stem)
-              inventory['source_image_candidates'][n]=[
-                  x for x in listed[str(h)] if key in x and x.endswith(('.svg','.png','.pptx','.jpg','.pdf'))][:30]
-          out=pathlib.Path('build/aaai-original-restoration/inventory.json')
-          out.write_text(json.dumps(inventory,indent=2,ensure_ascii=False))
-          print('source sha256',inventory['primary']['sha256'])
-          print('original pdf candidates',allpdf)
-          print('archive file count',len(listed[str(a)]))
-          print('exact references',inventory['exact_graphic_paths_present'])
-          PY
-      - uses: actions/upload-artifact@v4
+          python .github/scripts/restore_aaai_step0.py
+          cmp docs/paper/aaaii/pd-bg-rfm.tex docs/paper/RemoteSensing_AAAI_Rebuild/pd-bg-rfm.tex
+          cmp docs/paper/aaaii/paper0726.tex docs/paper/RemoteSensing_AAAI_Rebuild/paper0726.tex
+          sha256sum docs/paper/aaaii/pd-bg-rfm.tex docs/paper/RemoteSensing_AAAI_Rebuild/pd-bg-rfm.tex
+
+      - name: Commit independent restored workspace to figure-step branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- docs/paper/RemoteSensing_AAAI_Rebuild/
+          git diff --cached --name-only | tee /tmp/aaai-step0-changed-paths
+          test -s /tmp/aaai-step0-changed-paths
+          if grep -v '^docs/paper/RemoteSensing_AAAI_Rebuild/' /tmp/aaai-step0-changed-paths; then
+            echo 'Unexpected staged path; refusing commit.'
+            exit 1
+          fi
+          git commit -m 'restoration: copy exact AAAI-27 source and label artwork-derived exports'
+          git push origin HEAD:refs/heads/remote-sensing/aaai-stepwise-rebuild
+
+      - name: Compile historically restored AAAI manuscript
+        uses: xu-cheng/latex-action@v4
         with:
-          name: aaai-original-restoration-inventory
-          path: build/aaai-original-restoration/inventory.json
+          root_file: pd-bg-rfm.tex
+          working_directory: docs/paper/RemoteSensing_AAAI_Rebuild
+          latexmk_use_xelatex: false
+
+      - name: Verify source hashes and build status
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmp docs/paper/aaaii/pd-bg-rfm.tex docs/paper/RemoteSensing_AAAI_Rebuild/pd-bg-rfm.tex
+          test -s docs/paper/RemoteSensing_AAAI_Rebuild/pd-bg-rfm.pdf
+          python - <<'PY'
+          import pathlib,hashlib
+          p=pathlib.Path('docs/paper/RemoteSensing_AAAI_Rebuild/pd-bg-rfm.tex')
+          got=hashlib.sha256(p.read_bytes()).hexdigest()
+          assert got=='51d57b5954516e0040114aee9a3863a4ea5869b78500cde7d4112d6edf4d7e83'
+          print('RESTORED_SOURCE_SHA256_PASS',got)
+          PY
+          pdfinfo docs/paper/RemoteSensing_AAAI_Rebuild/pd-bg-rfm.pdf | grep -E 'Pages:|Page size:|File size:' || true
+
+      - name: Upload reconstructed AAAI PDF
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aaai-step0-reconstructed-manuscript-pdf
+          path: docs/paper/RemoteSensing_AAAI_Rebuild/pd-bg-rfm.pdf
           if-no-files-found: error
+
+      - name: Package restoration assets and provenance
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p build/aaai-original-restoration
+          if [ -d docs/paper/RemoteSensing_AAAI_Rebuild ]; then
+            tar --exclude='*.aux' --exclude='*.log' --exclude='*.fls' --exclude='*.fdb_latexmk'               -czf build/aaai-original-restoration/AAAI_STEP0_RESTORED_SOURCE.tar.gz               -C docs/paper RemoteSensing_AAAI_Rebuild
+          fi
+
+      - name: Upload restoration source archive
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aaai-step0-original-restoration-source
+          path: build/aaai-original-restoration/AAAI_STEP0_RESTORED_SOURCE.tar.gz
+          if-no-files-found: warn
