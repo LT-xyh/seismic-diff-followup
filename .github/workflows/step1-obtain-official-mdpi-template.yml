@@ -1,7 +1,5 @@
 name: step1-obtain-official-mdpi-template
 on:
-  push:
-    branches: [remote-sensing/step1-mdpi-format]
   workflow_dispatch:
 jobs:
   official-template:
