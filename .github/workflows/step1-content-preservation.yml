@@ -1,0 +1,59 @@
+name: step1-content-preservation
+on:
+  push:
+    branches: [remote-sensing/step1-mdpi-format]
+  pull_request:
+  workflow_dispatch:
+jobs:
+  verify-only:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify restored historical manuscript is copied byte-exactly
+        shell: bash
+        run: |
+          set -euo pipefail
+          x=docs/paper/RemoteSensing_Stepwise
+          y=docs/paper/RemoteSensing_AAAI_Rebuild
+          cmp "$x/original/pd-bg-rfm.tex" "$y/pd-bg-rfm.tex"
+          cmp "$x/original/paper0726.tex" "$y/paper0726.tex"
+          cmp "$x/references.bib" "$y/references.bib"
+          sha256sum "$x/original/pd-bg-rfm.tex" "$x/original/paper0726.tex" "$x/references.bib"
+          for n in "$y"/figures/aaai/*; do
+            test -f "$x/figures/aaai/$(basename "$n")"
+            cmp "$n" "$x/figures/aaai/$(basename "$n")"
+          done
+      - name: Recreate and check exact semantic body and abstract
+        shell: bash
+        run: |
+          set -euo pipefail
+          p=docs/paper/RemoteSensing_Stepwise
+          cp "$p/ABSTRACT_EXACT_FROM_AAAI.tex" /tmp/expected_abstract.tex
+          cp "$p/CONTENT_EXACT_FROM_AAAI.tex" /tmp/expected_content.tex
+          python "$p/tools/prepare_mechanical_migration.py"
+          cmp /tmp/expected_abstract.tex "$p/ABSTRACT_EXACT_FROM_AAAI.tex"
+          cmp /tmp/expected_content.tex "$p/CONTENT_EXACT_FROM_AAAI.tex"
+          python - <<'PY'
+          import json, pathlib
+          p=pathlib.Path('docs/paper/RemoteSensing_Stepwise/CONTENT_PRESERVATION.json')
+          d=json.loads(p.read_text())
+          assert d['scientific_body_substring_exact'] and d['abstract_text_extract_exact']
+          assert not d['missing_citations'] and not d['missing_figures']
+          print('STEP1_PREPARATION_AUDIT_PASS',d['figure_count'],len(d['citation_keys']))
+          PY
+      - name: Build staging-only source archive (NOT the MDPI submission package)
+        run: |
+          set -e
+          mkdir -p build/step1
+          cd docs/paper
+          zip -qr ../../build/step1/BG-RFM_STEP1_STAGED_NOT_MDPI.zip RemoteSensing_Stepwise
+      - uses: actions/upload-artifact@v4
+        with:
+          name: step1-staging-and-preservation-audit-NOT-MDPI
+          path: |
+            build/step1/BG-RFM_STEP1_STAGED_NOT_MDPI.zip
+            docs/paper/RemoteSensing_Stepwise/CONTENT_PRESERVATION.json
+          if-no-files-found: error
