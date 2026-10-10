@@ -20,7 +20,7 @@ ABSTRACT = HERE / "ABSTRACT_EXACT_FROM_AAAI.tex"
 AUDIT = HERE / "CONTENT_PRESERVATION.json"
 SOURCE_SHA = "51d57b5954516e0040114aee9a3863a4ea5869b78500cde7d4112d6edf4d7e83"
 EARLY_SHA = "5c933cb974ba83b47b3394e11a3b518818832aa8f2315e2210a70d9f721710e1"
-BIB_SHA = "a6936d64e1e3bb46ce122444f7c11d73ef99c8c98080a815356ed69e121d55da9"
+BIB_SHA = "9fa6af7bcf73bc3c1ced76e98eae3a235c564ce802101c94bafec435cfbac356"
 
 
 def sha(p):
@@ -30,6 +30,7 @@ def sha(p):
 def main():
     assert sha(ORIGINAL) == SOURCE_SHA, "AAAI primary source altered"
     assert sha(EARLY) == EARLY_SHA, "AAAI early manuscript altered"
+    assert sha(BIB) == BIB_SHA, "AAAI bibliography altered"
     # Historical Git blob identity is checked separately in CI for the bib.
     original = ORIGINAL.read_text(encoding="utf-8")
     assert original.count("\\begin{abstract}") == original.count("\\end{abstract}") == 1
