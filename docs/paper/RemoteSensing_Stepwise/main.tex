@@ -1,0 +1,62 @@
+% STEP 1: FORMAT-ONLY; not approved for submission.
+% Original AAAI text is preserved in CONTENT_EXACT_FROM_AAAI.tex.
+% Official MDPI ACS ZIP SHA-256: 62744425fbcec9cd3e58147cbee65bdec2e2ff0440f29792c26edc97a11b6c70
+% Definitions/mdpi.cls v6.5a, 2026-09-11.
+\documentclass[remotesensing,article,submit,moreauthors]{Definitions/mdpi}
+\firstpage{1}
+\makeatletter
+\setcounter{page}{\@firstpage}
+\makeatother
+\pubvolume{1}
+\issuenum{1}
+\articlenumber{0}
+\pubyear{2026}
+\copyrightyear{2026}
+\datereceived{ }
+\daterevised{ }
+\dateaccepted{ }
+\datepublished{ }
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath,amssymb}
+\newif\ifaaaiwithappendix
+\aaaiwithappendixtrue
+\newif\ifconditioncontractfigure
+\IfFileExists{figures/figure3_condition_learning/figure3_condition_learning.pdf}
+ {\conditioncontractfiguretrue}{\conditioncontractfigurefalse}
+\Title{Predicting the Background, Transporting the Structure: Decoupled Multimodal Subsurface Velocity Inversion}
+\Author{Chunlei Wu, Yinghao Xu and Jing Lu*}
+\AuthorNames{Chunlei Wu, Yinghao Xu and Jing Lu}
+\address{[Author affiliations and numbering pending confirmation]}
+\corres{Correspondence: [Jing Lu email pending confirmation]}
+\abstract{
+Multimodal subsurface velocity inversion combines complementary observations: post-stack migrated images and horizons reveal structural geometry, whereas RMS velocity and well logs calibrate smooth background velocity and absolute scale. Existing methods fuse these cues with one full-field predictor, treating predictable background velocity and structural variation as one task. We identify this mismatch as an asymmetry in conditional complexity and propose Physics-Decoupled Background-Guided Residual Flow Matching (PD-BG-RFM). Our method uses physics-decoupled contrastive learning to construct separate conditions for background-velocity prediction and structural guidance. The background branch deterministically predicts background velocity and reuses it throughout the pipeline: this prediction defines the residual target during training, conditions the residual transport vector field jointly with the structural condition, and composes the final velocity estimate at inference. We derive an exact composition-consistency identity and prove a necessary-and-sufficient condition for residual transport to have lower straight-path target energy than full-field transport. On the globally held-out OpenFWI test set, PD-BG-RFM achieves the best RMSE, SSIM, and high-frequency MAE among matched-input baselines using only 10.6M parameters. Controlled ablations and branch-specific diagnostics support a broader principle for multimodal inverse problems: predict well-constrained components directly and reserve generative transport for structure-bearing variation unexplained by the predicted background.
+}
+\keyword{[PENDING - keywords not author-approved in format-only Step 1]}
+% The MDPI 2026-09-11 ACS template uses a flag and redefinition for Highlights.
+% No scientific highlight content is authored in Step 1.
+\addhighlights{yes}
+\renewcommand{\addhighlights}{%
+\noindent\textbf{What are the main findings?}
+\begin{itemize}[topsep=0pt,itemsep=0pt]
+\item \textit{[Pending author-supplied findings]}
+\end{itemize}
+\noindent\textbf{What are the implications of the main findings?}
+\begin{itemize}[topsep=0pt,itemsep=0pt]
+\item \textit{[Pending author-supplied implications]}
+\end{itemize}
+}
+\reftitle{References}
+\begin{document}
+\input{CONTENT_MDPI_LAYOUT}
+% Format-only administrative structure; none of the fields below are asserted as facts.
+\authorcontributions{[PENDING - CRediT roles not confirmed]}
+\funding{[PENDING - grant numbers and funders not confirmed]}
+\institutionalreview{Not applicable.}
+\informedconsent{Not applicable.}
+\dataavailability{[PENDING - data availability requires author confirmation]}
+\acknowledgments{[PENDING - acknowledgments and AI disclosure require confirmation]}
+\conflictsofinterest{[PENDING - no-conflicts statement not yet authorized]}
+\end{document}

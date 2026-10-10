@@ -1,0 +1,103 @@
+# Step 1.1 — official MDPI v6.5a CI build. Never publish the publisher's class ZIP.
+# Publisher download first; optional author-controlled PRIVATE release fallback.
+name: step1-official-mdpi-build
+
+on:
+  push:
+    branches: [remote-sensing/step1-mdpi-format]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  official-mdpi:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install PDF verification dependency
+        run: python -m pip install --disable-pip-version-check pypdf==5.9.0
+
+      - name: Verify scientific preservation before build
+        run: |
+          set -euo pipefail
+          python docs/paper/RemoteSensing_Stepwise/tools/verify_step1_semantics.py
+          cmp docs/paper/RemoteSensing_AAAI_Rebuild/pd-bg-rfm.tex docs/paper/RemoteSensing_Stepwise/original/pd-bg-rfm.tex
+          cmp docs/paper/RemoteSensing_AAAI_Rebuild/references.bib docs/paper/RemoteSensing_Stepwise/references.bib
+
+      - name: Acquire exact official MDPI ACS archive (publisher, then private cache)
+        env:
+          MDPI_ACS_PRIVATE_REPO: ${{ vars.MDPI_ACS_PRIVATE_REPO }}
+          MDPI_ACS_PRIVATE_TAG: ${{ vars.MDPI_ACS_PRIVATE_TAG }}
+          GH_TOKEN: ${{ secrets.MDPI_ACS_PRIVATE_READ_TOKEN }}
+        run: |
+          set -euo pipefail
+          python .github/scripts/acquire_official_mdpi_acs.py
+
+      - name: Install verified publisher template
+        run: |
+          set -euo pipefail
+          python docs/paper/RemoteSensing_Stepwise/tools/install_uploaded_mdpi_acs.py \
+            build/step1-mdpi/MDPI_template_ACS.zip
+          # No file from the official publisher ZIP is checked into Git.
+
+      - name: Compile from clean GitHub checkout (pdfLaTeX and BibTeX)
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: main.tex
+          working_directory: docs/paper/RemoteSensing_Stepwise
+          latexmk_use_xelatex: false
+
+      - name: Verify compiled PDF, citations, appendices and figure assets
+        run: |
+          set -euo pipefail
+          python .github/scripts/check_step1_mdpi_pdf.py
+
+      - name: Stage artifact-safe PDF and logs (exclude publisher template files)
+        run: |
+          set -euo pipefail
+          mkdir -p build/step1-mdpi/checked-output
+          cp docs/paper/RemoteSensing_Stepwise/main.pdf build/step1-mdpi/checked-output/BG-RFM_STEP1_MDPI_CI_PREVIEW.pdf
+          cp docs/paper/RemoteSensing_Stepwise/main.log build/step1-mdpi/checked-output/mdpi-main.log
+          test -f docs/paper/RemoteSensing_Stepwise/main.blg && \
+            cp docs/paper/RemoteSensing_Stepwise/main.blg build/step1-mdpi/checked-output/mdpi-main.blg || true
+          cp build/step1-mdpi/pdf-verification.json build/step1-mdpi/checked-output/pdf-verification.json
+          cp build/step1-mdpi/template-acquisition.json build/step1-mdpi/checked-output/template-acquisition.json
+
+      - name: Upload compilation logs and verification report (no publisher template)
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: step1-mdpi-v65a-build-logs
+          path: |
+            build/step1-mdpi/checked-output/mdpi-main.log
+            build/step1-mdpi/checked-output/mdpi-main.blg
+            build/step1-mdpi/checked-output/pdf-verification.json
+            build/step1-mdpi/checked-output/template-acquisition.json
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload compiled PDF only with PI-approved public artifact visibility
+        if: ${{ success() && vars.MDPI_PUBLIC_PREVIEW_ARTIFACT_APPROVED == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: step1-mdpi-v65a-compiled-preview
+          path: build/step1-mdpi/checked-output/BG-RFM_STEP1_MDPI_CI_PREVIEW.pdf
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload sanitized dependency diagnostics even on blocked runs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: step1-mdpi-dependency-status
+          path: build/step1-mdpi/template-acquisition.json
+          if-no-files-found: warn
+          retention-days: 7
