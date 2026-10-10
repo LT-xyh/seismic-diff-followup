@@ -1,0 +1,78 @@
+name: step1-obtain-official-mdpi-template
+on:
+  push:
+    branches: [remote-sensing/step1-mdpi-format]
+  workflow_dispatch:
+jobs:
+  official-template:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch authoritative MDPI template archive and provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p build/mdpi-template-fetch
+          python - <<'PY'
+          from urllib.request import Request, urlopen
+          from urllib.parse import urljoin
+          from html.parser import HTMLParser
+          from pathlib import Path
+          import ssl, json, hashlib, zipfile, io, re
+          out=Path("build/mdpi-template-fetch")
+          urls=["https://www.mdpi.com/authors/latex","https://www.mdpi.com/data/MDPI_template.zip"]
+          class Anchors(HTMLParser):
+            def __init__(self):super().__init__();self.items=[];self.active=None;self.strings=[]
+            def handle_starttag(self,t,a):
+              if t=="a":self.active=dict(a).get("href");self.strings=[]
+            def handle_data(self,d):
+              if self.active is not None:self.strings.append(d)
+            def handle_endtag(self,t):
+              if t=="a" and self.active is not None:
+                self.items.append((self.active," ".join(self.strings).strip()))
+                self.active=None
+          meta={"source":"https://www.mdpi.com/authors/latex","attempts":[],"template_urls":[]}
+          try:
+            req=Request(urls[0],headers={"User-Agent":"Mozilla/5.0 (LaTeX journal author; contact latex@mdpi.com)","Accept":"text/html"})
+            r=urlopen(req,timeout=40)
+            html=r.read()
+            (out/"official_page.html").write_bytes(html)
+            a=Anchors();a.feed(html.decode("utf-8",errors="replace"))
+            meta["page_links"]=[{"href":h,"text":t} for h,t in a.items if "MDPI" in t or "template" in h.lower() or "ACS" in t]
+            for h,t in a.items:
+              if "ACS Citation Style" in t:
+                meta["template_urls"].append(urljoin(urls[0],h))
+            print("official page status",r.status,"anchors",len(a.items),"ACS links",meta["template_urls"])
+          except Exception as e:meta["page_error"]=repr(e);print("Official page failed",repr(e))
+          candidates=list(dict.fromkeys(meta["template_urls"]+[urls[1],"https://www.mdpi.com/data/MDPI_template.zip?v=20260911"]))
+          for u in candidates:
+            try:
+              req=Request(u,headers={"User-Agent":"Mozilla/5.0","Accept":"application/zip,*/*"})
+              x=urlopen(req,timeout=40);b=x.read()
+              if not zipfile.is_zipfile(io.BytesIO(b)):raise ValueError(f"not a ZIP: {len(b)} bytes; prefix {b[:80]!r}")
+              z=zipfile.ZipFile(io.BytesIO(b));files=z.namelist()
+              if not any(n.endswith("mdpi.cls") for n in files):raise ValueError("no mdpi.cls")
+              if not any(n.endswith("template.tex") for n in files):raise ValueError("no template.tex")
+              (out/"OFFICIAL_MDPI_ACS_template.zip").write_bytes(b)
+              meta["verified_download_url"]=u;meta["zip_sha256"]=hashlib.sha256(b).hexdigest()
+              meta["zip_bytes"]=len(b);meta["zip_files"]=files[:250]
+              for n in files:
+                if n.endswith("mdpi.cls"):
+                  txt=z.read(n).decode("utf-8",errors="replace")
+                  meta["class_header"]=txt[:1500]
+                  print("MDPI CLASS HEADER",txt[:300])
+                  break
+              break
+            except Exception as e:
+              meta["attempts"].append({"url":u,"error":repr(e)})
+              print("download failure",u,repr(e))
+          (out/"provenance.json").write_text(json.dumps(meta,indent=2))
+          if "verified_download_url" not in meta:
+            raise SystemExit("No official MDPI zip downloaded; STOP rather than use unofficial template")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mdpi-official-acs-template-and-provenance
+          path: build/mdpi-template-fetch
+          if-no-files-found: warn
