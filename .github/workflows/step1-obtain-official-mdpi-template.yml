@@ -1,76 +1,90 @@
-name: step1-obtain-official-mdpi-template
+# Step 1.1 — official MDPI v6.5a CI build. Never publish the publisher's class ZIP.
+# Publisher download first; optional author-controlled PRIVATE release fallback.
+name: step1-official-mdpi-build
+
 on:
+  push:
+    branches: [remote-sensing/step1-mdpi-format]
   workflow_dispatch:
+
+permissions:
+  contents: read
+
 jobs:
-  official-template:
+  official-mdpi:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Fetch authoritative MDPI template archive and provenance
-        shell: bash
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install PDF verification dependency
+        run: python -m pip install --disable-pip-version-check pypdf==5.9.0
+
+      - name: Verify scientific preservation before build
         run: |
           set -euo pipefail
-          mkdir -p build/mdpi-template-fetch
-          python - <<'PY'
-          from urllib.request import Request, urlopen
-          from urllib.parse import urljoin
-          from html.parser import HTMLParser
-          from pathlib import Path
-          import ssl, json, hashlib, zipfile, io, re
-          out=Path("build/mdpi-template-fetch")
-          urls=["https://www.mdpi.com/authors/latex","https://www.mdpi.com/data/MDPI_template.zip"]
-          class Anchors(HTMLParser):
-            def __init__(self):super().__init__();self.items=[];self.active=None;self.strings=[]
-            def handle_starttag(self,t,a):
-              if t=="a":self.active=dict(a).get("href");self.strings=[]
-            def handle_data(self,d):
-              if self.active is not None:self.strings.append(d)
-            def handle_endtag(self,t):
-              if t=="a" and self.active is not None:
-                self.items.append((self.active," ".join(self.strings).strip()))
-                self.active=None
-          meta={"source":"https://www.mdpi.com/authors/latex","attempts":[],"template_urls":[]}
-          try:
-            req=Request(urls[0],headers={"User-Agent":"Mozilla/5.0 (LaTeX journal author; contact latex@mdpi.com)","Accept":"text/html"})
-            r=urlopen(req,timeout=40)
-            html=r.read()
-            (out/"official_page.html").write_bytes(html)
-            a=Anchors();a.feed(html.decode("utf-8",errors="replace"))
-            meta["page_links"]=[{"href":h,"text":t} for h,t in a.items if "MDPI" in t or "template" in h.lower() or "ACS" in t]
-            for h,t in a.items:
-              if "ACS Citation Style" in t:
-                meta["template_urls"].append(urljoin(urls[0],h))
-            print("official page status",r.status,"anchors",len(a.items),"ACS links",meta["template_urls"])
-          except Exception as e:meta["page_error"]=repr(e);print("Official page failed",repr(e))
-          candidates=list(dict.fromkeys(meta["template_urls"]+[urls[1],"https://www.mdpi.com/data/MDPI_template.zip?v=20260911"]))
-          for u in candidates:
-            try:
-              req=Request(u,headers={"User-Agent":"Mozilla/5.0","Accept":"application/zip,*/*"})
-              x=urlopen(req,timeout=40);b=x.read()
-              if not zipfile.is_zipfile(io.BytesIO(b)):raise ValueError(f"not a ZIP: {len(b)} bytes; prefix {b[:80]!r}")
-              z=zipfile.ZipFile(io.BytesIO(b));files=z.namelist()
-              if not any(n.endswith("mdpi.cls") for n in files):raise ValueError("no mdpi.cls")
-              if not any(n.endswith("template.tex") for n in files):raise ValueError("no template.tex")
-              (out/"OFFICIAL_MDPI_ACS_template.zip").write_bytes(b)
-              meta["verified_download_url"]=u;meta["zip_sha256"]=hashlib.sha256(b).hexdigest()
-              meta["zip_bytes"]=len(b);meta["zip_files"]=files[:250]
-              for n in files:
-                if n.endswith("mdpi.cls"):
-                  txt=z.read(n).decode("utf-8",errors="replace")
-                  meta["class_header"]=txt[:1500]
-                  print("MDPI CLASS HEADER",txt[:300])
-                  break
-              break
-            except Exception as e:
-              meta["attempts"].append({"url":u,"error":repr(e)})
-              print("download failure",u,repr(e))
-          (out/"provenance.json").write_text(json.dumps(meta,indent=2))
-          if "verified_download_url" not in meta:
-            raise SystemExit("No official MDPI zip downloaded; STOP rather than use unofficial template")
-          PY
-      - uses: actions/upload-artifact@v4
-        if: always()
+          python docs/paper/RemoteSensing_Stepwise/tools/verify_step1_semantics.py
+          cmp docs/paper/RemoteSensing_AAAI_Rebuild/pd-bg-rfm.tex docs/paper/RemoteSensing_Stepwise/original/pd-bg-rfm.tex
+          cmp docs/paper/RemoteSensing_AAAI_Rebuild/references.bib docs/paper/RemoteSensing_Stepwise/references.bib
+
+      - name: Acquire exact official MDPI ACS archive (publisher, then private cache)
+        env:
+          MDPI_ACS_PRIVATE_REPO: ${{ vars.MDPI_ACS_PRIVATE_REPO }}
+          MDPI_ACS_PRIVATE_TAG: ${{ vars.MDPI_ACS_PRIVATE_TAG }}
+          GH_TOKEN: ${{ secrets.MDPI_ACS_PRIVATE_READ_TOKEN }}
+        run: |
+          set -euo pipefail
+          python .github/scripts/acquire_official_mdpi_acs.py
+
+      - name: Install verified publisher template
+        run: |
+          set -euo pipefail
+          python docs/paper/RemoteSensing_Stepwise/tools/install_uploaded_mdpi_acs.py \
+            build/step1-mdpi/MDPI_template_ACS.zip
+          # No file from the official publisher ZIP is checked into Git.
+
+      - name: Compile from clean GitHub checkout (pdfLaTeX and BibTeX)
+        uses: xu-cheng/latex-action@v4
         with:
-          name: mdpi-official-acs-template-and-provenance
-          path: build/mdpi-template-fetch
+          root_file: main.tex
+          working_directory: docs/paper/RemoteSensing_Stepwise
+          latexmk_use_xelatex: false
+
+      - name: Verify compiled PDF, citations, appendices and figure assets
+        run: |
+          set -euo pipefail
+          python .github/scripts/check_step1_mdpi_pdf.py
+
+      - name: Stage artifact-safe PDF and logs (exclude publisher template files)
+        run: |
+          set -euo pipefail
+          mkdir -p build/step1-mdpi/checked-output
+          cp docs/paper/RemoteSensing_Stepwise/main.pdf build/step1-mdpi/checked-output/BG-RFM_STEP1_MDPI_CI_PREVIEW.pdf
+          cp docs/paper/RemoteSensing_Stepwise/main.log build/step1-mdpi/checked-output/mdpi-main.log
+          test -f docs/paper/RemoteSensing_Stepwise/main.blg && \
+            cp docs/paper/RemoteSensing_Stepwise/main.blg build/step1-mdpi/checked-output/mdpi-main.blg || true
+          cp build/step1-mdpi/pdf-verification.json build/step1-mdpi/checked-output/pdf-verification.json
+          cp build/step1-mdpi/template-acquisition.json build/step1-mdpi/checked-output/template-acquisition.json
+
+      - name: Upload PDF and logs (only if verified; never ZIP/class)
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: step1-mdpi-v65a-compiled-preview
+          path: build/step1-mdpi/checked-output/
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload sanitized dependency diagnostics even on blocked runs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: step1-mdpi-dependency-status
+          path: build/step1-mdpi/template-acquisition.json
           if-no-files-found: warn
+          retention-days: 7
