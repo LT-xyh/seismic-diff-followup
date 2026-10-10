@@ -44,6 +44,11 @@ jobs:
           assert not d['missing_citations'] and not d['missing_figures']
           print('STEP1_PREPARATION_AUDIT_PASS',d['figure_count'],len(d['citation_keys']))
           PY
+      - name: Verify reversible MDPI formatting and original scientific evidence
+        run: |
+          set -euo pipefail
+          python docs/paper/RemoteSensing_Stepwise/tools/verify_step1_semantics.py
+
       - name: Build staging-only source archive (NOT the MDPI submission package)
         run: |
           set -e
