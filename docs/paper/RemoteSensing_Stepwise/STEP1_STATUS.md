@@ -62,14 +62,34 @@ directly on GitHub without the binary `Definitions/` assets.
 
 The downloadable **BG-RFM_AAAI_to_MDPI_STEP1_SOURCE.zip** prepared in this conversation
 DOES include the official 2026-09-11 class/style assets and has already passed
-independent recompilation. For an equivalent GitHub CI run, add the identical
-official MDPI ACS ZIP to the repository and execute:
+independent recompilation. For an equivalent GitHub CI run, **do not commit the official MDPI
+ACS ZIP to this public repository**. The Step 1.1 workflow now attempts
+publisher-hosted acquisition first and, if HTTP 403 persists, offers a
+private read-only GitHub Release dependency using an author-controlled secret.
 
-```bash
-python docs/paper/RemoteSensing_Stepwise/tools/install_uploaded_mdpi_acs.py MDPI_template_ACS.zip
-cd docs/paper/RemoteSensing_Stepwise
-latexmk -pdf main.tex
-```
+See `STEP1_1_BUILD_GATE.md` for exact release/tag, Actions variables,
+fine-grained read-only token, immutable SHA-256 checks and steps to trigger
+the GitHub build. Local reproducibility remains available using the
+already verified private author-supplied ZIP.
 
 **DO NOT** merge into `remote-sensing/submission-sprint`, create a final tag,
 submit to SUSY or begin scientific Step 2 without explicit PI approval.
+
+## Step 1.1 CI update — 2026-10-10
+
+- Official MDPI ACS v6.5a (2026-09-11) ZIP and class SHA-256 verified.
+- Original MDPI Highlights macro hook and template redefinition pattern
+  verified; scientific Highlights content remains unapproved.
+- `step1-content-preservation`: **PASS** on the Step 1.1 branch.
+- `step1-official-mdpi-build`: **BLOCKED** because the publisher's official
+  direct URLs return HTTP **403 Forbidden** from GitHub Actions. Private
+  dependency fallback is implemented but requires an author-configured
+  read-only private release and corresponding GitHub Actions secret.
+- No GitHub-side MDPI PDF was generated on the blocked run. The previously
+  independently compiled **28-page local MDPI PDF** remains valid but must
+  not be described as a CI-produced PDF.
+- Workflow results and sanitized blocker report:
+  https://github.com/LT-xyh/seismic-diff-followup/actions/runs/38035656453
+
+No science, historical manuscript, original figures, citations or experiment
+results were modified by Step 1.1.
