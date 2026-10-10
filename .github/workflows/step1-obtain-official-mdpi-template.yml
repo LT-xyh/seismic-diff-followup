@@ -71,12 +71,25 @@ jobs:
           cp build/step1-mdpi/pdf-verification.json build/step1-mdpi/checked-output/pdf-verification.json
           cp build/step1-mdpi/template-acquisition.json build/step1-mdpi/checked-output/template-acquisition.json
 
-      - name: Upload PDF and logs (only if verified; never ZIP/class)
+      - name: Upload compilation logs and verification report (no publisher template)
         if: success()
         uses: actions/upload-artifact@v4
         with:
+          name: step1-mdpi-v65a-build-logs
+          path: |
+            build/step1-mdpi/checked-output/mdpi-main.log
+            build/step1-mdpi/checked-output/mdpi-main.blg
+            build/step1-mdpi/checked-output/pdf-verification.json
+            build/step1-mdpi/checked-output/template-acquisition.json
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload compiled PDF only with PI-approved public artifact visibility
+        if: ${{ success() && vars.MDPI_PUBLIC_PREVIEW_ARTIFACT_APPROVED == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
           name: step1-mdpi-v65a-compiled-preview
-          path: build/step1-mdpi/checked-output/
+          path: build/step1-mdpi/checked-output/BG-RFM_STEP1_MDPI_CI_PREVIEW.pdf
           if-no-files-found: error
           retention-days: 7
 
