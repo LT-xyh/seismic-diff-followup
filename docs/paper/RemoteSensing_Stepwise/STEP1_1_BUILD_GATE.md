@@ -67,9 +67,14 @@ Actions variables.
 - `.github/scripts/check_step1_mdpi_pdf.py` verifies official class,
   original figure bytes, all four appendix titles, citations, bibliography,
   visible Highlights placeholders, and absence of fatal LaTeX warnings.
-- Successful runs upload a PDF preview and compilation logs for **seven
-  days**, but **never upload the official template ZIP/Definitions**.
-  Failed/blocked runs upload only sanitized acquisition diagnostics.
+- Successful runs upload compilation logs and a PDF-verification JSON for
+  **seven days**, excluding the official template ZIP/Definitions.
+- Because GitHub Actions artifacts on a public repository may be visible
+  to other GitHub users, **the PDF itself is uploaded only with the PI's
+  explicit approval**: repository Actions variable
+  `MDPI_PUBLIC_PREVIEW_ARTIFACT_APPROVED=true`. Without this authorization
+  the compile and checks still run, but only the reports/logs are uploaded.
+- Failed/blocked runs upload only sanitized acquisition diagnostics.
 - `.github/workflows/step1-content-preservation.yml` independently
   verifies scientific content and artwork without needing the template.
 
