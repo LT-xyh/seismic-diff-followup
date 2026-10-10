@@ -93,6 +93,24 @@ def main():
     }
     (OUT/"uploaded_figure_integrity.json").write_text(
         json.dumps(report, indent=2, ensure_ascii=False)+"\n", encoding="utf-8")
+    provenance = json.loads((WORK/"PROVENANCE.json").read_text(encoding="utf-8"))
+    assert provenance["verified_original_submission_pdf"] is False
+    assert provenance["figure_pdf_uploaded_from"]["commit"] == report["supplied_commit"]
+    indexed = {
+        item["latex_reference"].split("/")[-1]: item
+        for item in provenance["figure_exports"]
+        if item["latex_reference"].endswith(".pdf")
+    }
+    assert set(indexed) == set(BLOB_SHAS)
+    for rec in records:
+        recorded = indexed[rec["filename"]]
+        assert recorded["git_blob_sha"] == rec["git_blob_sha"]
+        assert recorded["source_sha256"] == rec["sha256"]
+        assert recorded["restored_sha256"] == rec["sha256"]
+        assert recorded["bytes"] == rec["bytes"]
+        assert "UNVERIFIED" in recorded["status"]
+    committed = (WORK/"SHA256SUMS.txt").read_text(encoding="utf-8")
+    assert committed == manifest, "SHA256SUMS.txt is stale or missing immutable files"
     print("AAAI_PDF_ASSET_AUDIT_PASS",len(records),"figure PDFs",
           "three identical copies each",len(immutable),"manifest files")
     for x in records:
