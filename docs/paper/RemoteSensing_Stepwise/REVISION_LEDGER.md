@@ -15,6 +15,16 @@ Author approval: 2026-10-12 (Step 2C routing panel + permanent revision marking 
 | M4 | Not approved | Appendix D training settings | Unchanged | Keep detailed settings in appendix | N/A | None |
 | M5 | Not approved | Appendix D metric formulas | Unchanged | Keep metrics in appendix | N/A | None |
 | Step 2B | Explicitly declined | Original AAAI comparison | Unchanged | No replacement of original AAAI results/rankings | N/A | None |
+| 2D-H-METHOD | Approved Step 2D | `Method` section heading | `Materials and Methods` section heading | Rename only | Source marker `2D-H-METHOD` | None |
+| 2D-MOVE-SETUP | Approved Step 2D | `Experiments` > `Experimental Setup` | `Materials and Methods` > `Experimental Setup` | Existing subsection and both paragraphs moved verbatim | Source marker `2D-MOVE-SETUP`; unchanged text is not newly blue | None |
+| 2D-H-RESULTS | Approved Step 2D | `Experiments` section heading | `Results` section heading | Rename only; result tables and figures unchanged | Source marker `2D-H-RESULTS` | None |
+| 2D-H-DISCUSSION | Approved Step 2D | No standalone Discussion | Between Results and Conclusions | New heading | Source marker `2D-H-DISCUSSION` | No new data or analyses |
+| 2D-DISC-P1 | Approved Step 2D | No standalone Discussion paragraph | Discussion paragraph 1 | New scholarly synthesis of existing evidence | Whole paragraph in BGRevAdd (blue in marked PDF) | No new data or analyses |
+| 2D-DISC-P2 | Approved Step 2D | No standalone Discussion paragraph | Discussion paragraph 2 | New scholarly synthesis of existing evidence | Whole paragraph in BGRevAdd (blue in marked PDF) | No new data or analyses |
+| 2D-DISC-P3 | Approved Step 2D | No standalone Discussion paragraph | Discussion paragraph 3 | New scholarly synthesis of existing evidence | Whole paragraph in BGRevAdd (blue in marked PDF) | No new data or analyses |
+| 2D-DISC-P4 | Approved Step 2D | No standalone Discussion paragraph | Discussion paragraph 4 | New scholarly synthesis of existing evidence | Whole paragraph in BGRevAdd (blue in marked PDF) | No new data or analyses |
+| 2D-H-CONCLUSIONS | Approved Step 2D | `Conclusion` section heading | `Conclusions` section heading | Rename only; original conclusion text preserved | Source marker `2D-H-CONCLUSIONS` | None |
+| 2D-ENTRY | Approved Step 2D | `main.tex` selects Step 2C source | `main.tex` selects Step 2D source | Active source toggle | Source marker `2D-ENTRY` | None |
 
 ## Figure data and presentation provenance
 
@@ -26,7 +36,8 @@ Author approval: 2026-10-12 (Step 2C routing panel + permanent revision marking 
 
 ## Active working files and immutable sources
 
-- Active entry: `main.tex` selects `CONTENT_STEP2C_MARKED.tex`.
+- Active entry (Step 2D): `main.tex` selects `CONTENT_STEP2D_MARKED.tex`.
+- Previous Step 2C marked snapshot: `CONTENT_STEP2C_MARKED.tex`, unchanged.
 - Active marked source: `CONTENT_STEP2C_MARKED.tex`.
 - Previous M1/M3 snapshot: `CONTENT_M1_M3_REVISED.tex`, unchanged.
 - Step 1 formatting snapshot: `CONTENT_MDPI_LAYOUT.tex`, unchanged.
@@ -38,3 +49,14 @@ Author approval: 2026-10-12 (Step 2C routing panel + permanent revision marking 
 - Stage-specific reversible text scope audit: verified in the editing operation. Relative to M1/M3 stage, the only semantic addition is the routing paragraph/figure and its caption; earlier M1/M3 paragraphs are only wrapped in revision-coloring macros.
 - LaTeX compilation with actual MDPI `Definitions/` dependency has not been completed in the GitHub environment because the publisher download returned HTTP 403. A passing GitHub quality job is **not** an MDPI PDF compilation.
 - A marked and clean PDF must both be visually inspected before journal submission, particularly the crop of the new routing panel. No merge or publication tag is authorized by this change.
+
+## Step 2D — Section organization and Discussion (2026-10-12)
+
+- Source: `remote-sensing/step2c-routing-marked-20261012` at `297d51f9d804a5839eee89895a7be7785e1f37cb`.
+- New independent branch: `remote-sensing/step2d-sections-discussion-marked-20261012`.
+- The four new Discussion paragraphs use the approved BGRevAdd source macro; earlier M1, M3, R1-2C and FIG-2C markings are retained.
+- The Experimental Setup subsection moves verbatim, including all numeric values and citations; no mathematical, algorithmic or benchmark change.
+- Appendices A–D, original figures, title, abstract, Introduction, Conclusion body, citations and references are preserved.
+- Heading/input changes are recorded with BG-REV comments rather than unsafe inline coloration of structural commands.
+- Implementation commit: STEP2D_IMPLEMENTATION_COMMIT_PENDING_LEDGER_FINALIZATION.
+- MDPI PDF rendering still requires the verified ACS v6.5a class and binary figures; existing GitHub dependency-download failures do not authorize an infrastructure rewrite.
