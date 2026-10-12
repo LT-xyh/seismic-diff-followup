@@ -60,3 +60,11 @@ Author approval: 2026-10-12 (Step 2C routing panel + permanent revision marking 
 - Heading/input changes are recorded with BG-REV comments rather than unsafe inline coloration of structural commands.
 - Implementation commit: 6d216e505c0001a79e3b8e7f1944190141b4eb61.
 - MDPI PDF rendering still requires the verified ACS v6.5a class and binary figures; existing GitHub dependency-download failures do not authorize an infrastructure rewrite.
+
+## Step 2D — Table 1 page-width correction (2026-10-12)
+
+- ID: `2D-TABLE1-FIT` — The table previously used `adjustwidth{-\\extralength}{0cm}` and a full expanded `\\linewidth`, extending into the wide journal-review margin. The new layout uses zero extra width and scales the unchanged 9-column tabular body within the native available `\\linewidth` via `\\resizebox{\\linewidth}{!}{...}`. The caption and label stay in place; dataset entries, numerical values, emphasis/rank, citations, rows, and columns remain byte-identical between tabular contents.
+- Active input is now `CONTENT_STEP2D_TABLE1_MARKED.tex`; `CONTENT_STEP2D_MARKED.tex` and all earlier snapshots are immutable.
+- Scope: pure table typography/layout; no scientific content or experimental changes, no new equations or tests.
+- Marked review PDF: `% BG-REV 2D-TABLE1-FIT` source marker and this ledger; all M1/M3/Step 2C and Step 2D Discussion paragraph blue markings remain unchanged.
+- Source: `a060db8652e892c507e736b9193fcfb3538f0304`; implementation commit recorded in Git history.
