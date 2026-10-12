@@ -58,5 +58,5 @@ Author approval: 2026-10-12 (Step 2C routing panel + permanent revision marking 
 - The Experimental Setup subsection moves verbatim, including all numeric values and citations; no mathematical, algorithmic or benchmark change.
 - Appendices A–D, original figures, title, abstract, Introduction, Conclusion body, citations and references are preserved.
 - Heading/input changes are recorded with BG-REV comments rather than unsafe inline coloration of structural commands.
-- Implementation commit: STEP2D_IMPLEMENTATION_COMMIT_PENDING_LEDGER_FINALIZATION.
+- Implementation commit: 6d216e505c0001a79e3b8e7f1944190141b4eb61.
 - MDPI PDF rendering still requires the verified ACS v6.5a class and binary figures; existing GitHub dependency-download failures do not authorize an infrastructure rewrite.
