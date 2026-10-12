@@ -1,0 +1,52 @@
+name: step2c-figure4-compact-crop
+
+on:
+  push:
+    branches: [remote-sensing/step2c-routing-marked-20261012]
+    paths:
+      - docs/paper/RemoteSensing_Stepwise/figures/aaai/crop_role_routing_panel.py
+      - .github/workflows/step2c-figure4-crop.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  crop-original-panel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: remote-sensing/step2c-routing-marked-20261012
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install raster crop dependency
+        run: python -m pip install --disable-pip-version-check Pillow==11.3.0
+      - name: Generate compact Figure 4 without changing appendix art
+        run: |
+          set -euo pipefail
+          python docs/paper/RemoteSensing_Stepwise/figures/aaai/crop_role_routing_panel.py
+          git diff --exit-code -- docs/paper/RemoteSensing_Stepwise/figures/aaai/appendix_full_condition_diagnostics.png
+      - name: Save only the newly derived panel to figure branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          fig=docs/paper/RemoteSensing_Stepwise/figures/aaai/role_routing_compact.png
+          git add -- "$fig"
+          if git diff --cached --quiet; then
+            echo "Cropped image already committed at expected content"
+            exit 0
+          fi
+          test "$(git diff --cached --name-only)" = "$fig"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "fig4: preserve original data in standalone compact routing panel"
+          git push origin HEAD:refs/heads/remote-sensing/step2c-routing-marked-20261012
+      - name: Publish compact preview (no manuscript)
+        uses: actions/upload-artifact@v4
+        with:
+          name: step2c-figure4-compact-panel
+          path: docs/paper/RemoteSensing_Stepwise/figures/aaai/role_routing_compact.png
+          if-no-files-found: error
