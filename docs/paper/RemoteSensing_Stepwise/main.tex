@@ -21,11 +21,19 @@
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{amsmath,amssymb}
+% BG-REV: Toggle author-review markings (true) or clean submission text (false).
+\usepackage{xcolor}
+\newif\ifBGshowrevisions
+\BGshowrevisionstrue
+\DeclareRobustCommand{\BGRevAdd}[1]{\ifBGshowrevisions\begingroup\color{blue!70!black}#1\endgroup\else#1\fi}
+\DeclareRobustCommand{\BGRevFigure}[1]{\ifBGshowrevisions\fcolorbox{blue!70!black}{white}{#1}\else#1\fi}
+
 \newif\ifaaaiwithappendix
 \aaaiwithappendixtrue
 \newif\ifconditioncontractfigure
 \IfFileExists{figures/figure3_condition_learning/figure3_condition_learning.pdf}
  {\conditioncontractfiguretrue}{\conditioncontractfigurefalse}
+% BG-REV TITLE-PRIOR: author-approved title change from the historical AAAI source; see revision ledger.
 \Title{Predicting the Background, Transporting the Structure: Decoupled Multimodal Subsurface Velocity Inversion}
 \Author{Chunlei Wu, Yinghao Xu and Jing Lu*}
 \AuthorNames{Chunlei Wu, Yinghao Xu and Jing Lu}
@@ -50,7 +58,7 @@ Multimodal subsurface velocity inversion combines complementary observations: po
 }
 \reftitle{References}
 \begin{document}
-\input{CONTENT_M1_M3_REVISED}
+\input{CONTENT_STEP2C_MARKED}
 % Format-only administrative structure; none of the fields below are asserted as facts.
 \authorcontributions{[PENDING - CRediT roles not confirmed]}
 \funding{[PENDING - grant numbers and funders not confirmed]}
