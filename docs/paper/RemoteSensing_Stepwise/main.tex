@@ -25,14 +25,15 @@
 \usepackage{xcolor}
 \newif\ifBGshowrevisions
 \BGshowrevisionstrue
-\newcommand{\BGRevAdd}[1]{\ifBGshowrevisions{\color{blue!70!black}#1}\else#1\fi}
-\newcommand{\BGRevFigure}[1]{\ifBGshowrevisions\fcolorbox{blue!70!black}{white}{#1}\else#1\fi}
+\DeclareRobustCommand{\BGRevAdd}[1]{\ifBGshowrevisions\begingroup\color{blue!70!black}#1\endgroup\else#1\fi}
+\DeclareRobustCommand{\BGRevFigure}[1]{\ifBGshowrevisions\fcolorbox{blue!70!black}{white}{#1}\else#1\fi}
 
 \newif\ifaaaiwithappendix
 \aaaiwithappendixtrue
 \newif\ifconditioncontractfigure
 \IfFileExists{figures/figure3_condition_learning/figure3_condition_learning.pdf}
  {\conditioncontractfiguretrue}{\conditioncontractfigurefalse}
+% BG-REV TITLE-PRIOR: author-approved title change from the historical AAAI source; see revision ledger.
 \Title{Predicting the Background, Transporting the Structure: Decoupled Multimodal Subsurface Velocity Inversion}
 \Author{Chunlei Wu, Yinghao Xu and Jing Lu*}
 \AuthorNames{Chunlei Wu, Yinghao Xu and Jing Lu}
