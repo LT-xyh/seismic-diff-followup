@@ -321,9 +321,10 @@ Figure~\ref{fig:condition-contract} tests the representation side of the conditi
 % BG-REV FIG-2C: main-text crop of the original appendix figure; original image untouched.
 \begin{figure*}[t]
 \centering
-% BG-REV FIG-2C: show the bottom (d) panel of the unchanged AAAI diagnostic figure.
-% graphicx trim order is left, bottom, right, top (natural bp; PNG is 2561x1545 @ 320 dpi).
-\BGRevFigure{\includegraphics[width=0.93\textwidth,trim=12bp 7bp 8bp 195bp,clip]{figures/aaai/appendix_full_condition_diagnostics.png}}
+% BG-REV FIG-2C: pixel-preserving compact crop generated from the original four-panel PNG.
+% Only the redundant panel-(d) heading and surrounding whitespace are excluded.
+% Appendix B continues to include the byte-identical full diagnostic PNG.
+\BGRevFigure{\includegraphics[width=0.93\textwidth]{figures/aaai/role_routing_compact.png}}
 \caption{\BGRevAdd{Role-specific reliability routing across the eight OpenFWI subsets. Average normalized weights of the trained background-oriented and structure-oriented interfaces, evaluated on 25,222 held-out records with all four modalities available. The weights are read from the trained encoder, which was regularized using fixed modality-role priors during training. The complete diagnostic figure is provided in Appendix~\ref{app:condition-diagnostics}.}}
 \label{fig:main-role-routing}
 \end{figure*}
