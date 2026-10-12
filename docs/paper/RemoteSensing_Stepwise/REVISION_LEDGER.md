@@ -36,7 +36,7 @@ Author approval: 2026-10-12 (Step 2C routing panel + permanent revision marking 
 
 ## Active working files and immutable sources
 
-- Active entry (Step 2D): `main.tex` selects `CONTENT_STEP2D_MARKED.tex`.
+- Active entry (Step 2D snapshot): `CONTENT_STEP2D_TABLE1_MARKED.tex`; Step 2E active content is `CONTENT_STEP2E_MARKED.tex`.
 - Previous Step 2C marked snapshot: `CONTENT_STEP2C_MARKED.tex`, unchanged.
 - Active marked source: `CONTENT_STEP2C_MARKED.tex`.
 - Previous M1/M3 snapshot: `CONTENT_M1_M3_REVISED.tex`, unchanged.
@@ -68,3 +68,14 @@ Author approval: 2026-10-12 (Step 2C routing panel + permanent revision marking 
 - Scope: pure table typography/layout; no scientific content or experimental changes, no new equations or tests.
 - Marked review PDF: `% BG-REV 2D-TABLE1-FIT` source marker and this ledger; all M1/M3/Step 2C and Step 2D Discussion paragraph blue markings remain unchanged.
 - Source: `a060db8652e892c507e736b9193fcfb3538f0304`; implementation commit recorded in Git history.
+
+## Step 2E — Minimal Introduction revision (2026-10-12)
+
+- Parent branch: `remote-sensing/step2d-table1-proof-20261012`; exact parent commit: `80f4ccaf270a1cf7443921c33d0f5a5cbeddcec9`.
+- Working branch: `remote-sensing/step2e-introduction`; active entry: `main.tex` uses `CONTENT_STEP2E_MARKED.tex`.
+- `2E-INTRO-P7`: Introduction method-summary paragraph beginning “We propose” (previous Step 2D manuscript, Introduction paragraph 7); rewrite is limited to clearer role-aware conditioning, deterministic background prediction, the one-way generator-facing dependency, and alignment with the approved “Decoupled Multimodal” title. Full revised paragraph wrapped in `\\BGRevAdd`.
+- `2E-INTRO-C1`: First item of the Introduction contributions list; clarify the role-aware, nonexclusive condition assignment without modifying the block-triangular contract. Full revised item text wrapped in `\\BGRevAdd`.
+- `2E-ENTRY`: `main.tex` input change to independent Step 2E snapshot; no text or metadata in `main.tex` changed.
+- All other Introduction prose and bullets, citations, references, figures, equations, theorem/definition/corollary, original AAAI tables, Methods, Results, Discussion, Conclusions and Appendices A–D are identical to source. The Table 1 layout fix and previous blue revision marks are preserved. No new data, citations, numerical results or experiments.
+- The previously approved headline/title and abstract are unchanged; no benchmark replacement or new dataset contribution.
+- Commit: recorded in the Step 2E Git commit history. The PDF build may use a separate proof branch solely for CI and artifact packaging.
