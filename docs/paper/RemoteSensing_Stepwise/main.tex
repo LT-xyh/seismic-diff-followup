@@ -35,10 +35,11 @@
  {\conditioncontractfiguretrue}{\conditioncontractfigurefalse}
 % BG-REV TITLE-PRIOR: author-approved title change from the historical AAAI source; see revision ledger.
 \Title{Predicting the Background, Transporting the Structure: Decoupled Multimodal Subsurface Velocity Inversion}
-\Author{Chunlei Wu, Yinghao Xu and Jing Lu*}
-\AuthorNames{Chunlei Wu, Yinghao Xu and Jing Lu}
-\address{[Author affiliations and numbering pending confirmation]}
-\corres{Correspondence: [Jing Lu email pending confirmation]}
+% BG-REV ANON-AUTHORS: Temporarily omit authors and affiliations in this review copy.
+\Author{}
+\AuthorNames{}
+\address{}
+\corres{}
 \abstract{
 % BG-REV 2H-ABSTRACT: Entire revised scientific abstract is colored in marked mode.
 \BGRevAdd{Subsurface velocity reconstruction from processed geophysical observations must reconcile complementary numerical and structural constraints: RMS velocity and sparse well logs inform broad velocity magnitudes, whereas post-stack time-migrated images and interpreted horizons delineate subsurface geometry. Conventional unified estimation does not explicitly assign these sources to background recovery and structure-bearing correction. We propose Physics-Decoupled Background-Guided Residual Flow Matching (PD-BG-RFM), a decoupled multimodal framework that learns background- and structure-oriented conditions while allowing every available modality to contribute to both. A deterministic branch predicts the smooth background velocity, and conditional Flow Matching generates the residual relative to that prediction, guided by structural conditions and an embedding of the predicted background. Crucially, the same background estimate defines residual supervision, vector-field conditioning, and final velocity composition. In full-field coordinates, this yields a transport path from an observation-dependent Gaussian reference centered on the predicted background toward the target velocity field. Exact composition and low-pass identities clarify the correction being modeled, while a necessary-and-sufficient condition characterizes when its straight-path target energy is lower than that of full-field transport. On 33,600 globally held-out OpenFWI-derived samples under a matched multimodal input and evaluation protocol, PD-BG-RFM achieves an RMSE of 0.0270, an SSIM of 0.9913, and a high-frequency MAE of 0.0065, leading the evaluated adapted baselines on these measures with 10.6 million trainable parameters. Controlled ablations, role-specific routing diagnostics, and transport-energy measurements further support the coordination of direct background estimation and conditional residual generation. The resulting reconstruction organization uses a shared predicted velocity background to connect heterogeneous geophysical evidence with structure-sensitive generative correction.}
@@ -65,6 +66,41 @@
 \end{itemize}
 \endgroup
 }
+
+% BG-REV ANON-BRANDING: Neutral, reversible, unbranded author-review rendering.
+% Publisher class remains unmodified, preserving the manuscript's scientific layout.
+\makeatletter
+% Remove the first-page journal/publisher logo without leaving a clickable MDPI link.
+\patchcmd{\@maketitle}
+  {\href{https://www.mdpi.com}{\includegraphics[height=1cm]{Definitions/logo-mdpi.eps}}}
+  {\rule{0pt}{1cm}}
+  {\typeout{BG-REV anonymous review: first-page publisher logo suppressed}}
+  {\PackageError{BG-REV}{Cannot locate first-page publisher logo in MDPI class}{Use the verified template or revise this scoped style override.}}
+% Suppress publisher information in the first-page margin and empty affiliation blocks.
+\renewcommand{\contentleftcolumn}{}
+\renewcommand{\maketitlen}{}
+% The archived Highlights style places its heading against the first question.
+% Add only a small gap in the unbranded review rendering.
+\patchcmd{\abstractkeywords}
+  {\noindent\textbf{Highlights\vspace{-6pt}\\}\addhighlights}
+  {\noindent\textbf{Highlights\vspace{5pt}\\}\addhighlights}
+  {\typeout{BG-REV anonymous review: Highlights spacing corrected}}
+  {\PackageError{BG-REV}{Cannot locate the Highlights heading style}{Check MDPI class version}}
+
+% Keep page numbering, but remove journal/version banners and placeholder DOI links.
+\lhead{}
+\rhead{\fontsize{8}{8}\selectfont\thepage{} of \pageref*{LastPage}}
+\lfoot{}
+\rfoot{}
+\cfoot{}
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyhead[R]{\fontsize{8}{8}\selectfont\thepage{} of \pageref*{LastPage}}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+}
+\makeatother
+
 \reftitle{References}
 \begin{document}
 % BG-REV 2D-ENTRY: New active copy, old snapshots preserved.
@@ -75,7 +111,7 @@
 % BG-REV 2H-ENTRY: Active Step 2H snapshot, prior stages immutable.
 \input{CONTENT_STEP2H_MARKED}
 % Format-only administrative structure; none of the fields below are asserted as facts.
-\authorcontributions{[PENDING - CRediT roles not confirmed]}
+% BG-REV ANON-AUTHORS: Author contributions intentionally hidden in this anonymous review draft.
 \funding{[PENDING - grant numbers and funders not confirmed]}
 \institutionalreview{Not applicable.}
 \informedconsent{Not applicable.}

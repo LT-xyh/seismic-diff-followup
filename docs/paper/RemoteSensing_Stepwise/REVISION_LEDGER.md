@@ -143,3 +143,14 @@ Author approval: 2026-10-12 (Step 2C routing panel + permanent revision marking 
 - ID `2H-HIGHLIGHTS-R1-IM2`: express the broader methodological implication as complementary background-estimation and structure-correction roles.
 - All four changes are confined to the text arguments of the existing `\\BGRevAdd` bullet wrappers inside `main.tex`; full blue markings, the two MDPI question headings, layout macros, title, Abstract, Keywords, Conclusions, full active body, references, tables, all results, equations, figures, and appendices are unchanged.
 - Historical Step 2H source and snapshots remain immutable. This ledger-only change records the four highlights edits in accordance with the permanent revision rule; no scientific data or model changes.
+
+## Anonymous, unbranded author-review presentation (2026-10-13)
+
+- Baseline branch: `remote-sensing/step2h-highlights-findings-20261013`; baseline commit: `86eafe3c8d2e897271302d2ced8e4c0712b397ff`.
+- Independent branch: `remote-sensing/step2h-anonymous-unbranded-20261013`. This is a reversible, non-submission review layout; the previous Step 2H branch retains the original author metadata.
+- `ANON-AUTHORS`: set active `\\Author{}`, `\\AuthorNames{}`, `\\address{}`, and `\\corres{}` empty, and suppress the unconfirmed author-contributions placeholder. The PDF metadata author is empty.
+- `ANON-BRANDING`: patch the bundled MDPI class macro from `main.tex` only to suppress the first-page MDPI logo/link; hide left-column received/revised/accepted/published/copyright text, the publisher/journal page banners, the placeholder DOI in every page footer, and preserve neutral page numbering. No publisher template files are modified.
+- `ANON-HIGHLIGHTS-SPACING`: use a scoped class macro patch to separate the Highlights heading from its first question. All four highlights and the Abstract text remain identical to the approved Step 2H text.
+- Only `main.tex` and this revision ledger are modified. `CONTENT_STEP2H_MARKED.tex`, the title, Abstract, Keywords, Conclusions, every scientific section, existing figures, equations, references, experiment tables, and appendix files remain unchanged. Original blue markup and clean/marked toggle remain active.
+- For an author-identified journal submission, restore the author metadata and publisher branding by using the preceding Step 2H snapshot; do not treat this anonymous review PDF as the final publisher-issued article.
+- PDF verification: marked and clean copies compiled with the locally bundled MDPI class dated 2026-04-14; the published template version has not been independently migrated.
