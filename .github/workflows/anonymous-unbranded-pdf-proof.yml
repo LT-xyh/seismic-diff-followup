@@ -1,0 +1,57 @@
+name: BG-RFM Anonymous Unbranded PDF proof
+on:
+  push:
+    branches:
+      - remote-sensing/step2h-anonymous-pdf-proof-20261013
+  workflow_dispatch:
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare bundled MDPI class and assets
+        run: |
+          mkdir -p docs/paper/RemoteSensing_Stepwise/Definitions
+          cp -a docs/paper/RemoteSensing/mdpi/Definitions/. docs/paper/RemoteSensing_Stepwise/Definitions/
+          grep -m1 '\\ProvidesClass' docs/paper/RemoteSensing_Stepwise/Definitions/mdpi.cls
+      - name: Compile marked review PDF
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: main.tex
+          working_directory: docs/paper/RemoteSensing_Stepwise
+          latexmk_use_xelatex: false
+      - name: Store marked PDF and disable markings in runner only
+        run: |
+          mkdir -p build/step2h-pdf
+          cp docs/paper/RemoteSensing_Stepwise/main.pdf build/step2h-pdf/BG-RFM_Anonymous_Unbranded_MARKED.pdf
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('docs/paper/RemoteSensing_Stepwise/main.tex')
+          s=p.read_text()
+          assert s.count('\\BGshowrevisionstrue') == 1
+          p.write_text(s.replace('\\BGshowrevisionstrue','\\BGshowrevisionsfalse',1))
+          PY
+      - name: Compile clean review PDF
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: main.tex
+          working_directory: docs/paper/RemoteSensing_Stepwise
+          latexmk_use_xelatex: false
+      - name: Verify and stage both PDFs
+        shell: bash
+        run: |
+          set -euo pipefail
+          src=docs/paper/RemoteSensing_Stepwise
+          cp "$src/main.pdf" build/step2h-pdf/BG-RFM_Anonymous_Unbranded_CLEAN.pdf
+          test -s build/step2h-pdf/BG-RFM_Anonymous_Unbranded_MARKED.pdf
+          test -s build/step2h-pdf/BG-RFM_Anonymous_Unbranded_CLEAN.pdf
+          echo "Both marked and clean PDF files exist and are nonempty."
+          if grep -Eiq 'There were undefined references|There were undefined citations|destination with the same identifier' "$src/main.log"; then
+            echo "Unresolved references or citations"; exit 1
+          fi
+      - name: Upload marked and clean proofs
+        uses: actions/upload-artifact@v4
+        with:
+          name: BG-RFM-Anonymous-Unbranded-PDFs
+          path: build/step2h-pdf/*.pdf
+          if-no-files-found: error
