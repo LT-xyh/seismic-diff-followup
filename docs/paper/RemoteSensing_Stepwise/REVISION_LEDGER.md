@@ -110,3 +110,13 @@ Author approval: 2026-10-12 (Step 2C routing panel + permanent revision marking 
 - Numerical/experimental effect: none. No training or new evaluation.
 - Commit: this section's Git history records the corresponding stage commit.
 - Previous semantic stage A commit: `4e17ee3f3f71baa497508437589d11a242d00c8e`.
+
+## Step 2G / C -- authorized narrative enhancement (2026-10-13)
+
+- Baseline: `cd2dd8da5df49594669ec207e57b0572e8ec27c2`; branch: `remote-sensing/step2g-narrative-enhancement`.
+- Active source: `CONTENT_STEP2G_MARKED.tex`. Earlier snapshots and original AAAI sources are immutable.
+- 2G-C-P2, 2G-C-P3, and 2G-C-P4: revise only Discussion paragraphs 2-4; paragraph 1 is byte-identical. Preserve the established role allocation and shared-reference arguments, synthesize existing matched-input/routing/energy evidence, retain synthetic observation scope and target-derived horizon/well provenance, and remove repeated unsupported-property disclaimers. Prior 2D revision comments and all other earlier markings remain.
+- Visibility: entire new/revised paragraphs blue in marked mode; scientific content identical in clean mode.
+- Numerical/experimental effect: none. No training or new evaluation.
+- Commit: this section's Git history records the corresponding stage commit.
+- Previous semantic stage B commit: `853ee0fca71bf13220565b562494ccdf27ec22ab`.
