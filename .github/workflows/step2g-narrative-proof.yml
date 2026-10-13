@@ -1,0 +1,125 @@
+name: BG-RFM Step2G narrative and PDF proof
+on:
+  push:
+    branches:
+      - remote-sensing/step2g-narrative-enhancement
+    paths:
+      - .github/scripts/step2g_narrative.py
+      - .github/workflows/step2g-narrative-proof.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: bg-rfm-step2g-narrative
+  cancel-in-progress: false
+jobs:
+  revise-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+      - name: Apply and audit three separately committed scientific revisions
+        run: |
+          python -m py_compile .github/scripts/step2g_narrative.py
+          python .github/scripts/step2g_narrative.py
+      - name: Prepare the same bundled MDPI dependency as Step 2F
+        run: |
+          src=docs/paper/RemoteSensing_Stepwise
+          mkdir -p "$src/Definitions"
+          cp -a docs/paper/RemoteSensing/mdpi/Definitions/. "$src/Definitions/"
+          python - <<'PY'
+          import hashlib, json, re, subprocess
+          from pathlib import Path
+          p=Path('docs/paper/RemoteSensing_Stepwise/Definitions/mdpi.cls')
+          b=p.read_bytes()
+          baseline=subprocess.check_output(['git','show','cd2dd8da5df49594669ec207e57b0572e8ec27c2:docs/paper/RemoteSensing/mdpi/Definitions/mdpi.cls'])
+          assert b == baseline, 'Bundled template changed'
+          ident=re.search(r'\\ProvidesClass[^\n]*', b.decode('utf-8', errors='replace')).group(0)
+          Path('build/step2g-delivery/TEMPLATE_PROVENANCE.json').write_text(json.dumps({'class_declaration':ident,'sha256':hashlib.sha256(b).hexdigest(),'same_dependency_as_step2f':True,'note':'Repository-bundled class; not represented as the separately mentioned September v6.5a dependency.'},indent=2))
+          print(ident)
+          PY
+      - name: Compile marked editorial PDF
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: main.tex
+          working_directory: docs/paper/RemoteSensing_Stepwise
+          latexmk_use_xelatex: false
+      - name: Preserve marked output and toggle clean mode in runner only
+        run: |
+          src=docs/paper/RemoteSensing_Stepwise
+          cp "$src/main.pdf" build/step2g-delivery/BG-RFM_Step2G_MARKED.pdf
+          cp "$src/main.log" build/step2g-delivery/MARKED.log
+          cp "$src/main.aux" build/step2g-delivery/MARKED.aux
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('docs/paper/RemoteSensing_Stepwise/main.tex')
+          s=p.read_text()
+          assert s.count('\\BGshowrevisionstrue') == 1
+          p.write_text(s.replace('\\BGshowrevisionstrue','\\BGshowrevisionsfalse',1))
+          PY
+      - name: Compile clean manuscript PDF
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: main.tex
+          working_directory: docs/paper/RemoteSensing_Stepwise
+          latexmk_use_xelatex: false
+      - name: Verify references, restore committed source, and package source assets
+        run: |
+          src=docs/paper/RemoteSensing_Stepwise
+          cp "$src/main.pdf" build/step2g-delivery/BG-RFM_Step2G_CLEAN.pdf
+          cp "$src/main.log" build/step2g-delivery/CLEAN.log
+          cp "$src/main.aux" build/step2g-delivery/CLEAN.aux
+          python - <<'PY'
+          import json, re, subprocess, zipfile
+          from pathlib import Path
+          src=Path('docs/paper/RemoteSensing_Stepwise')
+          out=Path('build/step2g-delivery')
+          for mode in ['MARKED','CLEAN']:
+              log=(out/f'{mode}.log').read_text(errors='replace')
+              for bad in ['There were undefined references','There were undefined citations','destination with the same identifier']:
+                  assert bad not in log, f'{mode}: {bad}'
+              assert not re.search(r'(?:LaTeX|natbib) Warning:.*?undefined',log), mode+' undefined reference'
+              assert (out/f'BG-RFM_Step2G_{mode}.pdf').stat().st_size > 100000
+          tracked=subprocess.check_output(['git','show','HEAD:'+str(src/'main.tex')]).decode()
+          clean=(src/'main.tex').read_text()
+          assert clean.replace('\\BGshowrevisionsfalse','\\BGshowrevisionstrue',1) == tracked
+          (src/'main.tex').write_text(tracked)
+          allowed={'.tex','.bib','.cls','.bst','.sty','.pdf','.png','.jpg','.jpeg','.eps','.md','.py'}
+          with zipfile.ZipFile(out/'BG-RFM_Step2G_SOURCE.zip','w',zipfile.ZIP_DEFLATED) as z:
+              for p in src.rglob('*'):
+                  if p.is_file() and p.suffix.lower() in allowed and p.name != 'main.pdf':
+                      z.write(p,p.relative_to(src))
+          print('Both PDFs compiled; no unresolved references/citations; original source restored.')
+          PY
+      - name: Measure physical PDF pages and text/color consistency
+        run: |
+          python -m pip install --quiet pymupdf
+          python - <<'PY'
+          import fitz, json, re
+          from pathlib import Path
+          out=Path('build/step2g-delivery')
+          result={'source_toggle_only':True,'pdfs':{}}
+          texts={}
+          for mode in ['MARKED','CLEAN']:
+              d=fitz.open(out/f'BG-RFM_Step2G_{mode}.pdf')
+              pages=[p.get_text() for p in d]
+              blue=sum(1 for p in d for b in p.get_text('dict')['blocks'] if 'lines' in b for l in b['lines'] for s in l['spans'] if s['color']==179)
+              def find(needle): return [i+1 for i,t in enumerate(pages) if needle in t]
+              result['pdfs'][mode]={'pages':len(d),'page_size_pt':list(d[0].rect),'appendix_A_first_page':find('Appendix A. Theoretical Derivations and Proofs')[0],'methods_addition_pages':find('observation-dependent coordinate system'),'ablation_addition_pages':find('The ablations distinguish'),'discussion_pages':find('Discussion'),'blue_revision_spans':blue}
+              texts[mode]='\n'.join(pages)
+          result['extracted_text_exactly_equal']=texts['MARKED']==texts['CLEAN']
+          assert result['pdfs']['MARKED']['blue_revision_spans']>0
+          assert result['pdfs']['CLEAN']['blue_revision_spans']==0
+          (out/'PDF_VERIFICATION.json').write_text(json.dumps(result,indent=2))
+          print(json.dumps(result,indent=2))
+          PY
+      - name: Upload PDFs, exact sources, logs, and preservation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: BG-RFM-Step2G-Delivery
+          path: build/step2g-delivery/
+          if-no-files-found: warn
