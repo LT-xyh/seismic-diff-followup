@@ -120,3 +120,16 @@ Author approval: 2026-10-12 (Step 2C routing panel + permanent revision marking 
 - Numerical/experimental effect: none. No training or new evaluation.
 - Commit: this section's Git history records the corresponding stage commit.
 - Previous semantic stage B commit: `853ee0fca71bf13220565b562494ccdf27ec22ab`.
+
+
+## Step 2H — Final Abstract, Conclusions, Keywords and Highlights (2026-10-13)
+
+- Source branch: `remote-sensing/step2g-narrative-enhancement` at frozen commit `054b2f3a001f36242c6280b5da43fd2ee4627d15`. New independent branch: `remote-sensing/step2h-final-narrative`. The active entry `main.tex` now inputs `CONTENT_STEP2H_MARKED.tex`; Step 2G and all historical snapshots remain unchanged.
+- `2H-ABSTRACT`: replace the prior single-paragraph Abstract with the author-reviewed full manuscript Abstract, marking the entire revised paragraph using `\BGRevAdd` inside MDPI's `\abstract` front-matter macro. Scientific results and matched-input protocol derive from existing Step 2G evidence; no experimental or numerical data changed.
+- `2H-CONCLUSIONS`: replace the sole Conclusions paragraph with the author-reviewed version, fully wrapped in `\BGRevAdd`. All text outside that single conclusion paragraph is unchanged in the active scientific content file.
+- `2H-KEYWORDS`: replace the unapproved placeholder with six topic-specific keywords, fully marked using `\BGRevAdd` inside MDPI's `\keyword` argument.
+- `2H-HIGHLIGHTS-MF1`, `2H-HIGHLIGHTS-MF2`, `2H-HIGHLIGHTS-IM1`, `2H-HIGHLIGHTS-IM2`: replace the four placeholder Highlight bullets with author-approved, evidence-grounded text in the existing two-category format. Each new bullet is fully marked by `\BGRevAdd`. The Highlights list is locally typeset with `\small` to prevent overlap with the MDPI copyright notice while the Abstract retains its normal font size. The question headings remain unmodified.
+- `2H-ENTRY`: administrative input-path change in `main.tex`, marked by source comment. Prior M1/M3/Step 2C–2G blue markings and figure borders are preserved.
+- Complete preservation: Introduction, Related Work, Materials and Methods, Results, Discussion, original figures, equations, algorithms, comparisons, experimental values, references and Appendices A–D unchanged. No new experiments, dataset-construction contributions or newly invented claims. Title and unconfirmed author metadata unchanged.
+- Compilation uses the repository-bundled MDPI class dated 2026-04-14; this is not an independent verification against the previously reported 2026-09-11 ACS v6.5a class.
+- Commit: recorded in Step 2H branch Git history.

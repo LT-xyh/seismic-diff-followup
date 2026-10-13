@@ -40,21 +40,30 @@
 \address{[Author affiliations and numbering pending confirmation]}
 \corres{Correspondence: [Jing Lu email pending confirmation]}
 \abstract{
-Multimodal subsurface velocity inversion combines complementary observations: post-stack migrated images and horizons reveal structural geometry, whereas RMS velocity and well logs calibrate smooth background velocity and absolute scale. Existing methods fuse these cues with one full-field predictor, treating predictable background velocity and structural variation as one task. We identify this mismatch as an asymmetry in conditional complexity and propose Physics-Decoupled Background-Guided Residual Flow Matching (PD-BG-RFM). Our method uses physics-decoupled contrastive learning to construct separate conditions for background-velocity prediction and structural guidance. The background branch deterministically predicts background velocity and reuses it throughout the pipeline: this prediction defines the residual target during training, conditions the residual transport vector field jointly with the structural condition, and composes the final velocity estimate at inference. We derive an exact composition-consistency identity and prove a necessary-and-sufficient condition for residual transport to have lower straight-path target energy than full-field transport. On the globally held-out OpenFWI test set, PD-BG-RFM achieves the best RMSE, SSIM, and high-frequency MAE among matched-input baselines using only 10.6M parameters. Controlled ablations and branch-specific diagnostics support a broader principle for multimodal inverse problems: predict well-constrained components directly and reserve generative transport for structure-bearing variation unexplained by the predicted background.
+% BG-REV 2H-ABSTRACT: Entire revised scientific abstract is colored in marked mode.
+\BGRevAdd{Subsurface velocity reconstruction from processed geophysical observations must reconcile complementary numerical and structural constraints: RMS velocity and sparse well logs inform broad velocity magnitudes, whereas post-stack time-migrated images and interpreted horizons delineate subsurface geometry. Conventional unified estimation does not explicitly assign these sources to background recovery and structure-bearing correction. We propose Physics-Decoupled Background-Guided Residual Flow Matching (PD-BG-RFM), a decoupled multimodal framework that learns background- and structure-oriented conditions while allowing every available modality to contribute to both. A deterministic branch predicts the smooth background velocity, and conditional Flow Matching generates the residual relative to that prediction, guided by structural conditions and an embedding of the predicted background. Crucially, the same background estimate defines residual supervision, vector-field conditioning, and final velocity composition. In full-field coordinates, this yields a transport path from an observation-dependent Gaussian reference centered on the predicted background toward the target velocity field. Exact composition and low-pass identities clarify the correction being modeled, while a necessary-and-sufficient condition characterizes when its straight-path target energy is lower than that of full-field transport. On 33,600 globally held-out OpenFWI-derived samples under a matched multimodal input and evaluation protocol, PD-BG-RFM achieves an RMSE of 0.0270, an SSIM of 0.9913, and a high-frequency MAE of 0.0065, leading the evaluated adapted baselines on these measures with 10.6 million trainable parameters. Controlled ablations, role-specific routing diagnostics, and transport-energy measurements further support the coordination of direct background estimation and conditional residual generation. The resulting reconstruction organization uses a shared predicted velocity background to connect heterogeneous geophysical evidence with structure-sensitive generative correction.}
 }
-\keyword{[PENDING - keywords not author-approved in format-only Step 1]}
-% The MDPI 2026-09-11 ACS template uses a flag and redefinition for Highlights.
-% No scientific highlight content is authored in Step 1.
+% BG-REV 2H-KEYWORDS: Approved final scientific keywords, colored in marked mode.
+\keyword{\BGRevAdd{seismic velocity model building; multimodal geophysical conditioning; conditional Flow Matching; deterministic background estimation; prediction-relative residual transport; processed seismic observations}}
+% BG-REV 2H-HIGHLIGHTS: Author-approved MDPI two-question format, four complete blue bullets.
 \addhighlights{yes}
 \renewcommand{\addhighlights}{%
+\begingroup\small
 \noindent\textbf{What are the main findings?}
 \begin{itemize}[topsep=0pt,itemsep=0pt]
-\item \textit{[Pending author-supplied findings]}
+% BG-REV 2H-HIGHLIGHTS-MF1
+\item \BGRevAdd{Separating direct background prediction from conditional residual transport improves matched-input subsurface velocity reconstruction.}
+% BG-REV 2H-HIGHLIGHTS-MF2
+\item \BGRevAdd{On held-out OpenFWI-derived data, PD-BG-RFM leads the evaluated adapted baselines in RMSE, SSIM, and high-frequency MAE using 10.6M parameters.}
 \end{itemize}
 \noindent\textbf{What are the implications of the main findings?}
 \begin{itemize}[topsep=0pt,itemsep=0pt]
-\item \textit{[Pending author-supplied implications]}
+% BG-REV 2H-HIGHLIGHTS-IM1
+\item \BGRevAdd{The predicted background provides a shared numerical reference for residual supervision, transport conditioning, and model composition.}
+% BG-REV 2H-HIGHLIGHTS-IM2
+\item \BGRevAdd{Role-aware multimodal conditions link broad kinematic guidance and structural evidence while allowing each available modality to inform both routes.}
 \end{itemize}
+\endgroup
 }
 \reftitle{References}
 \begin{document}
@@ -63,7 +72,8 @@ Multimodal subsurface velocity inversion combines complementary observations: po
 % BG-REV 2E-ENTRY: Active Step 2E content; all prior snapshots remain immutable.
 % BG-REV 2F-ENTRY: Active independent copy; all historical snapshots immutable.
 % BG-REV 2G-ENTRY-C: Author-approved independent Step 2G snapshot.
-\input{CONTENT_STEP2G_MARKED}
+% BG-REV 2H-ENTRY: Active Step 2H snapshot, prior stages immutable.
+\input{CONTENT_STEP2H_MARKED}
 % Format-only administrative structure; none of the fields below are asserted as facts.
 \authorcontributions{[PENDING - CRediT roles not confirmed]}
 \funding{[PENDING - grant numbers and funders not confirmed]}
