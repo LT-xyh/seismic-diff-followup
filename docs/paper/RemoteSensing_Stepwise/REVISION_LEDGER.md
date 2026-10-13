@@ -91,3 +91,12 @@ Author approval: 2026-10-12 (Step 2C routing panel + permanent revision marking 
 - Source diff audit: Methods, Results, Discussion, Conclusions, figures/algorithm/table/appendices/theorem/equation text and old bibliography entries are unchanged; all earlier blue author markings persist. No new experiments or numeric claims. Revision markers for all changed material as above; title and abstract immutable.
 - PDF proof to be generated with the repository-bundled MDPI class on an isolated build branch; this does not establish identity with the earlier mentioned 2026-09-11 v6.5a class.
 - Git change: see Step 2F branch commit history.
+
+## Step 2G / A -- authorized narrative enhancement (2026-10-13)
+
+- Baseline: `cd2dd8da5df49594669ec207e57b0572e8ec27c2`; branch: `remote-sensing/step2g-narrative-enhancement`.
+- Active source: `CONTENT_STEP2G_METHODS_MARKED.tex`. Earlier snapshots and original AAAI sources are immutable.
+- 2G-A-EQ and 2G-A-P1: insert one equivalent full-field training-path equation and one paragraph after eq:fm-objective and its existing interpretation sentence. Equation color is scoped outside the equation environment; the new paragraph uses BGRevAdd. Existing definitions, losses, and Theorem 1 are untouched.
+- Visibility: entire new/revised paragraphs blue in marked mode; scientific content identical in clean mode.
+- Numerical/experimental effect: none. No training or new evaluation.
+- Commit: this section's Git history records the corresponding stage commit.
