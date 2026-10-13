@@ -100,3 +100,13 @@ Author approval: 2026-10-12 (Step 2C routing panel + permanent revision marking 
 - Visibility: entire new/revised paragraphs blue in marked mode; scientific content identical in clean mode.
 - Numerical/experimental effect: none. No training or new evaluation.
 - Commit: this section's Git history records the corresponding stage commit.
+
+## Step 2G / B -- authorized narrative enhancement (2026-10-13)
+
+- Baseline: `cd2dd8da5df49594669ec207e57b0572e8ec27c2`; branch: `remote-sensing/step2g-narrative-enhancement`.
+- Active source: `CONTENT_STEP2G_METHODS_ABLATION_MARKED.tex`. Earlier snapshots and original AAAI sources are immutable.
+- 2G-B-P1 and 2G-B-P2: replace the original percentage-summary interpretation paragraph in Results / Ablation Study with two evidence-grounded paragraphs. Variant-definition paragraph and tab:ablation are byte-identical. All cited numbers are existing table entries, not new analyses. Background-context removal explicitly retains the predictor, residual reference, and final composition.
+- Visibility: entire new/revised paragraphs blue in marked mode; scientific content identical in clean mode.
+- Numerical/experimental effect: none. No training or new evaluation.
+- Commit: this section's Git history records the corresponding stage commit.
+- Previous semantic stage A commit: `4e17ee3f3f71baa497508437589d11a242d00c8e`.
