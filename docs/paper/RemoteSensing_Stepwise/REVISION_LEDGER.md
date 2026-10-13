@@ -133,3 +133,13 @@ Author approval: 2026-10-12 (Step 2C routing panel + permanent revision marking 
 - Complete preservation: Introduction, Related Work, Materials and Methods, Results, Discussion, original figures, equations, algorithms, comparisons, experimental values, references and Appendices A–D unchanged. No new experiments, dataset-construction contributions or newly invented claims. Title and unconfirmed author metadata unchanged.
 - Compilation uses the repository-bundled MDPI class dated 2026-04-14; this is not an independent verification against the previously reported 2026-09-11 ACS v6.5a class.
 - Commit: recorded in Step 2H branch Git history.
+
+## Step 2H — Findings-Oriented Highlights refinement (2026-10-13)
+
+- Source: Step 2H commit `1116e47051f054dc3d07b936d5703e6f6809924f`; independent review branch `remote-sensing/step2h-highlights-findings-20261013`.
+- ID `2H-HIGHLIGHTS-R1-MF1`: replace the first Main Findings bullet with a high-level finding about background-guided residual Flow Matching's matched-input accuracy and model size; the claim remains scoped to evaluated baselines.
+- ID `2H-HIGHLIGHTS-R1-MF2`: replace the second Main Findings bullet's metric listing with the evidence-supported contribution of prediction-consistent supervision, explicit background conditioning and role-aware fusion.
+- ID `2H-HIGHLIGHTS-R1-IM1`: clarify that the predicted background is an observation-dependent, shared reference for supervision, conditional transport and reconstruction.
+- ID `2H-HIGHLIGHTS-R1-IM2`: express the broader methodological implication as complementary background-estimation and structure-correction roles.
+- All four changes are confined to the text arguments of the existing `\\BGRevAdd` bullet wrappers inside `main.tex`; full blue markings, the two MDPI question headings, layout macros, title, Abstract, Keywords, Conclusions, full active body, references, tables, all results, equations, figures, and appendices are unchanged.
+- Historical Step 2H source and snapshots remain immutable. This ledger-only change records the four highlights edits in accordance with the permanent revision rule; no scientific data or model changes.

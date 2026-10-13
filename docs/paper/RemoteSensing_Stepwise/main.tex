@@ -52,16 +52,16 @@
 \noindent\textbf{What are the main findings?}
 \begin{itemize}[topsep=0pt,itemsep=0pt]
 % BG-REV 2H-HIGHLIGHTS-MF1
-\item \BGRevAdd{Separating direct background prediction from conditional residual transport improves matched-input subsurface velocity reconstruction.}
+\item \BGRevAdd{Background-guided residual Flow Matching achieves superior reconstruction accuracy with fewer trainable parameters than the evaluated baselines under matched multimodal inputs.}
 % BG-REV 2H-HIGHLIGHTS-MF2
-\item \BGRevAdd{On held-out OpenFWI-derived data, PD-BG-RFM leads the evaluated adapted baselines in RMSE, SSIM, and high-frequency MAE using 10.6M parameters.}
+\item \BGRevAdd{Ablation studies show that prediction-consistent residual supervision, explicit background conditioning, and role-aware multimodal fusion contribute to accurate subsurface velocity reconstruction.}
 \end{itemize}
 \noindent\textbf{What are the implications of the main findings?}
 \begin{itemize}[topsep=0pt,itemsep=0pt]
 % BG-REV 2H-HIGHLIGHTS-IM1
-\item \BGRevAdd{The predicted background provides a shared numerical reference for residual supervision, transport conditioning, and model composition.}
+\item \BGRevAdd{A predicted velocity background can serve as a shared, observation-dependent reference for residual supervision, conditional transport, and final reconstruction.}
 % BG-REV 2H-HIGHLIGHTS-IM2
-\item \BGRevAdd{Role-aware multimodal conditions link broad kinematic guidance and structural evidence while allowing each available modality to inform both routes.}
+\item \BGRevAdd{Organizing multimodal geophysical evidence into complementary background-estimation and structure-correction roles provides an effective framework for subsurface velocity model building.}
 \end{itemize}
 \endgroup
 }
