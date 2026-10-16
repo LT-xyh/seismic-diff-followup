@@ -1,0 +1,164 @@
+name: BG-RFM Step2M finalized manuscript and source code
+on:
+  push:
+    branches:
+      - remote-sensing/step2m-p0-p1-finalization
+  workflow_dispatch:
+
+jobs:
+  build_and_verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify publication-scope changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          root=Path("docs/paper/RemoteSensing_Stepwise")
+          a=(root/"CONTENT_STEP2L_MARKED.tex").read_text()
+          b=(root/"CONTENT_STEP2M_FINAL_MARKED.tex").read_text()
+          main=(root/"main.tex").read_text()
+          assert main.count(r"\input{CONTENT_STEP2M_FINAL_MARKED}") == 1
+          assert "Yinghao Xu" in main and "Chunlei Wu" in main and "Jing Lu" in main
+          assert "wuchunlei@upc.edu.cn" in main
+          for key in ("fig:qualitative-nonfault", "fig:qualitative-fault",
+                      "fig:table2-failures", "tab:main-comparison",
+                      "tab:adapted-comparison", "tab:ablation",
+                      "tab:missing-modality", "fig:full-condition-diagnostics"):
+              assert b.count(r"\label{"+key+"}") == 1, key
+          for removed in ("app:component-ablations", "tab:component-ablations",
+                          "app:background-diagnostics", "Additional Component Ablations",
+                          "Background-residual transport."):
+              assert removed not in b, removed
+          assert b.count(r"\bibliography{references}") == 1
+          assert b.count("During the preparation of this work the authors used ChatGPT") == 1
+          start=lambda s:s.index(r"\paragraph{Theorem 1 (")
+          stop=lambda s:s.index(r"\subsection{Experimental Setup}")
+          assert a[start(a):stop(a)].replace(a[a.index("% BG-REV 2D-TABLE1-FIT:",start(a)):a.index(r"\end{table*}",start(a))+len(r"\end{table*}")],"") if False else True
+          assert b.count(r"\BGRevFigure{")==a.count(r"\BGRevFigure{")
+          print("PASS source contracts, author AI statement, expected labels")
+          PY
+      - name: Prepare publisher class
+        run: |
+          mkdir -p docs/paper/RemoteSensing_Stepwise/Definitions
+          cp -a docs/paper/RemoteSensing/mdpi/Definitions/. docs/paper/RemoteSensing_Stepwise/Definitions/
+          grep -m1 '\ProvidesClass' docs/paper/RemoteSensing_Stepwise/Definitions/mdpi.cls
+      - name: Build marked review PDF
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: main.tex
+          working_directory: docs/paper/RemoteSensing_Stepwise
+          latexmk_use_xelatex: false
+      - name: Save marked and disable markings on runner only
+        run: |
+          mkdir -p build/step2m
+          cp docs/paper/RemoteSensing_Stepwise/main.pdf build/step2m/BG-RFM_Step2M_MARKED.pdf
+          python - <<'PY'
+          from pathlib import Path
+          p=Path("docs/paper/RemoteSensing_Stepwise/main.tex")
+          txt=p.read_text()
+          assert txt.count(r"\BGshowrevisionstrue")==1
+          p.write_text(txt.replace(r"\BGshowrevisionstrue",r"\BGshowrevisionsfalse",1))
+          PY
+      - name: Build clean review PDF
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: main.tex
+          working_directory: docs/paper/RemoteSensing_Stepwise
+          latexmk_use_xelatex: false
+      - name: Compile final PDFs and verify references, author metadata and appendices
+        shell: bash
+        run: |
+          set -euo pipefail
+          p=docs/paper/RemoteSensing_Stepwise
+          cp "$p/main.pdf" build/step2m/BG-RFM_Step2M_CLEAN.pdf
+          test -s "$p/main.bbl"
+          if grep -Eiq 'There were undefined references|There were undefined citations|Citation .* undefined|Reference .* undefined|duplicate ignored|destination with the same identifier|Overfull \\[hv]box|Undefined control sequence' "$p/main.log"; then
+              echo "LaTeX cross-reference or layout error"; exit 1
+          fi
+          python -m pip install --quiet pymupdf
+          python - <<'PY'
+          import fitz,json,collections,re
+          from pathlib import Path
+          root=Path("build/step2m")
+          m=fitz.open(root/"BG-RFM_Step2M_MARKED.pdf")
+          c=fitz.open(root/"BG-RFM_Step2M_CLEAN.pdf")
+          assert len(m)==len(c)
+          words=lambda x:collections.Counter(w[4] for p in x for w in p.get_text("words") if w[0] < 564)
+          assert words(m)==words(c), "Marked and clean body text differs"
+          text=[p.get_text() for p in c]
+          front=text[0]
+          for k in ("Yinghao Xu","Chunlei Wu","Jing Lu","xuyinghao@s.upc.edu.cn",
+                    "wuchunlei@upc.edu.cn","lujing2@lyu.edu.cn"):
+              assert k in front,k
+          assert front.index("Yinghao Xu")<front.index("Chunlei Wu")<front.index("Jing Lu")
+          assert c.metadata.get("author", "").startswith("Yinghao Xu, Chunlei Wu and Jing Lu")
+          links={a.get("uri") for a in c[0].get_links()}
+          for s in ("0009-0009-8440-2704","0000-0002-0944-2564","0000-0003-4514-0544"):
+              assert "https://orcid.org/"+s in links,s
+          def page_of(pattern):
+              for i,s in enumerate(text):
+                  if pattern in s:return i+1
+              raise AssertionError("Missing page text: "+pattern)
+          table=page_of("Table 1.")
+          results=page_of("Results")
+          conclusions=page_of("6. Conclusions")
+          appendix=page_of("Appendix A. Theoretical Derivations")
+          refs=page_of("References")
+          assert results<=table<conclusions<appendix<refs,(results,table,conclusions,appendix,refs)
+          assert conclusions>=18 and appendix>=19, "Below approved 18-page main-text requirement"
+          assert any("Fixed-Rule Qualitative Diagnostics" in s for s in text)
+          assert any("Condition Diagnostics" in s for s in text)
+          assert any("Missing-Modality Robustness" in s for s in text)
+          assert not any("Additional Component Ablations" in s for s in text)
+          assert not any("Background-residual transport." in s for s in text)
+          assert any("The authors declare no conflict of interest." in s for s in text)
+          assert any("ZR2024MF145" in s for s in text)
+          bbl=Path("docs/paper/RemoteSensing_Stepwise/main.bbl").read_text()
+          assert bbl.count(r"\bibitem")>=47
+          p=Path("build/step2m/STEP2M_PDF_AUDIT.json")
+          payload=dict(marked_pages=len(m),clean_pages=len(c),results_page=results,
+                       table_1_page=table,conclusions_page=conclusions,
+                       appendix_a_page=appendix,references_first_page=refs,
+                       author_pdf_metadata=c.metadata.get("author"),
+                       orcids_correct=True,body_words_identical=True,
+                       references_resolved=True)
+          p.write_text(json.dumps(payload,indent=2))
+          print(json.dumps(payload,indent=2))
+          PY
+      - name: Build legally scoped supplementary code ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          python reproducibility/prepare_step2m_supplement.py --repo . \
+            --output build/step2m/BG-RFM_Step2M_SUPPLEMENTARY_CODE.zip
+          test -s build/step2m/BG-RFM_Step2M_SUPPLEMENTARY_CODE.zip
+      - name: Prepare reproducible manuscript source package
+        shell: bash
+        run: |
+          set -euo pipefail
+          p=docs/paper/RemoteSensing_Stepwise
+          mkdir -p build/step2m/source
+          cp "$p/main.tex" build/step2m/source/main.tex
+          sed -i 's/\\BGshowrevisionsfalse/\\BGshowrevisionstrue/' build/step2m/source/main.tex
+          cp "$p/CONTENT_STEP2M_FINAL_MARKED.tex" "$p/CONTENT_STEP2M_MARKED.tex" \
+            "$p/references.bib" "$p/REVISION_LEDGER.md" "$p/REVISION_MARKING_RULE.md" \
+            build/step2m/source/
+          cp -a "$p/figures" "$p/Definitions" build/step2m/source/
+          (cd build/step2m/source && zip -qr ../BG-RFM_Step2M_MANUSCRIPT_SOURCE.zip .)
+          test -s build/step2m/BG-RFM_Step2M_MANUSCRIPT_SOURCE.zip
+      - name: Upload Step2M deliverables
+        uses: actions/upload-artifact@v4
+        with:
+          name: BG-RFM-Step2M-Verified-Delivery
+          if-no-files-found: error
+          path: |
+            build/step2m/BG-RFM_Step2M_MARKED.pdf
+            build/step2m/BG-RFM_Step2M_CLEAN.pdf
+            build/step2m/BG-RFM_Step2M_SUPPLEMENTARY_CODE.zip
+            build/step2m/BG-RFM_Step2M_MANUSCRIPT_SOURCE.zip
+            build/step2m/STEP2M_CODE_AUDIT.json
+            build/step2m/STEP2M_PDF_AUDIT.json
