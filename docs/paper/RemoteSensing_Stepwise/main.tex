@@ -37,10 +37,21 @@
  {\conditioncontractfiguretrue}{\conditioncontractfigurefalse}
 % BG-REV TITLE-PRIOR: author-approved title change from the historical AAAI source; see revision ledger.
 \Title{Predicting the Background, Transporting the Structure: Decoupled Multimodal Subsurface Velocity Inversion}
-\Author{Chunlei Wu, Yinghao Xu and Jing Lu*}
-\AuthorNames{Chunlei Wu, Yinghao Xu and Jing Lu}
-\address{[Author affiliations and numbering pending confirmation]}
-\corres{Correspondence: [Jing Lu email pending confirmation]}
+% BG-REV 2M-AUTHOR: Approved author order and corresponding-author designation.
+\newcommand{\orcidauthorA}{0009-0009-8440-2704}
+\newcommand{\orcidauthorB}{0000-0002-0944-2564}
+\newcommand{\orcidauthorC}{0000-0003-4514-0544}
+% BG-REV 2M-ORCID-ICON: Fall back to a readable hyperlink label only when
+% the repository-bundled MDPI class omits its optional logo-orcid.pdf asset.
+\IfFileExists{Definitions/logo-orcid.pdf}{}{\renewcommand{\orcidicon}{\textsf{\fontsize{6}{7}\selectfont ORCID}}}
+\Author{Yinghao Xu $^{1,2}$\orcidA{}, Chunlei Wu $^{1,2,*}$\orcidB{}, and Jing Lu $^{3}$\orcidC{}}
+\AuthorNames{Yinghao Xu, Chunlei Wu and Jing Lu}
+% BG-REV 2M-AFFILIATIONS: Institution names and author emails exactly as approved.
+\address{%
+$^{1}$ College of Computer Science and Technology, China University of Petroleum (East China), Qingdao, China; \href{mailto:xuyinghao@s.upc.edu.cn}{xuyinghao@s.upc.edu.cn} (Y.X.); \href{mailto:wuchunlei@upc.edu.cn}{wuchunlei@upc.edu.cn} (C.W.)\\
+$^{2}$ Shandong Province Key Laboratory of Intelligent Oil \& Gas Industrial Software, Qingdao, China\\
+$^{3}$ School of Information Science and Engineering, Linyi University, Linyi 276005, China; \href{mailto:lujing2@lyu.edu.cn}{lujing2@lyu.edu.cn} (J.L.)}
+\corres{Correspondence: wuchunlei@upc.edu.cn}
 \abstract{
 % BG-REV 2H-ABSTRACT: Entire revised scientific abstract is colored in marked mode.
 \BGRevAdd{Subsurface velocity reconstruction from processed geophysical observations must reconcile complementary numerical and structural constraints: RMS velocity and sparse well logs inform broad velocity magnitudes, whereas post-stack time-migrated images and interpreted horizons delineate subsurface geometry. Conventional unified estimation does not explicitly assign these sources to background recovery and structure-bearing correction. We propose Physics-Decoupled Background-Guided Residual Flow Matching (PD-BG-RFM), a decoupled multimodal framework that learns background- and structure-oriented conditions while allowing every available modality to contribute to both. A deterministic branch predicts the smooth background velocity, and conditional Flow Matching generates the residual relative to that prediction, guided by structural conditions and an embedding of the predicted background. Crucially, the same background estimate defines residual supervision, vector-field conditioning, and final velocity composition. In full-field coordinates, this yields a transport path from an observation-dependent Gaussian reference centered on the predicted background toward the target velocity field. Exact composition and low-pass identities clarify the correction being modeled, while a necessary-and-sufficient condition characterizes when its straight-path target energy is lower than that of full-field transport. On 33,600 globally held-out OpenFWI-derived samples under a matched multimodal input and evaluation protocol, PD-BG-RFM achieves an RMSE of 0.0270, an SSIM of 0.9913, and a high-frequency MAE of 0.0065, leading the evaluated adapted baselines on these measures with 10.6 million trainable parameters. Controlled ablations, role-specific routing diagnostics, and transport-energy measurements further support the coordination of direct background estimation and conditional residual generation. The resulting reconstruction organization uses a shared predicted velocity background to connect heterogeneous geophysical evidence with structure-sensitive generative correction.}
@@ -81,5 +92,6 @@
 % BG-REV 2K-ENTRY: Independent Step 2K source snapshot; previous sources immutable.
 % BG-REV 2K-APPB-ENTRY: Independent Appendix B heading-only revision; Step 2K original is immutable.
 % BG-REV 2L-ENTRY: Add verified references in an independent Step 2L source snapshot.
-\input{CONTENT_STEP2L_MARKED}
+% BG-REV 2M-ENTRY-A: Author-approved metadata and availability snapshot.
+\input{CONTENT_STEP2M_METADATA_MARKED}
 \end{document}

@@ -215,3 +215,13 @@ Author approval: 2026-10-12 (Step 2C routing panel + permanent revision marking 
 - **Scope/preservation:** Only two Related Work passage sites and the five new `references.bib` entries change scientific text. No new experiments or benchmark rows; all prior paper and appendix results, original figures, equations, proofs, algorithm, author declarations and change markings are intact. Total five new `\cite` commands in Related Work, one new `\BGRevAdd` paragraph, and the previous marked paragraph preserved in its wrapper.
 - **Publication status note:** Three arXiv citations are not described as peer-reviewed journal publications; status must be rechecked before actual submission if a version of record subsequently appears.
 - **Build:** Verify BibTeX, marked/clean PDFs, cross-references and main text/appendix preservation using the existing repository-bundled MDPI class dated 2026-04-14; this does not assert equivalence to ACS v6.5a.
+
+## Step 2M — Stage A: author metadata and declarations (2026-10-16)
+
+- Baseline: `6db0569527703a0aad2b379702c61101785aa6a3` on `remote-sensing/step2l-verified-references-20261016`. New independent branch `remote-sensing/step2m-p0-p1-finalization`.
+- 2M-AUTHOR/2M-AFFILIATIONS: Approved ordering Yinghao Xu (1,2), Chunlei Wu (1,2, sole corresponding author), Jing Lu (3), and their three emails and ORCID identifiers. The bundled MDPI class supports \orcidA/B/C and \AuthorNames (which supplies PDF author order) but lacks logo-orcid.pdf; the conditional fallback uses linked text "ORCID" only in that case. No fictitious postal code or equal-contribution statement.
+- 2M-FUNDING: Replace only the funding placeholder with the three author-approved organizations and grant numbers ZR2024MF145, DFWT-ZYRJ-2024-JS-84 and 42174138.
+- 2M-CONFLICT: Insert author-approved "The authors declare no conflict of interest."
+- 2M-DATA-CODE: Link exactly to the public SeisMIC-Init HF card, with verified modality descriptions but without claiming it contains all 336,000 BG-RFM experiment records; the study-specific eight-subset materialization is described as a distinct protocol. State the supplementary source-code and eventual publication-specific GitHub release as the author-approved planned policy, not a completed journal submission.
+- Preserve the verbatim ChatGPT acknowledgment, original Not applicable IRB/consent fields, all other scientific text, figures, tables, equations, reference entries, and existing colored markers. Author Contributions stays pending until authors provide verified CRediT assignments.
+- No alteration to historical Step 2L snapshot. Active \main.tex selects \CONTENT_STEP2M_METADATA_MARKED.tex; administrative changes logged in source markers rather than fragile metadata coloring.
