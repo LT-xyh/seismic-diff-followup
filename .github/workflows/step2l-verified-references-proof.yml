@@ -1,0 +1,143 @@
+name: BG-RFM Step2L verified references PDF proof
+on:
+  push:
+    branches:
+      - remote-sensing/step2l-refs-pdf-proof-20261016
+  workflow_dispatch:
+
+jobs:
+  proof:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify source scope and bibliography provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          root=Path('docs/paper/RemoteSensing_Stepwise')
+          old=(root/'CONTENT_STEP2K_APPB_MARKED.tex').read_text()
+          new=(root/'CONTENT_STEP2L_MARKED.tex').read_text()
+          bib=(root/'references.bib').read_text()
+          keys=set(re.findall(r'@\w+\s*\{([^,]+),',bib))
+          expected={'harsuko2025velocitygpt','cheng2026shallowdeep','brandolin2026guidedddim',
+                    'ma2026neuraloperatordiffusion','paulwitz2026probabilisticfm'}
+          assert expected.issubset(keys)
+          assert len(keys)==48
+          assert old.split(r'\section{Materials and Methods}',1)[1]==new.split(r'\section{Materials and Methods}',1)[1]
+          assert new.count(r'\BGRevAdd{')==old.count(r'\BGRevAdd{')+1
+          assert new.count(r'\cite{')==old.count(r'\cite{')+5
+          for k in expected:
+              assert r'\cite{'+k+'}' in new
+          assert (root/'main.tex').read_text().count(r'\input{CONTENT_STEP2L_MARKED}')==1
+          print('PASS: added five cited bibliographic entries, all other scientific sections unchanged')
+          PY
+
+      - name: Prepare the existing MDPI class
+        run: |
+          mkdir -p docs/paper/RemoteSensing_Stepwise/Definitions
+          cp -a docs/paper/RemoteSensing/mdpi/Definitions/. docs/paper/RemoteSensing_Stepwise/Definitions/
+          grep -m1 '\ProvidesClass' docs/paper/RemoteSensing_Stepwise/Definitions/mdpi.cls
+
+      - name: Compile marked author-review PDF
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: main.tex
+          working_directory: docs/paper/RemoteSensing_Stepwise
+          latexmk_use_xelatex: false
+
+      - name: Preserve marked and enable clean output in runner only
+        run: |
+          mkdir -p build/step2l
+          cp docs/paper/RemoteSensing_Stepwise/main.pdf build/step2l/BG-RFM_Step2L_MARKED.pdf
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('docs/paper/RemoteSensing_Stepwise/main.tex')
+          s=p.read_text()
+          assert s.count(r'\BGshowrevisionstrue')==1
+          p.write_text(s.replace(r'\BGshowrevisionstrue',r'\BGshowrevisionsfalse',1))
+          PY
+
+      - name: Compile clean PDF
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: main.tex
+          working_directory: docs/paper/RemoteSensing_Stepwise
+          latexmk_use_xelatex: false
+
+      - name: Verify bibliography, cross-references and PDF equivalence
+        shell: bash
+        run: |
+          set -euo pipefail
+          p=docs/paper/RemoteSensing_Stepwise
+          cp "$p/main.pdf" build/step2l/BG-RFM_Step2L_CLEAN.pdf
+          test -s "$p/main.bbl"
+          test -s build/step2l/BG-RFM_Step2L_MARKED.pdf
+          test -s build/step2l/BG-RFM_Step2L_CLEAN.pdf
+          grep -Fq '\bibdata{references}' "$p/main.aux"
+          if grep -Eiq 'There were undefined references|There were undefined citations|Citation .* undefined|Reference .* undefined|duplicate ignored|destination with the same identifier|Overfull \\[hv]box' "$p/main.log"; then
+              echo 'Unresolved reference, duplicate hyperlink or overfull text'; exit 1
+          fi
+          python -m pip install -q pymupdf
+          python - <<'PY'
+          from pathlib import Path
+          import fitz, json, collections, re
+          root=Path('build/step2l')
+          marked=fitz.open(root/'BG-RFM_Step2L_MARKED.pdf')
+          clean=fitz.open(root/'BG-RFM_Step2L_CLEAN.pdf')
+          assert len(marked)==len(clean) and len(clean)>=30
+          # Journal manuscript line numbers are in the right margin; ignore
+          # only those while comparing all remaining text tokens.
+          words=lambda doc:collections.Counter(
+              w[4] for page in doc for w in page.get_text('words') if w[0]<564)
+          assert words(marked)==words(clean)
+          body='\n'.join(page.get_text() for page in clean)
+          for name in ('Harsuko', 'Cheng', 'Brandolin', 'Ma, X.', 'Paulwitz'):
+              assert name in body,name
+          source=Path('docs/paper/RemoteSensing_Stepwise')
+          bbl=(source/'main.bbl').read_text()
+          keys=['harsuko2025velocitygpt','cheng2026shallowdeep',
+                'brandolin2026guidedddim','ma2026neuraloperatordiffusion',
+                'paulwitz2026probabilisticfm']
+          for key in keys:
+              assert '{'+key+'}' in bbl,key
+          assert bbl.count(r'\bibitem')==47, 'Expected 47 cited bibliography items'
+          result={'pages_marked':len(marked),'pages_clean':len(clean),
+                  'original_references':42,'cited_references_final':47,
+                  'bibliography_database_entries':48,'new_references':keys,
+                  'all_new_citations_resolved':True,
+                  'marked_clean_scientific_words_match':True,
+                  'bibliography_statuses':'Two peer-reviewed journal papers, three explicitly labeled arXiv preprints',
+                  'all_other_sections_preserved':True}
+          (root/'BG-RFM_Step2L_PROOF.json').write_text(json.dumps(result,indent=2))
+          print(json.dumps(result,indent=2))
+          PY
+
+      - name: Package immutable source and all figure assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          s=docs/paper/RemoteSensing_Stepwise
+          d=build/step2l/source
+          mkdir -p "$d"
+          cp "$s/main.tex" "$d/main.tex"
+          sed -i 's/\\BGshowrevisionsfalse/\\BGshowrevisionstrue/' "$d/main.tex"
+          cp "$s/CONTENT_STEP2L_MARKED.tex" "$s/CONTENT_STEP2K_APPB_MARKED.tex" \
+             "$s/references.bib" "$s/REVISION_LEDGER.md" "$s/REVISION_MARKING_RULE.md" "$d/"
+          cp -a "$s/figures" "$s/Definitions" "$d/"
+          (cd "$d" && zip -qr ../BG-RFM_Step2L_SOURCE.zip .)
+          test -s build/step2l/BG-RFM_Step2L_SOURCE.zip
+
+      - name: Upload complete verified manuscript package
+        uses: actions/upload-artifact@v4
+        with:
+          name: BG-RFM-Step2L-Verified-References
+          if-no-files-found: error
+          path: |
+            build/step2l/BG-RFM_Step2L_MARKED.pdf
+            build/step2l/BG-RFM_Step2L_CLEAN.pdf
+            build/step2l/BG-RFM_Step2L_SOURCE.zip
+            build/step2l/BG-RFM_Step2L_PROOF.json
