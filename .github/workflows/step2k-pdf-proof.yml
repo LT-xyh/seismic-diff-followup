@@ -1,0 +1,139 @@
+name: BG-RFM Step2K PDF and figure provenance proof
+on:
+  push:
+    branches:
+      - remote-sensing/step2k-pdf-proof-20261016
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify exact author PDF and scoped manuscript revisions
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,re
+          root=Path('docs/paper/RemoteSensing_Stepwise')
+          binary=root/'figures/aaai/qualitative_eight_subsets.pdf'
+          assert binary.is_file() and binary.stat().st_size==367744
+          assert hashlib.sha256(binary.read_bytes()).hexdigest()=='81425f52b25e45402b794382f0342602332d653d1bd446bc7ca633bf04a1e216'
+          old=(root/'CONTENT_STEP2J_MARKED.tex').read_text()
+          new=(root/'CONTENT_STEP2K_MARKED.tex').read_text()
+          for label in ('fig:adapted-qualitative','fig:table2-representative-a','fig:table2-representative-b'):
+              assert label not in new
+          for label in ('fig:qualitative-nonfault','fig:qualitative-fault','fig:table2-failures'):
+              assert label in new
+          assert new.count(r'\BGRevFigure{')==old.count(r'\BGRevFigure{')+2
+          assert new.count(r'\BGRevAdd{')==old.count(r'\BGRevAdd{')+5
+          for env in ['table','table*','equation','align','algorithm']:
+              rx=rf'\\begin\{{{re.escape(env)}\}}.*?\\end\{{{re.escape(env)}\}}'
+              assert re.findall(rx,old,re.S)==re.findall(rx,new,re.S),env
+          assert re.findall(r'\cite\{[^}]+\}',old)==re.findall(r'\cite\{[^}]+\}',new)
+          for asset in ['qualitative.pdf','table2_representative_cases_1.pdf','table2_representative_cases_2.pdf','table2_failure_cases.pdf']:
+              assert (root/'figures/aaai'/asset).is_file()
+          print('PASS: original artwork and complete math/data preservation')
+          PY
+
+      - name: Install repository-bundled MDPI class
+        run: |
+          mkdir -p docs/paper/RemoteSensing_Stepwise/Definitions
+          cp -a docs/paper/RemoteSensing/mdpi/Definitions/. docs/paper/RemoteSensing_Stepwise/Definitions/
+          grep -m1 '\ProvidesClass' docs/paper/RemoteSensing_Stepwise/Definitions/mdpi.cls
+
+      - name: Compile marked author-review PDF
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: main.tex
+          working_directory: docs/paper/RemoteSensing_Stepwise
+          latexmk_use_xelatex: false
+
+      - name: Save marked PDF and switch clean toggle only within runner
+        shell: bash
+        run: |
+          mkdir -p build/step2k
+          cp docs/paper/RemoteSensing_Stepwise/main.pdf build/step2k/BG-RFM_Step2K_MARKED.pdf
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('docs/paper/RemoteSensing_Stepwise/main.tex')
+          s=p.read_text()
+          assert s.count(r'\BGshowrevisionstrue')==1
+          p.write_text(s.replace(r'\BGshowrevisionstrue',r'\BGshowrevisionsfalse',1))
+          PY
+
+      - name: Compile clean PDF
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: main.tex
+          working_directory: docs/paper/RemoteSensing_Stepwise
+          latexmk_use_xelatex: false
+
+      - name: Verify figure pages, references and PDF graphics
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp docs/paper/RemoteSensing_Stepwise/main.pdf build/step2k/BG-RFM_Step2K_CLEAN.pdf
+          test -s build/step2k/BG-RFM_Step2K_MARKED.pdf
+          test -s build/step2k/BG-RFM_Step2K_CLEAN.pdf
+          if grep -Eiq 'There were undefined references|There were undefined citations|Reference .* undefined|Citation .* undefined|duplicate ignored|destination with the same identifier|Overfull \\hbox|Overfull \\vbox' docs/paper/RemoteSensing_Stepwise/main.log; then
+             echo 'LaTeX reference or layout verification failed'; exit 1
+          fi
+          python -m pip install --quiet pymupdf
+          python - <<'PY'
+          import fitz,json,collections
+          from pathlib import Path
+          d=Path('build/step2k'); src=Path('docs/paper/RemoteSensing_Stepwise/figures/aaai/qualitative_eight_subsets.pdf')
+          m=fitz.open(d/'BG-RFM_Step2K_MARKED.pdf');c=fitz.open(d/'BG-RFM_Step2K_CLEAN.pdf');v=fitz.open(src)
+          assert len(m)==len(c)
+          def locate(haystack):
+             ids=[i+1 for i,p in enumerate(c) if haystack in p.get_text()]
+             assert len(ids)==1,(haystack,ids)
+             return ids[0]
+          p3=locate('Figure 3. Matched-input qualitative comparisons across the FlatVel')
+          p4=locate('Figure 4. Matched-input qualitative comparisons across the FlatFault')
+          pa=locate('Appendix A. Theoretical Derivations and Proofs')
+          pf=locate('Figure A1. Fixed-rule failure cases')
+          pr=locate('References')
+          assert p3<p4<pa<pf<pr and p4==p3+1
+          assert 'Fixed-rule qualitative cases for the first four' not in ''.join(p.get_text() for p in c)
+          counts=[]
+          for pageno,source_page in [(p3,0),(p4,1)]:
+             target_imgs=collections.Counter(x['digest'] for x in c[pageno-1].get_image_info(xrefs=True))
+             original_imgs=collections.Counter(x['digest'] for x in v[source_page].get_image_info(xrefs=True))
+             assert not original_imgs-target_imgs, (pageno,original_imgs-target_imgs)
+             counts.append(sum(original_imgs.values()))
+          getwords=lambda doc:collections.Counter(w[4] for p in doc for w in p.get_text('words') if w[0]<564)
+          assert getwords(m)==getwords(c)
+          info={'status':'PASS','marked_pages':len(m),'clean_pages':len(c),'figure3_pdf_page':p3,'figure4_pdf_page':p4,
+                'appendix_a_pdf_page':pa,'appendix_b_failure_figure_pdf_page':pf,'references_first_pdf_page':pr,
+                'author_pdf_native_images_matched':counts,'marked_clean_words_identical':True,'source_pdf_pages':len(v)}
+          (d/'STEP2K_VERIFICATION.json').write_text(json.dumps(info,indent=2))
+          print(json.dumps(info,indent=2))
+          PY
+
+      - name: Package exact source and audit trail
+        shell: bash
+        run: |
+          set -euo pipefail
+          folder=docs/paper/RemoteSensing_Stepwise
+          mkdir -p build/step2k/source
+          cp "$folder/main.tex" build/step2k/source/main.tex
+          sed -i 's/\BGshowrevisionsfalse/\BGshowrevisionstrue/' build/step2k/source/main.tex
+          cp "$folder/CONTENT_STEP2K_MARKED.tex" "$folder/CONTENT_STEP2J_MARKED.tex" \
+             "$folder/references.bib" "$folder/REVISION_LEDGER.md" "$folder/REVISION_MARKING_RULE.md" build/step2k/source/
+          cp -a "$folder/figures" "$folder/Definitions" build/step2k/source/
+          (cd build/step2k/source && zip -qr ../BG-RFM_Step2K_SOURCE.zip .)
+          test -s build/step2k/BG-RFM_Step2K_SOURCE.zip
+
+      - name: Upload verified Step2K deliverables
+        uses: actions/upload-artifact@v4
+        with:
+          name: BG-RFM-Step2K-Delivery
+          path: |
+            build/step2k/BG-RFM_Step2K_MARKED.pdf
+            build/step2k/BG-RFM_Step2K_CLEAN.pdf
+            build/step2k/BG-RFM_Step2K_SOURCE.zip
+            build/step2k/STEP2K_VERIFICATION.json
+          if-no-files-found: error
