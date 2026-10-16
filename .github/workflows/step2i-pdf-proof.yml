@@ -48,10 +48,10 @@ jobs:
           echo "Both marked and clean PDF files exist and are nonempty."
           test -s "$src/main.pdf"
           test -s "$src/main.bbl"
-          grep -Fq '\\bibdata{references}' "$src/main.aux"
-          grep -Fq '\\newlabel{app:residual-proofs}{{A}' "$src/main.aux"
-          grep -Fq '\\newlabel{app:condition-objective}{{C}' "$src/main.aux"
-          grep -Fq '\\newlabel{eq:fusion-normalization}{{A' "$src/main.aux"
+          grep -Fq '\bibdata{references}' "$src/main.aux"
+          grep -Fq '\newlabel{app:residual-proofs}{{A}' "$src/main.aux"
+          grep -Fq '\newlabel{app:condition-objective}{{C}' "$src/main.aux"
+          grep -Fq '\newlabel{eq:fusion-normalization}{{A' "$src/main.aux"
           if grep -Eiq 'duplicate ignored|destination with the same identifier|There were undefined references|There were undefined citations|Reference .* undefined|Citation .* undefined' "$src/main.log"; then
             echo "Unresolved reference or duplicate PDF destination"; exit 1
           fi
