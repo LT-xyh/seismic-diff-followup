@@ -78,6 +78,15 @@ $^{3}$ School of Information Science and Engineering, Linyi University, Linyi 27
 \end{itemize}
 \endgroup
 }
+% BG-REV 2M-FRONT-SPACING: Fix publisher-class Highlights title overlap
+% without changing scientific wording, fonts, margins, or the numbered sections.
+\makeatletter
+\patchcmd{\abstractkeywords}
+  {\noindent\textbf{Highlights\vspace{-6pt}\\}\addhighlights}
+  {\noindent\textbf{Highlights\vspace{5pt}\\}\addhighlights}
+  {\typeout{BG-REV: Highlights heading and first item separated}}
+  {\PackageError{BG-REV}{MDPI Highlights heading style not found}{Inspect mdpi.cls}}
+\makeatother
 \reftitle{References}
 \begin{document}
 % BG-REV 2D-ENTRY: New active copy, old snapshots preserved.
