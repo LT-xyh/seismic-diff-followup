@@ -31,7 +31,7 @@ jobs:
           for env in ['table','table*','equation','align','algorithm']:
               rx=rf'\\begin\{{{re.escape(env)}\}}.*?\\end\{{{re.escape(env)}\}}'
               assert re.findall(rx,old,re.S)==re.findall(rx,new,re.S),env
-          assert re.findall(r'\cite\{[^}]+\}',old)==re.findall(r'\cite\{[^}]+\}',new)
+          assert re.findall(r'\\cite\{[^}]+\}',old)==re.findall(r'\\cite\{[^}]+\}',new)
           for asset in ['qualitative.pdf','table2_representative_cases_1.pdf','table2_representative_cases_2.pdf','table2_failure_cases.pdf']:
               assert (root/'figures/aaai'/asset).is_file()
           print('PASS: original artwork and complete math/data preservation')
