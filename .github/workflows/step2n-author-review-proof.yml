@@ -1,0 +1,241 @@
+name: BG-RFM Step2N cover letter and CRediT proof
+on:
+  push:
+    branches:
+      - remote-sensing/step2n-credit-coverletter
+  workflow_dispatch:
+
+jobs:
+  review_and_package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify author draft and frozen scientific source
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          root=Path('docs/paper/RemoteSensing_Stepwise')
+          original=(root/'CONTENT_STEP2M_FINAL_MARKED.tex').read_text()
+          revised=(root/'CONTENT_STEP2N_MARKED.tex').read_text()
+          old=r'\authorcontributions{[PENDING - CRediT roles not confirmed]}'
+          mm=re.search(r'% BG-REV 2N-CREDIT-DRAFT:[^\n]+\n\\authorcontributions\{\\BGRevAdd\{[^\n]*\}\}',revised)
+          assert mm, 'Missing marked CRediT draft'
+          assert revised[:mm.start()]+old+revised[mm.end():] == original, 'Unexpected scientific-text modification'
+          main=(root/'main.tex').read_text()
+          assert main.count(r'\input{CONTENT_STEP2N_MARKED}')==1
+          assert main.count(r'\BGshowrevisionstrue')==1
+          cover=(root/'submission/STEP2N_COVER_LETTER_DRAFT.md').read_text()
+          credit=(root/'submission/STEP2N_CREDIT_VERIFICATION_DRAFT.md').read_text()
+          assert 'Predicting the Background, Transporting the Structure' in cover
+          assert cover.count('- [ ]')>=3
+          assert 'All authors have approved the manuscript' in cover
+          assert 'neither the manuscript nor any parts of its content' in cover
+          assert 'EAAI' not in cover and 'SeisMIC-Diff' not in cover
+          for author in ('Yinghao Xu','Chunlei Wu','Jing Lu'):
+              assert author in cover and author in credit and author in mm.group(0)
+          assert 'PENDING VERIFICATION BY ALL THREE AUTHORS' in credit
+          assert revised.count(r'\BGRevAdd{')==original.count(r'\BGRevAdd{')+1
+          assert revised.count(r'\BGRevFigure{')==original.count(r'\BGRevFigure{')
+          for token in (r'\cite{', r'\label{',r'\bibliography{references}',r'\dataavailability{'):
+              assert revised.count(token)==original.count(token),token
+          for field in (r'\funding{',r'\conflictsofinterest{',r'\acknowledgments{',r'\dataavailability{'):
+              assert revised.split(field,1)[1].split('}\n',1)[0]==original.split(field,1)[1].split('}\n',1)[0],field
+          assert (root/'main.tex').read_text().index('Yinghao Xu') < main.index('Chunlei Wu') < main.index('Jing Lu')
+          print('PASS — sole CRediT pending draft, no changed scientific material')
+          PY
+
+      - name: Prepare verified bundled publisher class
+        run: |
+          set -euo pipefail
+          p=docs/paper/RemoteSensing_Stepwise
+          mkdir -p "$p/Definitions"
+          cp -a docs/paper/RemoteSensing/mdpi/Definitions/. "$p/Definitions/"
+          grep -m1 '\ProvidesClass' "$p/Definitions/mdpi.cls"
+
+      - name: Compile marked manuscript
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: main.tex
+          working_directory: docs/paper/RemoteSensing_Stepwise
+          latexmk_use_xelatex: false
+
+      - name: Save marked version and toggle clean only in runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p build/step2n
+          cp docs/paper/RemoteSensing_Stepwise/main.pdf build/step2n/BG-RFM_Step2N_MARKED.pdf
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('docs/paper/RemoteSensing_Stepwise/main.tex')
+          s=p.read_text()
+          assert s.count(r'\BGshowrevisionstrue')==1
+          p.write_text(s.replace(r'\BGshowrevisionstrue',r'\BGshowrevisionsfalse',1))
+          PY
+
+      - name: Compile clean manuscript
+        uses: xu-cheng/latex-action@v4
+        with:
+          root_file: main.tex
+          working_directory: docs/paper/RemoteSensing_Stepwise
+          latexmk_use_xelatex: false
+
+      - name: Verify PDFs, citations and changed marking
+        shell: bash
+        run: |
+          set -euo pipefail
+          p=docs/paper/RemoteSensing_Stepwise
+          cp "$p/main.pdf" build/step2n/BG-RFM_Step2N_CLEAN.pdf
+          test -s "$p/main.bbl"
+          if grep -Eiq 'There were undefined references|There were undefined citations|Citation .* undefined|Reference .* undefined|duplicate ignored|destination with the same identifier|Overfull \\[hv]box|Undefined control sequence' "$p/main.log"; then
+              echo "LaTeX citation, link or layout failure"; exit 1
+          fi
+          python -m pip install --quiet pymupdf reportlab
+          python - <<'PY'
+          import collections,fitz,json,re
+          from pathlib import Path
+          root=Path('build/step2n')
+          marked=fitz.open(root/'BG-RFM_Step2N_MARKED.pdf')
+          clean=fitz.open(root/'BG-RFM_Step2N_CLEAN.pdf')
+          assert len(marked)==len(clean)
+          science=lambda pdf:collections.Counter(w[4] for p in pdf for w in p.get_text('words') if w[0]<564)
+          assert science(marked)==science(clean), 'Marked/clean scientific text differs'
+          pages=[p.get_text() for p in clean]
+          full=' '.join(pages)
+          assert 'Draft for author verification' in full
+          assert 'Yinghao Xu' in full and 'Chunlei Wu' in full and 'Jing Lu' in full
+          for word in ('ZR2024MF145','DFWT-ZYRJ-2024-JS-84','42174138',
+                       'huggingface.co/datasets/YinghaoXu/SeisMIC-Init',
+                       'During the preparation of this work the authors used ChatGPT',
+                       'The authors declare no conflict of interest'):
+              assert word in full,word
+          assert 'References' in full and 'Appendix A' in full
+          assert sum('Author Contributions' in x for x in pages)>=1
+          assert clean.metadata.get('author','').startswith('Yinghao Xu, Chunlei Wu and Jing Lu')
+          # A modified CRediT span is blue in marked PDF but monochrome in clean.
+          def colors(pdf):
+              out=set()
+              for page in pdf:
+                  for b in page.get_text('dict')['blocks']:
+                      if b.get('type')!=0:continue
+                      for line in b['lines']:
+                          for span in line['spans']:
+                              if 'Draft for author' in span['text'] or 'verification (not' in span['text']:
+                                  out.add(span['color'])
+              return out
+          colored=colors(marked);plain=colors(clean)
+          assert colored and any(x not in (0,0x000000) for x in colored),colored
+          assert plain and all(x in (0,0x000000) for x in plain),plain
+          result=dict(pages_marked=len(marked),pages_clean=len(clean),
+                      author_order='Yinghao Xu; Chunlei Wu; Jing Lu',
+                      credit_status='DRAFT — not approved',
+                      data_availability_unchanged=True,scientific_content_unchanged=True,
+                      scientific_tokens_identical=True,credit_blue_mark_verified=True,
+                      citations_resolved=True,no_submission_performed=True)
+          (root/'STEP2N_PDF_AUDIT.json').write_text(json.dumps(result,indent=2))
+          print(result)
+          PY
+
+      - name: Generate independent printable Cover Letter draft
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from reportlab.platypus import SimpleDocTemplate,Paragraph,Spacer,HRFlowable,KeepTogether
+          from reportlab.lib import colors
+          from reportlab.lib.enums import TA_LEFT
+          from reportlab.lib.styles import ParagraphStyle
+          from reportlab.lib.pagesizes import A4
+          from reportlab.pdfbase import pdfmetrics
+          from reportlab.pdfbase.ttfonts import TTFont
+          import html,re
+          root=Path('docs/paper/RemoteSensing_Stepwise/submission')
+          source=(root/'STEP2N_COVER_LETTER_DRAFT.md').read_text()
+          dest=Path('build/step2n/BG-RFM_Step2N_COVER_LETTER_DRAFT.pdf')
+          for key,name in [('Body','DejaVuSans.ttf'),('Body-Bold','DejaVuSans-Bold.ttf')]:
+              path=Path('/usr/share/fonts/truetype/dejavu')/name
+              if path.is_file():pdfmetrics.registerFont(TTFont(key,str(path)))
+          font='Body' if 'Body' in pdfmetrics.getRegisteredFontNames() else 'Helvetica'
+          bold='Body-Bold' if 'Body-Bold' in pdfmetrics.getRegisteredFontNames() else 'Helvetica-Bold'
+          styles={
+           'heading':ParagraphStyle('h',fontName=bold,fontSize=13,leading=17,spaceAfter=9,textColor=colors.HexColor('#1C2938')),
+           'text':ParagraphStyle('p',fontName=font,fontSize=9.3,leading=13.0,spaceAfter=6,alignment=TA_LEFT),
+           'small':ParagraphStyle('small',fontName=font,fontSize=8.4,leading=11.5,spaceAfter=5),
+           'notice':ParagraphStyle('notice',fontName=bold,fontSize=9,leading=13,textColor=colors.HexColor('#973030'),spaceAfter=7),
+          }
+          def inline(s):
+              s=html.escape(s)
+              s=re.sub(r'\*\*(.+?)\*\*',r'<b>\1</b>',s)
+              s=re.sub(r'\*(.+?)\*',r'<i>\1</i>',s)
+              return s
+          chunks=[b.strip() for b in re.split(r'\n\s*\n',source) if b.strip()]
+          flow=[]
+          for c in chunks:
+              if c.startswith('# '):
+                  flow.append(Paragraph(inline(c[2:]),styles['heading']))
+              elif c=='---':
+                  flow.append(HRFlowable(width='100%',thickness=0.45,color=colors.HexColor('#D0D4DB')))
+              elif c.startswith('- [ ]'):
+                  for line in c.splitlines():
+                      if line.strip().startswith('- [ ]'):
+                          flow.append(Paragraph('&#9633; '+inline(line.strip()[5:]),styles['small']))
+              elif 'DRAFT ONLY' in c or 'not yet certified' in c or 'not yet approved' in c.lower():
+                  flow.append(Paragraph(inline(c.replace('\n',' ')),styles['notice']))
+              else:
+                  flow.append(Paragraph(inline(c.replace('\n',' ')),styles['text']))
+          def footer(canvas,document):
+              canvas.saveState()
+              canvas.setFont('Helvetica',8)
+              canvas.setFillColor(colors.HexColor('#777777'))
+              canvas.drawRightString(A4[0]-46,36,'Author-review draft | Not submitted')
+              canvas.restoreState()
+          doc=SimpleDocTemplate(str(dest),pagesize=A4,rightMargin=46,leftMargin=46,topMargin=43,bottomMargin=54)
+          doc.build(flow,onFirstPage=footer,onLaterPages=footer)
+          assert dest.stat().st_size>5000
+          import fitz
+          pdf=fitz.open(dest)
+          assert len(pdf)<=3
+          text=''.join(p.get_text() for p in pdf)
+          assert 'All authors have approved the manuscript' in text
+          assert 'neither the manuscript nor any parts' in text
+          assert 'Chunlei Wu' in text
+          assert 'EAAI' not in text
+          print({'cover_letter_pages':len(pdf),'bytes':dest.stat().st_size})
+          PY
+
+      - name: Assemble editable manuscript source package
+        shell: bash
+        run: |
+          set -euo pipefail
+          root=docs/paper/RemoteSensing_Stepwise
+          mkdir -p build/step2n/source/submission
+          cp "$root/main.tex" build/step2n/source/main.tex
+          sed -i 's/\\BGshowrevisionsfalse/\\BGshowrevisionstrue/' build/step2n/source/main.tex
+          cp "$root/CONTENT_STEP2N_MARKED.tex" "$root/CONTENT_STEP2M_FINAL_MARKED.tex" \
+             "$root/references.bib" "$root/REVISION_LEDGER.md" "$root/REVISION_MARKING_RULE.md" \
+             build/step2n/source/
+          cp "$root/submission/STEP2N_COVER_LETTER_DRAFT.md" \
+             "$root/submission/STEP2N_CREDIT_VERIFICATION_DRAFT.md" build/step2n/source/submission/
+          cp -a "$root/figures" "$root/Definitions" build/step2n/source/
+          (cd build/step2n/source && zip -qr ../BG-RFM_Step2N_SOURCE.zip .)
+          cp "$root/submission/STEP2N_COVER_LETTER_DRAFT.md" build/step2n/BG-RFM_Step2N_COVER_LETTER_DRAFT.md
+          cp "$root/submission/STEP2N_CREDIT_VERIFICATION_DRAFT.md" build/step2n/BG-RFM_Step2N_CREDIT_VERIFICATION_DRAFT.md
+          test -s build/step2n/BG-RFM_Step2N_SOURCE.zip
+
+      - name: Upload Step2N author review deliverables
+        uses: actions/upload-artifact@v4
+        with:
+          name: BG-RFM-Step2N-Author-Review
+          if-no-files-found: error
+          path: |
+            build/step2n/BG-RFM_Step2N_MARKED.pdf
+            build/step2n/BG-RFM_Step2N_CLEAN.pdf
+            build/step2n/BG-RFM_Step2N_COVER_LETTER_DRAFT.pdf
+            build/step2n/BG-RFM_Step2N_COVER_LETTER_DRAFT.md
+            build/step2n/BG-RFM_Step2N_CREDIT_VERIFICATION_DRAFT.md
+            build/step2n/BG-RFM_Step2N_SOURCE.zip
+            build/step2n/STEP2N_PDF_AUDIT.json
