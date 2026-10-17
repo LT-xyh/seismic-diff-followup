@@ -38,4 +38,4 @@ wuchunlei@upc.edu.cn
 
 ---
 
-**Editorial control:** Draft prepared for author review only. Not submitted to MDPI. The manuscript title, author order, corresponding author and reported metrics have been updated from the historical draft to the approved Step 2M version. No related-manuscript discussion is inserted into this letter.
+**DRAFT ONLY — NOT YET CONFIRMED OR AUTHORIZED FOR JOURNAL UPLOAD.**

@@ -186,7 +186,7 @@ jobs:
               elif 'DRAFT ONLY' in c or 'not yet certified' in c or 'not yet approved' in c.lower():
                   flow.append(Paragraph(inline(c.replace('\n',' ')),styles['notice']))
               else:
-                  flow.append(Paragraph(inline(c.replace('\n',' ')),styles['text']))
+                  flow.append(Paragraph(inline(c.replace('  \n','@@LINE_BREAK@@').replace('\n',' ')).replace('@@LINE_BREAK@@','<br/>'),styles['text']))
           def footer(canvas,document):
               canvas.saveState()
               canvas.setFont('Helvetica',8)
